@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="181" height="189" viewBox="0 0 181 189">
+  <defs>
+    <clipPath id="clip-estrelinha-g">
+      <rect width="181" height="189"/>
+    </clipPath>
+  </defs>
+  <g id="estrelinha-g" clip-path="url(#clip-estrelinha-g)">
+    <rect width="181" height="189" fill="#fff"/>
+    <g id="Grupo_351" data-name="Grupo 351" transform="translate(-6353.43 -3490)">
+      <path id="Polígono_18" data-name="Polígono 18" d="M89.5,0l17.9,74.8L179,93.5l-71.6,18.7L89.5,187,71.6,112.2,0,93.5,71.6,74.8Z" transform="translate(6353 3492)" fill="#2a2929"/>
+      <g id="Grupo_350" data-name="Grupo 350" transform="translate(221 -18)">
+        <path id="Polígono_17" data-name="Polígono 17" d="M89.5,0l17.9,74.8L179,93.5l-71.6,18.7L89.5,187,71.6,112.2,0,93.5,71.6,74.8Z" transform="translate(6135 3508)" fill="#d90f0f"/>
+        <path id="Polígono_17_-_Contorno" data-name="Polígono 17 - Contorno" d="M89.5,8.594,73.266,76.432,7.915,93.5l65.351,17.068L89.5,178.407l16.234-67.839L171.085,93.5,105.734,76.432,89.5,8.594M89.5,0l17.9,74.8L179,93.5l-71.6,18.7L89.5,187,71.6,112.2,0,93.5,71.6,74.8Z" transform="translate(6135 3508)" fill="#2a2929"/>
+      </g>
+    </g>
+  </g>
+</svg>

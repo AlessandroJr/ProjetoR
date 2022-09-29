@@ -4,7 +4,7 @@ let Anima = {
         nome: 'triangulo',
         posX: -6,
         posY: 6,
-        svg: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="197" height="198" viewBox="0 0 197 198">
+        svg: `<svg class="cobrinha" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="197" height="198" viewBox="0 0 197 198">
             <defs>
             <clipPath id="clip-triangulo">
                 <rect width="197" height="198"/>

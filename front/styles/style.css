@@ -102,14 +102,6 @@ body {
   z-index: -10;
 }
 #backdoor {
-<<<<<<< HEAD
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-}
-=======
     position: relative;
     width: 100vw;
     height: 100vh;
@@ -119,4 +111,3 @@ body {
 .cobrinha{
     transform: rotate(100deg);
 }
->>>>>>> fe544586364b02b1f4f1d70972a922b909339c94

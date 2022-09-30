@@ -4,6 +4,7 @@ let Anima = {
         nome: 'triangulo',
         posX: -6,
         posY: 6,
+        rotDeg: 0,
         svg: `<svg class="cobrinha" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="197" height="198" viewBox="0 0 197 198">
             <defs>
             <clipPath id="clip-triangulo">
@@ -24,6 +25,7 @@ let Anima = {
             nome: 'piramide',
             posX: -10,
             posY: 70,
+            rotDeg: 0,
             svg: `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="237.57" height="260.2" viewBox="0 0 237.57 260.2">
         <defs>
           <clipPath id="clip-piramide">
@@ -44,14 +46,15 @@ let Anima = {
       `
     }],
 
-    renderSVG: function (svg, posX, posY) {
+    renderSVG: function (svg, posX, posY, angle) {
         let local = document.getElementById('backdoor');
 
         let html = `
             <div style="
                 position: absolute;
                 top: ${posY}vh;
-                left: ${posX}vw
+                left: ${posX}vw;
+                transform: rotate(${angle}deg)
             ">${svg}</div>
         `;
         
@@ -64,7 +67,7 @@ let Anima = {
         for (let index = 0; index < Anima.ArraySVG.length; index++) {
             const element = Anima.ArraySVG[index];
 
-            Anima.renderSVG(element.svg, element.posX, element.posY);
+            Anima.renderSVG(element.svg, element.posX, element.posY, element.rotDeg);
         }
     }
 };

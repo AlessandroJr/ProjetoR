@@ -65,7 +65,7 @@ body {
   background-color: #fffee2;
   border: 2px #2a2929 solid;
   border-radius: 3px;
-  position: absolute;
+  position: relative;
   top: 31vh;
   -webkit-box-shadow: -6px 6px 0px 0px #2a2929;
   box-shadow: -6px 6px 0px 0px #2a2929;
@@ -90,7 +90,7 @@ body {
 }
 
 .ola {
-  padding: 30px 30px 60px 30px;
+  padding: 25px 60px 50px 60px;
 }
 
 .backdoor {
@@ -102,12 +102,12 @@ body {
   z-index: -10;
 }
 #backdoor {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    top:0;
-    left: 0;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
 }
-.cobrinha{
-    transform: rotate(100deg);
+.cobrinha {
+  transform: rotate(100deg);
 }

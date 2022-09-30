@@ -1,109 +1,110 @@
 * {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 /* fallback */
 @font-face {
-    font-family: 'Material Symbols Outlined';
-    font-style: normal;
-    font-weight: 400;
-    src: url('../assets/fonts/IconsGF.woff2') format('woff2');
-  }
-  
-  .material-symbols-outlined {
-    font-family: 'Material Symbols Outlined';
-    font-weight: normal;
-    font-style: normal;
-    font-size: 24px;
-    line-height: 1;
-    letter-spacing: normal;
-    text-transform: none;
-    display: inline-block;
-    white-space: nowrap;
-    word-wrap: normal;
-    direction: ltr;
-    -webkit-font-feature-settings: 'liga';
-    -webkit-font-smoothing: antialiased;
-  }
+  font-family: "Material Symbols Outlined";
+  font-style: normal;
+  font-weight: 400;
+  src: url("../assets/fonts/IconsGF.woff2") format("woff2");
+}
 
-@font-face {
-    font-family: Archivo;
-    src: url('../assets/fonts/Archivo-VariableFont_wdth_wght.woff');
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
 }
 
 @font-face {
-    font-family: Ultra;
-    src: url('../assets/fonts/Ultra-Regular_1.woff');
+  font-family: Archivo;
+  src: url("../assets/fonts/Archivo-VariableFont_wdth_wght.woff");
 }
 
-body{
-    background-color: #FAC710;
-    font-family: Archivo;
-    font-size: 12px;
+@font-face {
+  font-family: Ultra;
+  src: url("../assets/fonts/Ultra-Regular_1.woff");
 }
 
-.header, .content {
-    width: 100%;
-    text-align: center;
-    justify-content: center;
+body {
+  background-color: #fac710;
+  font-family: Roboto regular;
+  font-size: 12px;
 }
 
-.content{
-    display: flex;
-    justify-content: center;
-    position: relative;
+.header,
+.content {
+  width: 100%;
+  text-align: center;
+  justify-content: center;
 }
 
-.logo-topo{ 
-    margin-top: 3%;
-    width: 33.33%;
+.content {
+  display: flex;
+  justify-content: center;
+  position: relative;
 }
 
-.janelinha{
-    background-color: #FFFEE2;
-    border: 2px #2A2929 solid;
-    border-radius: 3px;
-    position: absolute;
-    top: 31vh;
-    -webkit-box-shadow: -6px 6px 0px 0px #2A2929; 
-    box-shadow: -6px 6px 0px 0px #2A2929;
+.logo-topo {
+  margin-top: 3%;
+  width: 33.33%;
+}
+
+.janelinha {
+  background-color: #fffee2;
+  border: 2px #2a2929 solid;
+  border-radius: 3px;
+  position: absolute;
+  top: 31vh;
+  -webkit-box-shadow: -6px 6px 0px 0px #2a2929;
+  box-shadow: -6px 6px 0px 0px #2a2929;
 }
 
 .frase-efeito {
-    font-family: Ultra;
-    font-size: 60px;
-    color: #652CB3;
+  font-family: Ultra;
+  font-size: 60px;
+  color: #652cb3;
 }
 
 .janelinha-p {
-    width: 70%;
+  width: 70%;
 }
 
-.janelinha-header{
-    display: flex;
-    justify-content: space-between;
-    background-color: #652CB3;
-    color: #fff;
-    padding: 6px 6px;
+.janelinha-header {
+  display: flex;
+  justify-content: space-between;
+  background-color: #652cb3;
+  color: #fff;
+  padding: 6px 6px;
 }
 
-.ola{
-    padding: 30px 30px 60px 30px;
+.ola {
+  padding: 30px 30px 60px 30px;
 }
 
 .backdoor {
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-    top:0;
-    left: 0;
-    z-index: -10;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: -10;
 }
 #backdoor {
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    top:0;
-    left: 0;
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
 }

@@ -1,17 +1,126 @@
-SVG#esplosao {
+svg#esplosao {
   position: absolute;
-  top: 335px;
-  left: 81px;
+  top: 52px;
+  left: 31px;
 }
 
-SVG#estrelinha-g {
+/* SVG#estrelinha-g {
   position: absolute;
   top: 378px;
   left: 230px;
 }
 
 SVG#estrelinha-p {
+  
+} */
+
+
+@keyframes floating {
+  0% {
+    transform: translate(0px, 0px);
+  }
+
+  50% {
+    transform: translate(0px, 20px);
+  }
+
+  100% {
+    transform: translate(0px, 0px);
+  }
+}
+
+
+.floatingDefault {
+  animation-name: floating;
+  animation-duration: 3s;
+  animation-delay: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: easy;
+}
+
+.floatingDelayed {
+  animation-name: floating;
+  animation-duration: 3s;
+  animation-delay: 0s;
+  animation-iteration-count: infinite;
+  animation-timing-function: easy;
+}
+
+#triangulo {
   position: absolute;
-  top: 405px;
-  left: 200px;
+  top: 6vh;
+  left: -14vw;
+  transform: rotate(-40deg);
+  z-index: 0
+}
+
+#piramide {
+  position: absolute;
+  top: 72vh;
+  left: -9vw;
+  transform: rotate(0deg);
+  z-index: 0
+}
+
+#curva-verde {
+  position: absolute;
+  top: 22vh;
+  left: -22vw;
+  transform: rotate(-15deg);
+  z-index: -15
+}
+
+.cobrinha {
+  transform: rotate(100deg);
+}
+
+#estrela-p {
+  position: absolute;
+  top: 61vh;
+  left: 55vw;
+}
+
+#estrela-m {
+  position: absolute;
+  top: 71vh;
+  left: 55vw;
+}
+
+#estrela-g {
+  position: absolute;
+  top: 56vh;
+  left: 59vw;
+}
+
+#curva-vermelha {
+  position: absolute;
+  top: 14vh;
+  left: -27vw;
+  transform: rotate(-15deg);
+  z-index: -15
+}
+
+#curva-rosa {
+  position: absolute;
+  top: 5vh;
+  left: -22vw;
+  transform: rotate(-15deg);
+  z-index: -15
+}
+
+#olho-aberto {
+  position: absolute;
+  top: 85vh;
+  left: 65vw;
+  transform: rotate(0deg);
+  z-index: 0
+}
+
+
+/*---------------------------------------------------------------------------------------------------------*/
+/*              SUAVIZAÇÕES                                                                                */
+/*---------------------------------------------------------------------------------------------------------*/
+
+.backdoor #backdoor div{
+  transition: all 3s ease;
 }

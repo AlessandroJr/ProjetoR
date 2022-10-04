@@ -41,6 +41,7 @@ body {
   background-color: #fac710;
   font-family: Roboto regular;
   font-size: 12px;
+  overflow: hidden;
 }
 
 .header,
@@ -65,7 +66,8 @@ body {
   background-color: #fffee2;
   border: 2px #2a2929 solid;
   border-radius: 3px;
-  position: relative;
+  margin: auto;
+  position: absolute;
   top: 31vh;
   -webkit-box-shadow: -6px 6px 0px 0px #2a2929;
   box-shadow: -6px 6px 0px 0px #2a2929;
@@ -77,9 +79,13 @@ body {
   color: #652cb3;
 }
 
-.janelinha-p {
-  width: 70%;
+.janelinha-content{
+  position: relative;
 }
+
+/* .janelinha-p {
+  width: 70%;
+} */
 
 .janelinha-header {
   display: flex;
@@ -108,6 +114,20 @@ body {
   top: 0;
   left: 0;
 }
-.cobrinha {
-  transform: rotate(100deg);
+
+.overlay {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+#overlay {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
 }

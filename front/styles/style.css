@@ -3,6 +3,12 @@
   padding: 0;
 }
 
+body {
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+}
+
+
 /* fallback */
 @font-face {
   font-family: "Material Symbols Outlined";
@@ -28,8 +34,8 @@
 }
 
 @font-face {
-  font-family: Archivo;
-  src: url("../assets/fonts/Archivo-VariableFont_wdth_wght.woff");
+  font-family: Roboto;
+  src: url("../assets/fonts/Roboto-Regular.woff");
 }
 
 @font-face {
@@ -59,7 +65,7 @@ body {
 
 .logo-topo {
   margin-top: 3%;
-  width: 33.33%;
+  width: 130px;
 }
 
 .janelinha {
@@ -69,17 +75,68 @@ body {
   margin: auto;
   position: absolute;
   top: 31vh;
+  width: 280px;
+  height: 25px;
+  transition: all 3s ease;
   -webkit-box-shadow: -6px 6px 0px 0px #2a2929;
   box-shadow: -6px 6px 0px 0px #2a2929;
+}
+
+#janelinha {
+  transform: scale(0.001);
 }
 
 .frase-efeito {
   font-family: Ultra;
   font-size: 60px;
   color: #652cb3;
+  text-shadow:
+    -1px -1px 0px #2A2929,
+    -1px 1px 0px #2A2929,
+    1px -1px 0px #2A2929,
+    1px 0px 0px #2A2929;
 }
 
-.janelinha-content{
+.frase-efeito .txt1 {
+  letter-spacing: 10px;
+  font-size: 40px;
+  display: flex;
+  align-content: flex-end;
+  justify-content: center;
+}
+
+.frase-efeito .txt2 {
+  font-size: 40px;
+  letter-spacing: 6px;
+}
+
+.frase-efeito .txt3 {
+  font-size: 40px;
+  text-shadow: none;
+}
+
+.frase-efeito .txt4 {
+  font-size: 26px;
+  text-shadow: none;
+}
+
+#txt-intro {
+  font-family: Roboto;
+  font-size: 16px;
+  padding: 20px 15px;
+  color: #2A2929;
+  text-shadow: none;
+}
+
+.antesdetudo {
+  width: 310px;
+  position: absolute;
+  top: 10vh;
+  text-align: left;
+  margin-left: -200vw;
+}
+
+.janelinha-content {
   position: relative;
 }
 
@@ -89,14 +146,17 @@ body {
 
 .janelinha-header {
   display: flex;
+  /* transform: scale(0.001); */
   justify-content: space-between;
   background-color: #652cb3;
   color: #fff;
   padding: 6px 6px;
+
 }
 
-.ola {
-  padding: 25px 60px 50px 60px;
+#ola {
+  opacity: 0;
+  margin-top: 37px;
 }
 
 .backdoor {
@@ -106,13 +166,16 @@ body {
   top: 0;
   left: 0;
   z-index: -10;
+  overflow: hidden;
 }
+
 #backdoor {
   position: relative;
   width: 100vw;
   height: 100vh;
   top: 0;
   left: 0;
+  overflow: hidden;
 }
 
 .overlay {
@@ -122,6 +185,7 @@ body {
   top: 0;
   left: 0;
   z-index: 100;
+  overflow: hidden;
 }
 
 #overlay {
@@ -130,4 +194,99 @@ body {
   height: 100vh;
   top: 0;
   left: 0;
+  overflow: hidden;
+}
+
+.btn {
+  border: 2px #2a2929 solid;
+  -webkit-box-shadow: -6px 6px 0px 0px #2a2929;
+  box-shadow: -6px 6px 0px 0px #2a2929;
+  width: 315px;
+  text-align: center;
+  border-radius: 50px;
+  font-size: 26px;
+  font-family: Ultra;
+  color: #2A2929;
+  padding: 20px 0;
+  display: flex;
+  align-content: flex-end;
+  justify-content: center;
+}
+
+.btn:hover {
+  cursor: pointer;
+}
+
+.btn-bottom {
+  position: absolute;
+  margin: auto;
+}
+
+.btn-yellow {
+  background-color: #FAC710;
+}
+
+.btn-cian {
+  background-color: #16D1A7;
+}
+
+
+
+.wrap-input100 {
+  width: 100%;
+  position: relative;
+  border-bottom: 2px solid #000000;
+  padding-bottom: 13px;
+  margin-bottom: 27px;
+}
+
+.validate-input {
+  position: relative;
+}
+
+.label-input100 {
+  font-family: Roboto;
+  font-size: 13px;
+  color: rgb(0, 0, 0);
+  line-height: 1.5;
+  padding-left: 5px;
+}
+
+input.input100 {
+  height: 40px;
+}
+
+.input100 {
+  display: block;
+  width: 100%;
+  background: 0 0;
+  font-family: Roboto;
+  font-size: 18px;
+  color: rgb(0, 0, 0);
+  line-height: 1.2;
+  padding: 0 5px;
+}
+
+input {
+  outline: none;
+  border: none;
+}
+
+.focus-input100 {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.arrow-input {
+  margin-top: 5px;
+  position: absolute;
+  top: -5px;
+  right: -6px;
+  font-size: 32px;
+  font-weight: 800;
 }

@@ -17,11 +17,11 @@ SVG#estrelinha-p {
 
 @keyframes spinning {
   from {
-    transform: rotate(0deg);
+    transform: rotate(0deg) translate(0, 0);
   }
 
   to {
-    transform: rotate(360deg);
+    transform: rotate(360deg) translate(0, 0);
   }
 }
 
@@ -84,6 +84,7 @@ SVG#estrelinha-p {
 
 #curva-vermelha {
   z-index: -15;
+  width: 100vw;
   margin-top: -100%;
 }
 
@@ -109,6 +110,12 @@ SVG#estrelinha-p {
   top:150vh;
 }
 
+#curva-vermelho-curta {
+  position: absolute;
+  width: 100%;
+  top:150vh;
+}
+
 #inserir-nome {
   width: 310px;
   position: absolute;
@@ -123,8 +130,34 @@ SVG#estrelinha-p {
   right: 0;
 }
 
+#olho-easter{
+  position: absolute;
+  top: 40vh;
+  margin: auto;
+  opacity: 0;
+  z-index: 10;
+}
 
+#oe-aberto {
+  width: 100px;
+}
 
+#oe-fechado {
+  width: 100px;
+}
+
+#planeta-loading {
+  position: absolute;
+  margin: auto;
+  top:32vh;
+  opacity: 0;
+  width: 150px;
+  left: auto;
+}
+
+#btns-carreiras {
+  margin-top: 77px;
+}
 
 /*---------------------------------------------------------------------------------------------------------*/
 /*              AJUSTES GERAIS                                                                             */
@@ -147,6 +180,7 @@ SVG#estrelinha-p {
 .backdoor #backdoor #curva-rosa,
 .backdoor #backdoor #curva-vermelha,
 #curva-verde-curta,
+#curva-vermelho-curta,
 #inserir-nome
  {
   transition: all 3s ease;
@@ -167,13 +201,22 @@ SVG#estrelinha-p {
 svg#explosao,
 #ola,
 .txt1,
-.txt2
+.txt2,
+#planeta-loading
 {
   transition: all 0.5s ease;
 }
 
 #estrela-loading,
-.antesdetudo
+.antesdetudo,
+.perfeitonome,
+.seguircarreira,
+.agorashow,
+#btns-carreiras,
+#olho-easter,
+#curva-verde,
+#curva-vermelha,
+.header-pergunta
 {
   transition: all 1s ease;
 }

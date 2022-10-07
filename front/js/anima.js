@@ -2,13 +2,198 @@
 
 let Anima = {
 
-    onClickAction: function (sceneid) {
+    player: {
+        nome: ''
+    },
+
+    onClickAction: function (sceneid, oquesalvar) {
         let nextframe = Anima.frames.find(e => e.sceneid === sceneid);
 
         if (nextframe.nextFrame) {
             nextframe.nextFrame();
         }
+
+        switch (oquesalvar) {
+            case 'playernome':
+                Anima.player.nome = document.getElementById('player-nome').value
+                break;
+
+            default:
+                break;
+        }
     },
+
+    onClickCarreira: function (carreira) {
+
+        switch (carreira) {
+            case 'design':
+                Anima.carreiraDesign();
+                break;
+
+            case 'frontend':
+                Anima.carreiraFrontend();
+                break;
+
+            case 'ba':
+                Anima.carreiraBa();
+                break;
+
+            case 'backend':
+                Anima.carreiraBackend();
+                break;
+
+            case 'tester':
+                Anima.carreiraTester();
+                break;
+
+            case 'comercial':
+                Anima.carreiraComercial();
+                break;
+
+            case 'contabil':
+                Anima.carreiraContabil();
+                break;
+
+            case 'adm':
+                Anima.carreiraAdm();
+                break;
+
+            case 'rh':
+                Anima.carreiraRh();
+                break;
+
+            default:
+                break;
+        }
+
+    },
+
+    carreiraDesign: function () {
+        this.loadingPerguntas();
+    },
+
+    loadingPerguntas: function () {
+        let html = `
+        <div class="frase-efeito agorashow">
+            <div class="txt3">
+                Agora, hora <br>
+                do show!
+            </div>
+        </div>`;
+
+        let curvas =`<div id="curva-verde"><svg class="floatingDefault" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+              viewBox="0 0 347 142" style="enable-background:new 0 0 347 142;" xml:space="preserve">
+         <style type="text/css">
+             .st0{clip-path:url(#SVGID_00000181781177258171903250000010890193186801933449_);fill:#269385;}
+         </style>
+         <g>
+             <defs>
+                 <rect id="SVGID_1_" width="347" height="142"/>
+             </defs>
+             <clipPath id="SVGID_00000026849244763890238530000003769901207436846752_">
+                 <use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+             </clipPath>
+             <path style="clip-path:url(#SVGID_00000026849244763890238530000003769901207436846752_);fill:#269385;" d="M346.8,19.1
+                 c-1.7,4.9-4.5,9.3-9.5,8.1c-4.5-1.1-7.4-10.9-9.9-15.2c-2.6-4.5-7-7.8-12.1-9c-0.8-0.2-1.6-0.3-2.3-0.4h-4.8
+                 c-11.4,1.7-16.8,15.2-19.3,25.9c-1.5,5.5-3.8,18.1-11.7,16.2c-4.5-1.1-7.4-10.9-9.9-15.2c-2.6-4.5-7-7.8-12.1-9
+                 C239,16.5,232,33.2,228.9,45.9c-1.5,5.5-3.8,18.1-11.7,16.2c-4.5-1.1-7.4-10.9-9.9-15.2c-2.6-4.5-7-7.8-12.1-9
+                 c-16.3-3.9-23.3,12.8-26.4,25.5c-1.5,5.5-3.8,18.1-11.7,16.2c-4.5-1.1-7.4-10.9-9.9-15.2c-2.6-4.5-7-7.8-12.1-9
+                 c-16.3-3.9-23.3,12.8-26.4,25.5h0c-1.5,5.5-3.8,18.1-11.7,16.2c-4.5-1.1-7.4-10.9-9.9-15.2c-2.6-4.5-7-7.8-12.1-9
+                 C58.8,69,51.8,85.7,48.8,98.4c-1.5,5.5-3.8,18.1-11.7,16.2c-4.5-1.1-7.4-10.9-9.9-15.2c-2.6-4.5-7-7.8-12.1-9
+                 c-6.5-1.6-11.5,0.1-15.3,3.5v28.4c0.3-1.2,0.7-2.4,0.9-3.5l0,0c1.5-5.5,3.6-18.2,11.7-16.2c4.1,1,6.2,7.9,7.9,11.4
+                 c3.4,6.5,6.7,11,14,12.8c16.2,3.9,23.4-12.9,26.4-25.5c1.5-5.5,3.6-18.2,11.7-16.2c4.1,1,6.2,7.9,7.9,11.4c3.4,6.5,6.7,11,14,12.8
+                 c16.2,3.9,23.4-12.9,26.4-25.5l0,0c1.5-5.5,3.6-18.2,11.7-16.2c4.1,1,6.2,7.9,7.9,11.4c3.4,6.5,6.7,11,14,12.8
+                 c16.2,3.9,23.4-12.9,26.4-25.5c1.5-5.5,3.6-18.2,11.7-16.2c4.1,1,6.2,7.9,7.9,11.4c3.4,6.5,6.7,11,14,12.8
+                 c16.2,3.9,23.4-12.9,26.4-25.5c1.5-5.5,3.6-18.2,11.7-16.2c4.1,1,6.2,7.9,7.9,11.4c3.4,6.5,6.7,11,14,12.8
+                 c16.2,3.9,23.4-12.9,26.4-25.5c1.5-5.5,3.6-18.2,11.7-16.2c4.1,1,6.2,7.9,7.9,11.4c3.4,6.5,6.7,11,14,12.8
+                 c4.8,1.2,8.8,0.5,12.1-1.3V19.1z"/>
+         </g>
+         </svg>
+            
+  
+              </div>
+
+              <div id="curva-vermelha"><svg class="floatingDefault" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+              viewBox="0 0 347 142" style="enable-background:new 0 0 347 142;" xml:space="preserve">
+         <style type="text/css">
+             .st2230{fill:#D90F0F;}
+         </style>
+         <path class="st2230" d="M333.3,23.6L333.3,23.6c-1.5,5.5-3.8,18.1-11.7,16.2c-4.5-1.1-7.4-10.9-9.9-15.2c-2.6-4.5-7-7.8-12-9
+             c-16.3-3.9-23.3,12.8-26.4,25.5c-1.5,5.5-3.8,18.1-11.7,16.2c-4.5-1.1-7.4-10.9-9.9-15.2c-2.6-4.5-7-7.8-12.1-9
+             c-16.3-3.9-23.3,12.8-26.4,25.5c-1.5,5.5-3.8,18.1-11.7,16.2c-4.5-1.1-7.4-10.9-9.9-15.2c-2.6-4.5-7-7.8-12.1-9
+             c-16.3-3.9-23.3,12.8-26.4,25.5c-1.5,5.5-3.8,18.1-11.7,16.2c-4.5-1.1-7.4-10.9-9.9-15.2c-2.6-4.5-7-7.8-12.1-9
+             C103.1,64.1,96.1,80.8,93,93.5l0,0c-1.5,5.5-3.8,18.1-11.7,16.2c-4.5-1.1-7.4-10.9-9.9-15.2c-2.6-4.5-7-7.8-12.1-9
+             C43.1,81.6,36.1,98.3,33,111c-1.5,5.5-3.8,18.1-11.7,16.2c-4.5-1.1-7.4-10.9-9.9-15.2c-2.5-4.3-6.6-7.5-11.4-8.8v14.4
+             c2,2.6,3.4,6.6,4.6,9c3.4,6.5,6.7,11,14,12.8c16.2,3.9,23.4-12.9,26.4-25.5c1.5-5.5,3.6-18.2,11.7-16.2c4.1,1,6.2,7.9,7.9,11.4
+             c3.4,6.5,6.7,11,14,12.8C94.8,125.8,102,109,105,96.4l0,0c1.5-5.5,3.6-18.2,11.7-16.2c4.1,1,6.2,7.9,7.9,11.4
+             c3.4,6.5,6.7,11,14,12.8c16.2,3.9,23.4-12.9,26.4-25.5c1.5-5.5,3.6-18.2,11.7-16.2c4.1,1,6.2,7.9,7.9,11.4c3.4,6.5,6.7,11,14,12.8
+             c16.2,3.9,23.4-12.9,26.4-25.5c1.5-5.5,3.6-18.2,11.7-16.2c4.1,1,6.2,7.9,7.9,11.4c3.4,6.5,6.7,11,14,12.8
+             c16.2,3.9,23.4-12.9,26.4-25.5c1.5-5.5,3.6-18.2,11.7-16.2c4.1,1,6.2,7.9,7.9,11.4c3.4,6.5,6.7,11,14,12.8
+             c16.2,3.9,23.4-12.9,26.4-25.5h0c0.5-1.7,1-4.2,1.8-6.7V0h-0.5C339.2,4.6,335.3,15,333.3,23.6z"/>
+         </svg>
+         
+  
+              </div>
+        `;
+        
+        $('#planeta-loading').css('transform', 'rotate(0deg) translate(0px, 0px)');
+        $('#btns-carreiras').css('transform', 'translate(-200vh, 0px)');
+        $('.seguircarreira').css('transform', 'translate(-200vh, 0px)');
+
+        
+        $('.content').append(html);
+        $('.backdoor').append(curvas);
+
+        $('#curva-vermelha').css('margin-top', '200vh');
+        $('.agorashow').css('margin-top', '20vh');
+        
+        setTimeout(() => {
+
+            $('#curva-verde').css('margin-top', '12vh');
+            $('#curva-vermelha').css('margin-top', '20vh');
+            
+            setTimeout(() => {
+                $('#planeta-loading').css('transform', 'rotate(360deg) translate(0px, 0px)');
+
+                setTimeout(() => {
+                    $('#planeta-loading').css('transform', 'translate(150vw, 0px)');
+
+                    setTimeout(() => {
+                        $('.agorashow').css('margin-left', '0');
+
+                        setTimeout(() => {
+
+                            $('#curva-verde').css('margin-top', '-150vh');
+                            $('#curva-vermelha').css('margin-top', '300vh');
+                            $('.agorashow').css('margin-left', '200vw');
+                            
+                            setTimeout(() => {
+                                $('.content').html('');    
+
+                                $('body').css('background-color', '#FFF6D6');
+
+                                Anima.abrirPerguntas();
+                            }, 2000);
+
+                        }, 2500);
+
+                    }, 500);
+                    
+                }, 1000);
+                
+            }, 1000);
+
+        }, 1000);
+    },
+
+    abrirPerguntas: function () {
+        let header = `
+            <div class="header-pergunta">
+
+            </div>
+        `;
+    },
+    
 
     currentFrame: {},
 
@@ -528,6 +713,7 @@ let Anima = {
     }, {
         sceneid: 8,
         onThisFrame: function () {
+            let frame = this;
 
             $('#estrela-loading').css('opacity', '0');
 
@@ -589,12 +775,12 @@ let Anima = {
             `;
             let formNome = `
                 <div id="inserir-nome">
-                <div class="wrap-input100 validate-input" data-validate="Name is required">
+                <div class="wrap-input100 validate-input">
                 
-                <input class="input100" type="text" name="name" placeholder="{seu_nome_aqui}">
+                <input id="player-nome" class="input100" type="text" name="name" placeholder="{seu_nome_aqui}">
                 <span class="focus-input100"></span>
                 </div>
-                <div onclick="alert('teu cu')" class="material-symbols-outlined arrow-input">
+                <div onclick="Anima.onClickAction(${frame.sceneid}, 'playernome')" class="material-symbols-outlined arrow-input">
                     arrow_forward
                 </div>
                 <div>
@@ -617,8 +803,266 @@ let Anima = {
                 }, 200);
 
             }, 500);
+        },
+        nextFrame: function () {
+            let i = this.sceneid + 1;
+
+            let nextframe = Anima.frames.find(e => e.sceneid === i);
+
+            if (nextframe.onThisFrame) {
+                nextframe.onThisFrame();
+            }
+        },
+    }, {
+        sceneid: 9,
+        onThisFrame: function () {
+            let frame = this;
+
+            let html = `
+                <div id="olho-easter">
+                    <svg id="oe-aberto" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="118" height="65" viewBox="0 0 118 65">
+                            <g id="olho" clip-path="url(#clip-olho)">
+                            <g id="Grupo_340" data-name="Grupo 340" transform="translate(-3134.831 -8790.233)">
+                                <ellipse id="Elipse_18" data-name="Elipse 18" cx="59" cy="32.5" rx="59" ry="32.5" transform="translate(3134.831 8790.233)" fill="#fff"/>
+                                <path id="Elipse_18_-_Contorno" data-name="Elipse 18 - Contorno" d="M59,2A99.386,99.386,0,0,0,36.488,4.5a71.418,71.418,0,0,0-18.243,6.769,38.091,38.091,0,0,0-12.023,9.8A18.628,18.628,0,0,0,2,32.5,18.628,18.628,0,0,0,6.223,43.932a38.091,38.091,0,0,0,12.023,9.8A71.418,71.418,0,0,0,36.488,60.5,99.386,99.386,0,0,0,59,63a99.386,99.386,0,0,0,22.512-2.5,71.418,71.418,0,0,0,18.243-6.769,38.091,38.091,0,0,0,12.023-9.8A18.628,18.628,0,0,0,116,32.5a18.628,18.628,0,0,0-4.223-11.432,38.091,38.091,0,0,0-12.023-9.8A71.418,71.418,0,0,0,81.512,4.5,99.386,99.386,0,0,0,59,2m0-2c32.585,0,59,14.551,59,32.5S91.585,65,59,65,0,50.449,0,32.5,26.415,0,59,0Z" transform="translate(3134.831 8790.233)" fill="#2a2929"/>
+                                <ellipse id="Elipse_19" data-name="Elipse 19" cx="23.9" cy="23.612" rx="23.9" ry="23.612" transform="translate(3169.931 8799.121)" fill="#2a2929"/>
+                            </g>
+                            </g>
+                    </svg>
+
+                    <svg id="oe-fechado" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                            viewBox="0 0 120.2 65" style="enable-background:new 0 0 120.2 65;" xml:space="preserve">
+                        <style type="text/css">
+                            .st0{fill:#272527;}
+                        </style>
+                        <path id="Caminho_2568" class="st0" d="M57.8,64c-8.4,0-16.8-1.1-24.9-3.4C13.8,55,2.4,43.1,0,26.1l2.1-0.3
+                            c5.6,38.9,58.3,36,58.8,35.9c0.2,0,0.5,0,0.7,0c45.1,0,56.5-35.8,56.6-36.1l2,0.7c-2.5,7.1-6.6,13.6-11.8,19
+                            c-8,8.5-22.6,18.6-46.7,18.6c-0.2,0-0.5,0-0.7,0C60.9,63.9,59.8,64,57.8,64z"/>
+                    </svg>
+                </div>
+                `;
+
+            $('.antesdetudo').css('top', '-150vh');
+            $('#curva-verde-curta').css('top', '-150vh');
+            $('#inserir-nome').css('top', '-150vh');
+
+            // $('.overlay').css('width', '100%');
+            // $('.overlay').css('height', '100%');
+
+            setTimeout(() => {
+                $('.content').html(html);
+
+                setTimeout(() => {
+
+                    $('#olho-easter').css('opacity', '1');
+
+                    $('#oe-aberto').css('display', 'block');
+                    $('#oe-fechado').css('display', 'none');
+
+                    setTimeout(() => {
+                        $('#oe-aberto').css('display', 'none');
+                        $('#oe-fechado').css('display', 'block');
+
+                        setTimeout(() => {
+                            $('#oe-aberto').css('display', 'block');
+                            $('#oe-fechado').css('display', 'none');
+
+                            setTimeout(() => {
+                                $('#oe-aberto').css('display', 'none');
+                                $('#oe-fechado').css('display', 'block');
+
+                                setTimeout(() => {
+                                    $('#oe-aberto').css('display', 'block');
+                                    $('#oe-fechado').css('display', 'none');
+
+                                    frame.nextFrame();
+
+                                }, 200);
+
+                            }, 1000);
+
+                        }, 200);
+
+                    }, 1500);
+
+                }, 1000);
+
+            }, 700);
 
 
+
+        },
+        nextFrame: function () {
+            let i = this.sceneid + 1;
+
+            let nextframe = Anima.frames.find(e => e.sceneid === i);
+
+            if (nextframe.onThisFrame) {
+                nextframe.onThisFrame();
+            }
+        }
+    }, {
+        sceneid: 10,
+        onThisFrame: function () {
+            let frame = this;
+
+            let html = `
+                <div class="frase-efeito perfeitonome">
+                    <div class="txt3">
+                        Perfeito,
+                        <br>
+                        ${Anima.player.nome}!
+                    </div>
+                </div>
+
+                <svg id="curva-vermelho-curta" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                    viewBox="0 0 412.7 85.5" style="enable-background:new 0 0 412.7 85.5;" xml:space="preserve">
+                    <style type="text/css">
+                        .vermelhongo{fill:#D90F0F;}
+                    </style>
+                    <path class="vermelhongo" d="M412.7,46.7c-3,4-6.7,7.1-11,4.7c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12c-14.6-8.3-26,5.8-32.4,17.2
+                        l0,0c-3,4.9-8.6,16.4-15.8,12.3c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12c-14.6-8.3-26,5.8-32.4,17.2
+                        c-3,4.9-8.6,16.4-15.8,12.3c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12c-14.6-8.3-26,5.8-32.4,17.2
+                        c-3,4.9-8.6,16.4-15.8,12.3c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12c-14.6-8.3-26,5.8-32.4,17.2
+                        c-3,4.9-8.6,16.4-15.8,12.3c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12c-14.6-8.3-26,5.8-32.4,17.2l0,0
+                        c-3,4.9-8.6,16.4-15.8,12.3c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12c-14.6-8.3-26,5.8-32.4,17.2
+                        c-3,4.9-8.6,16.4-15.8,12.3c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12C7.8,21.1,3.7,20.7,0,21.5v13c1.9-1,3.9-1.2,6.2,0
+                        c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c14.5,8.2,26-5.9,32.4-17.2c2.9-4.8,8.4-16.5,15.8-12.3
+                        c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c14.5,8.2,26-5.9,32.4-17.2l0,0c2.9-4.8,8.4-16.5,15.8-12.3
+                        c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c14.5,8.2,26-5.9,32.4-17.2c2.9-4.8,8.4-16.5,15.8-12.3
+                        c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c14.5,8.2,26-5.9,32.4-17.2c2.9-4.8,8.4-16.5,15.8-12.3
+                        c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c14.5,8.2,26-5.9,32.4-17.2c2.9-4.8,8.4-16.5,15.8-12.3
+                        c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c14.5,8.2,26-5.9,32.4-17.2l0,0c2.9-4.8,8.4-16.5,15.8-12.3
+                        c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c6.2,3.5,11.9,2.9,16.9,0.2V46.7z"/>
+                </svg>
+            `;
+
+            setTimeout(() => {
+
+                $('.content').append(html);
+
+
+                setTimeout(() => {
+                    $('#olho-easter').css('transform', 'rotate(-36deg) translate(130px, 16px)');
+                    $('#curva-vermelho-curta').css('top', '40vh');
+                    $('.perfeitonome').css('margin-left', '0');
+
+                    setTimeout(() => {
+
+                        $('#olho-easter').css('transform', 'rotate(-36deg) translate(-167vw, -211vh)');
+                        $('#curva-vermelho-curta').css('top', '150vh');
+                        $('.perfeitonome').css('margin-left', '-150vw');
+
+                        setTimeout(() => {
+                            frame.nextFrame();
+                        }, 1500);
+
+                    }, 4000);
+
+                }, 1000);
+
+            }, 300);
+        },
+        nextFrame: function () {
+            let i = this.sceneid + 1;
+
+            let nextframe = Anima.frames.find(e => e.sceneid === i);
+
+            if (nextframe.onThisFrame) {
+                nextframe.onThisFrame();
+            }
+        }
+    }, {
+        sceneid: 11,
+        onThisFrame: function () {
+            let frame = this;
+
+            let html = `
+            <div class="frase-efeito seguircarreira">
+                    <div class="txt4">
+                        E em qual área você quer seguir carreira?
+                    </div>
+                    <div class="listraazul">
+
+                    </div>
+                    <div id="btns-carreiras">
+                        <button onclick="Anima.onClickCarreira('design')" class="btn-carreira btn-cian">
+                            UI/UX Design
+                        </button>
+                        <button onclick="Anima.onClickCarreira('frontend')" class="btn-carreira btn-purple">
+                            FrontEnd
+                        </button>
+                        <button onclick="Anima.onClickCarreira('ba')" class="btn-carreira btn-red">
+                            Analista de negócios
+                        </button>
+                        <button onclick="Anima.onClickCarreira('backend')" class="btn-carreira btn-cian">
+                            BackEnd
+                        </button>
+                        <button onclick="Anima.onClickCarreira('tester')" class="btn-carreira btn-purple">
+                            QA
+                        </button>
+                        <button onclick="Anima.onClickCarreira('comercial')" class="btn-carreira btn-red">
+                            Comercial
+                        </button>
+                        <button onclick="Anima.onClickCarreira('rh')" class="btn-carreira btn-cian">
+                            RH
+                        </button>
+                        <button onclick="Anima.onClickCarreira('contabil')" class="btn-carreira btn-purple">
+                            Contabilidade
+                        </button>
+                        <button onclick="Anima.onClickCarreira('adm')" class="btn-carreira btn-red">
+                            Administração
+                        </button>
+                    </div>
+                </div>
+            <svg id="planeta-loading" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" width="128" height="73" xmlns:xlink="http://www.w3.org/1999/xlink"
+                    viewBox="0 0 128 73" style="enable-background:new 0 0 128 73;" xml:space="preserve">
+            <style type="text/css">
+                .st41232{fill:#FF4081;}
+                .st1223{fill:#2A2929;}
+                .st2222{fill:#FFEA00;}
+            </style>
+            <ellipse id="Elipse_17" transform="matrix(0.3998 -0.9166 0.9166 0.3998 4.9484 80.5509)" class="st41232" cx="64" cy="36.5" rx="35.5" ry="35.3"/>
+            <path id="Elipse_17_-_Contorno" class="st1223" d="M78.6,3c8.8,3.8,15.8,11.1,19.2,20.1c7.3,18.8-1.9,39.9-20.6,47.3
+                c-18.7,7.3-39.7-1.9-47-20.6c-3.5-9-3.3-19,0.6-27.8C36.5,8.6,49.8-0.1,64.5,0C69.3,0.1,74.1,1.1,78.6,3z M50.2,68.1
+                C67.6,75.8,88,68,95.7,50.6S95.6,12.8,78.1,5S40.3,5.2,32.6,22.6c0,0.1-0.1,0.1-0.1,0.2C24.9,40.2,32.8,60.5,50.2,68.1z"/>
+            <path id="Caminho_2561" class="st2222" d="M99.5,38.4L99.5,38.4c-0.2,2.5-0.6,5.1-1.3,7.5l0,0c8.5,5.2,13.4,9.5,12.5,11.6
+                c-1.7,3.9-24.1-2.1-50-13.5S15.1,20.4,16.8,16.5c0.9-2,7.2-1.4,16.6,1.2l0.3,0.1c1.3-2.2,2.9-4.2,4.7-6.1l0,0
+                C21.1,7,8.3,6.5,6.2,11.3C3,18.7,26.2,36,58.1,49.9s60.4,19.2,63.6,11.7C123.8,56.9,114.8,47.9,99.5,38.4z"/>
+            <path id="Caminho_2561_-_Contorno" class="st1223" d="M99.9,37.5c0,0,0.1,0,0.1,0.1c7.7,4.8,13.9,9.5,17.8,13.6c4.4,4.5,6,8.2,4.8,11
+                c-2.3,5.2-13.3,4.3-22.2,2.7c-12.1-2.2-27.3-7.2-42.8-13.9S28.3,36.3,18.4,29C11.2,23.6,3.1,16.1,5.3,10.9c1.2-2.8,5-4.1,11.3-4
+                c5.7,0.1,13.3,1.5,22.1,3.9c0.1,0,0.2,0.1,0.2,0.1l0,0c0.5,0.3,0.6,0.9,0.3,1.4c0,0.1-0.1,0.1-0.1,0.2c-1.7,1.8-3.3,3.8-4.6,5.9
+                c-0.3,0.4-0.8,0.6-1.2,0.4l-0.3-0.1c-3.7-1.1-7.5-1.9-11.3-2.3c-3.7-0.3-4.1,0.5-4.1,0.5c0,0-0.3,0.8,2.3,3.2
+                c2.8,2.4,5.8,4.6,8.9,6.5C39.3,32.8,50,38.4,61.1,43.1c11,4.9,22.4,9.1,34,12.4c3.5,1,7.2,1.7,10.9,2.1c3.5,0.3,3.9-0.5,3.9-0.5
+                c0,0,0.3-0.9-2.5-3.4c-3-2.6-6.2-4.9-9.6-6.9c-0.4-0.2-0.6-0.7-0.4-1.1c0.7-2.4,1.1-4.8,1.2-7.3c0-0.5,0.4-0.9,0.9-0.9l0,0
+                C99.6,37.4,99.7,37.4,99.9,37.5z M58.5,49c15.4,6.7,30.4,11.6,42.3,13.8c4.6,1,9.3,1.4,14,1.1c2.3-0.2,5.2-0.8,6-2.7
+                c0.8-1.9-0.7-5-4.4-8.8c-4.9-4.7-10.3-8.9-16.1-12.4c-0.2,1.8-0.5,3.6-1,5.3c3.3,2,6.4,4.2,9.3,6.7c1,0.8,1.8,1.8,2.5,2.9
+                c0.6,0.8,0.8,1.9,0.4,2.8c-0.5,0.9-1.3,1.5-2.3,1.6c-1.2,0.2-2.4,0.3-3.6,0.1c-3.8-0.4-7.6-1.1-11.2-2.2
+                C82.9,54,71.4,49.9,60.3,44.9c-11.2-4.8-22-10.3-32.5-16.6c-3.3-2-6.4-4.2-9.2-6.7c-0.9-0.8-1.7-1.7-2.3-2.7
+                c-0.6-0.8-0.7-1.8-0.4-2.7c0.5-0.9,1.3-1.5,2.3-1.6c1.2-0.2,2.5-0.2,3.7-0.1c3.8,0.4,7.6,1.2,11.4,2.3c1-1.5,2.1-3,3.3-4.3
+                c-6.5-1.9-13.2-3-20-3.4C11.3,8.8,8,9.8,7.2,11.7c-0.8,1.8,0.7,4.4,2.1,6.2c3,3.6,6.5,6.8,10.3,9.5C29.3,34.6,43.2,42.3,58.5,49
+                L58.5,49z"/>
+            </svg>
+            `;
+
+            $('.content').html(html);
+
+            setTimeout(() => {
+                $('#planeta-loading').css('opacity', '1');
+
+                setTimeout(() => {
+                    $('#planeta-loading').addClass('spinningDefault');
+
+                    setTimeout(() => {
+                        $('#planeta-loading').css('transform', 'rotate(0deg) translate(130px, -80px)');
+
+                        // $('.seguircarreira').css('margin-left', '-250vw');
+                        $('.seguircarreira').css('margin-left', '0vw');
+                    }, 1550);
+
+                }, 500);
+
+            }, 200);
 
         }
     }],

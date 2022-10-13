@@ -21,7 +21,11 @@ let Anima = {
     coresPgts: [],
 
     player: {
-        nome: ''
+        nome: '',
+        perguntaAtual: 0,
+        pgts: [],
+        respondidas: [],
+        acertos: 0
     },
 
     onClickAction: function (sceneid, oquesalvar) {
@@ -210,8 +214,9 @@ let Anima = {
     },
 
     abrirPerguntas: function () {
+        let cores = Anima.cores[Math.floor(Math.random() * 4)];
         let header = `
-            <div class="header-pergunta">
+            <div class="header-pergunta" style="background-color:${cores.header}">
                 <svg class="logo-topo" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                         viewBox="0 0 1211.4 374.8" style="enable-background:new 0 0 1211.4 374.8;" xml:space="preserve">
                 <style type="text/css">
@@ -262,7 +267,7 @@ let Anima = {
                     <svg id="exp-svg" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                         viewBox="0 0 67.6 67.7" style="enable-background:new 0 0 67.6 67.7;" xml:space="preserve">
                     <g id="Polígono_13">
-                        <path class="exp-background" d="M41.5,63l-7.2-11l-0.4-0.6L33.4,52l-7.2,11l-0.9-13.3l0-0.8l-0.7,0.3l-11.7,5.9l5.7-11.9l0.3-0.7l-0.7-0.1
+                        <path fill="${cores.exp}" d="M41.5,63l-7.2-11l-0.4-0.6L33.4,52l-7.2,11l-0.9-13.3l0-0.8l-0.7,0.3l-11.7,5.9l5.7-11.9l0.3-0.7l-0.7-0.1
                             l-13-0.9l10.8-7.4l0.6-0.4l-0.6-0.4L5.3,26l13-0.9l0.7-0.1l-0.3-0.7l-5.7-11.9l11.7,5.9l0.7,0.3l0-0.8l0.9-13.3l7.2,11l0.4,0.6
                             l0.4-0.6l7.2-11l0.9,13.3l0,0.8l0.7-0.3l11.7-5.9L49,24.4l-0.3,0.7l0.7,0.1l13,0.9l-10.8,7.4l-0.6,0.4l0.6,0.4l10.8,7.4l-13,0.9
                             l-0.7,0.1l0.3,0.7l5.7,11.9L43,49.3L42.4,49l0,0.8L41.5,63z"/>
@@ -282,9 +287,16 @@ let Anima = {
         setTimeout(() => {
             $('.header-pergunta').css('margin-top', '0');
             $('body').css('overflow-y', 'scroll');
+            $('.content').css('overflow-x', 'hidden');
+            $('.content').css('display', 'block');
+            $('.content').css('height', 'auto');
+            $('.content').css('padding-bottom', '50px');
+            // $('.content').css('opacity','0');
+            Anima.prepararPerguntasCarreira(this.carreira, function () {
+                Anima.renderPergunta(0, cores);
+            });
         }, 1000);
 
-        Anima.prepararPerguntasCarreira(this.carreira);
         // Anima.gerarCoresTemaPgts();
     },
 
@@ -299,10 +311,10 @@ let Anima = {
         }
     },
 
-    prepararPerguntasCarreira: function () {
+    prepararPerguntasCarreira: function (carreira, _cb) {
         let pgtSlctd = [];
 
-        let pgtsCarreira = Anima.perguntas.find(element => element.grupo == Anima.carreira);
+        let pgtsCarreira = Anima.perguntas.find(element => element.grupo == carreira);
 
         const maxNumbers = pgtsCarreira.pgts.length;
         let list = [];
@@ -323,16 +335,118 @@ let Anima = {
         }
 
         for (let index = 0; index < 3; index++) {
-            pgtSlctd.push(pgtsCarreira.pgts[list[index]-1]);
+            pgtSlctd.push(pgtsCarreira.pgts[list[index] - 1]);
         }
 
-        Anima.player.pgts =  pgtSlctd;
+        Anima.player.pgts = pgtSlctd;
+
+        return _cb();
     },
 
-    renderPerguntas: function () {
-        let html = [];
+    renderPergunta: function (i, cores) {
+        let html = '';
+        let pergunta = Anima.player.pgts[Anima.player.perguntaAtual];
 
-        html.push('');
+        html = `
+        <div class="janelinha janelinha-pgt">
+        <div class="janelinha-header">
+            <div id="progress">desafio_useall_${(Anima.player.perguntaAtual + 1) + '/' + Anima.player.pgts.length}</div>
+            <div style="position: relative;">
+                <span style="position: absolute;top: -6px; left: -68px;" class="material-symbols-outlined">
+                    remove
+                </span>
+                <span style="position: absolute;top: -6px; left: -43px;" class="material-symbols-outlined">
+                    check_box_outline_blank
+                </span>
+                <span style="position: absolute;top: -6px; left: -17px;" class="material-symbols-outlined">
+                    close
+                </span>
+            </div>
+        </div>
+
+        <div id="pergunta">
+            ...
+
+
+
+        </div>
+    </div>
+
+    <div id="respostas">
+    </div>
+        `;
+
+        $('.content').html(html);
+
+        setTimeout(() => {
+            $('#pergunta').html(pergunta.pergunta);
+
+            let respostas = '';
+
+            for (let index = 0; index < pergunta.respostas.length; index++) {
+                const element = pergunta.respostas[index] || 0;
+
+                let idresp = '#resposta-' + (index + 1);
+
+                let letraQst = '';
+
+                switch (index) {
+                    case 0:
+                        letraQst = 'A'
+                        break;
+
+                    case 1:
+                        letraQst = 'B'
+                        break;
+
+                    case 2:
+                        letraQst = 'C'
+                        break;
+
+                    case 3:
+                        letraQst = 'D'
+                        break;
+
+                    default:
+                        letraQst = '§'
+                        break;
+                }
+
+                respostas += `
+                <div class="resposta" onclick="Anima.onClickResposta(${element.respostacerta ? 'certo' : 'errado'})">
+                    <div class="left">
+                        <div class="grafic">
+                            
+                            <svg id="exp-svg" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                viewBox="0 0 67.6 67.7" style="enable-background:new 0 0 67.6 67.7;" xml:space="preserve">
+                            <g id="Polígono_13">
+                                <path fill="${cores.exp}" d="M41.5,63l-7.2-11l-0.4-0.6L33.4,52l-7.2,11l-0.9-13.3l0-0.8l-0.7,0.3l-11.7,5.9l5.7-11.9l0.3-0.7l-0.7-0.1
+                                    l-13-0.9l10.8-7.4l0.6-0.4l-0.6-0.4L5.3,26l13-0.9l0.7-0.1l-0.3-0.7l-5.7-11.9l11.7,5.9l0.7,0.3l0-0.8l0.9-13.3l7.2,11l0.4,0.6
+                                    l0.4-0.6l7.2-11l0.9,13.3l0,0.8l0.7-0.3l11.7-5.9L49,24.4l-0.3,0.7l0.7,0.1l13,0.9l-10.8,7.4l-0.6,0.4l0.6,0.4l10.8,7.4l-13,0.9
+                                    l-0.7,0.1l0.3,0.7l5.7,11.9L43,49.3L42.4,49l0,0.8L41.5,63z"/>
+                                <path class="exp-border" d="M41.1,6.2l-7.2,11.1L26.6,6.2l-0.9,13.3L14,13.6l5.7,12l-13,0.9l10.8,7.4L6.8,41.3l13,0.9l-5.7,12l11.7-5.9
+                                    l0.9,13.3l7.2-11.1l7.2,11.1l0.9-13.3l11.7,5.9l-5.7-12l13-0.9l-10.8-7.4l10.8-7.4l-13-0.9l5.7-12l-11.7,5.9L41.1,6.2 M41.9,3.1
+                                    l1,14.8l13-6.5l-6.4,13.3l14.4,1l-12,8.2l12,8.2l-14.4,1l6.4,13.3l-13-6.5l-1,14.8l-8-12.3l-8,12.3l-1-14.8l-13,6.5L18.2,43
+                                    l-14.4-1l12-8.2l-12-8.2l14.4-1l-6.4-13.3l13,6.5l1-14.8l8,12.3L41.9,3.1z"/>
+                            </g>
+                            </svg>
+
+                            <div class="letra-opt">
+                                ${letraQst}
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div id="resposta-${idresp}" class="desc-resposta">
+                        ${element.desc}
+                    </div>
+                </div>
+                `;
+            }
+
+            $('#respostas').html(respostas);
+        }, 250);
     },
 
     currentFrame: {},
@@ -1090,7 +1204,7 @@ let Anima = {
 
                         $('#olho-easter').css('transform', 'rotate(-36deg) translate(-167vw, -211vh)');
                         $('#curva-vermelho-curta').css('top', '150vh');
-                        $('.perfeitonome').css('margin-left', '-150vw');
+                        $('.perfeitonome').css('margin-left', '-300vw');
 
                         setTimeout(() => {
                             frame.nextFrame();
@@ -1128,13 +1242,13 @@ let Anima = {
                         <button onclick="Anima.onClickCarreira('design')" class="btn-carreira btn-cian">
                             UI/UX Design
                         </button>
-                        <button onclick="Anima.onClickCarreira('frontend')" class="btn-carreira btn-purple">
+                        <button onclick="Anima.onClickCarreira('desenvolvimento')" class="btn-carreira btn-purple">
                             FrontEnd
                         </button>
-                        <button onclick="Anima.onClickCarreira('ba')" class="btn-carreira btn-red">
+                        <button onclick="Anima.onClickCarreira('desenvolvimento')" class="btn-carreira btn-red">
                             Analista de negócios
                         </button>
-                        <button onclick="Anima.onClickCarreira('backend')" class="btn-carreira btn-cian">
+                        <button onclick="Anima.onClickCarreira('desenvolvimento')" class="btn-carreira btn-cian">
                             BackEnd
                         </button>
                         <button onclick="Anima.onClickCarreira('tester')" class="btn-carreira btn-purple">
@@ -1245,6 +1359,16 @@ let Anima = {
 
             $('#' + desenho).css('transform', `scale(${((100 * ((window.innerWidth + window.innerHeight) / 2)) / 374) * 0.007})`);
         }
+    },
+
+    onClickResposta: function (sn) {
+        console.log(sn);
+
+        if (sn == 'certo') {
+            Anima.player.acertos++;
+        }
+
+        Anima.player.respondidas.push(Anima.player.pgts[Anima.player.perguntaAtual]);
     },
 
     perguntas:
@@ -1369,7 +1493,7 @@ let Anima = {
                         respostacerta: 1
                     },
                     {
-                        desc: "Versaõ Beta",
+                        desc: "Versão Beta",
                         respostacerta: 0
                     },
                     {
@@ -1462,6 +1586,492 @@ let Anima = {
                     }
                 ]
             }]
+        }, {
+            grupo: "desenvolvimento",
+            pgts: [
+                {
+                    area: "Desenvolvimento",
+                    pergunta: " No Brasil, a tecnologia de computação em nuvem é muito recente, mas está se tornando madura muito rapidamente. Empresas de médio, pequeno e grande porte estão adotando a tecnologia gradativamente. O serviço começou a ser oferecido comercialmente em:",
+                    respostas: [
+                        {
+                            desc: "2007",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "2008",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "2010",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "2011",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Desenvolvimento",
+                    pergunta: "O ciclo de vida do software é a estrutura que contém processos, atividades e tarefas envolvidas no desenvolvimento, operação e manutenção de um produto de software. Assinale a alternativa que identifica corretamente o modelo mais antigo de ciclo de vida de software",
+                    respostas: [
+                        {
+                            desc: "Aspiral",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Incremental",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Prototipagem",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Cascata",
+                            respostacerta: 1
+                        }
+                    ]
+                },
+                {
+                    area: "Desenvolvimento",
+                    pergunta: "Existem diversos modelos de desenvolvimento de software na literatura. Sabendo disso é correto afirmar que o modelo que se baseia na ideia de desenvolver uma versão inicial do produto, apresentá-la para os comentários dos clientes e continuar o desenvolvimento, por meio da criação de diversas versões, até que um produto final adequado seja alcançado, é o:",
+                    respostas: [
+                        {
+                            desc: "modelo orientado a objetos.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "modelo orientado ao reúso.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "modelo incremental.",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "modelo cascata.",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Desenvolvimento",
+                    pergunta: "No contexto das metodologias ágeis, o conceito de refatoração compreende:",
+                    respostas: [
+                        {
+                            desc: "a renomeação de atributos e métodos para implementar melhorias no software.",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "a decomposição de histórias de usuário em uma série de tarefas de desenvolvimento.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "a substituição do resultado de uma sprint inteira para atender a requisitos diferentes dos originais.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "a junção de alterações de código às funcionalidades do software já entregue.",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Desenvolvimento",
+                    pergunta: "Assinale a opção que apresenta a função JDBC ResultSet que executa a instrução SQL fornecida, que retorna um único objeto ResultSet:",
+                    respostas: [
+                        {
+                            desc: "executeBatch()n",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "executeQuery()",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "executeUpdate()",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "executeUpdate()",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Desenvolvimento",
+                    pergunta: "Na navegação em uma aplicação web, os links acessíveis fazem parte da abordagem de:",
+                    respostas: [
+                        {
+                            desc: "Coluna de navegação vertical.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Link de navegação individual.",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Barra de navegação horizontal.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Guias e mapas de sítios.",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Desenvolvimento",
+                    pergunta: "Os microsserviços criam vários serviços, cada qual executando em seu próprio processo, mas que não podem ser implantados de forma independente.:",
+                    respostas: [
+                        {
+                            desc: "Certo",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Errado",
+                            respostacerta: 1
+                        }
+                    ]
+                },
+                {
+                    area: "Desenvolvimento",
+                    pergunta: "Os comandos SQL possuem duas grandes categorias que são DML e DDL. Relacione essas categorias da coluna da esquerda com os seus respectivos comandos da coluna da direita:",
+                    respostas: [
+                        {
+                            desc: "DDL - DROP, ALTER e DML - SELECT, UPDATE",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "DDL - SELECT, ALTER e DML - SELECT, UPDATE ",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "DDL - DROP, ALTER e DML - ALTER, SELECT, UPDATE",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "DDL - SELECT, UPDATE e DML - DROP, ALTER ",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Desenvolvimento",
+                    pergunta: "Em um banco de dados relacional, todos os usuários devem possuir uma mesma visão (view) do banco de dados, o que é necessário para garantir a consistência dos dados:",
+                    respostas: [
+                        {
+                            desc: "Certo",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Errado",
+                            respostacerta: 1
+                        }
+                    ]
+                },
+                {
+                    area: "Desenvolvimento",
+                    pergunta: "Para recuperar linhas de um banco de dados SQL Server 2005, pode-se utilizar o comando SQL:",
+                    respostas: [
+                        {
+                            desc: "INSERT",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "READ",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "CONSULT",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "SELECT",
+                            respostacerta: 1
+                        }
+                    ]
+                },
+                {
+                    area: "Desenvolvimento",
+                    pergunta: "O utilitário Explain Plan:",
+                    respostas: [
+                        {
+                            desc: "É criado pegando-se uma string de qualquer comprimento e codificando-a em uma impressão digital de 128 bits",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Serve para criar uma expressão da álgebra relacional criando os índices necessários para executar uma consulta.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Relata a maneira como uma consulta usa os índices do banco de dados.",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Deve executar o SQL para determinar o tamanho do resultado.",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Desenvolvimento",
+                    pergunta: "Assinale a alternativa correspondente ao processo de desenvolvimento de software, cujos valores centrais são comunicação, simplicidade, feedback, coragem e respeito:",
+                    respostas: [
+                        {
+                            desc: "Scrum",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "TDD",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Modelo Interativo",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "XP",
+                            respostacerta: 0
+                        }
+                    ]
+                }
+            ],
+        }, {
+            grupo: "tester",
+            pgts: [
+                {
+                    area: "Qualidade de Software (Tester)",
+                    pergunta: "No caso do teste de um software de um sistema computacional, é importante a realização do chamado teste de recuperação, que consiste especificamente em:",
+                    respostas: [
+                        {
+                            desc: "Entregar o software ao cliente final que vai observar e criticar seu funcionamento.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Simular uma invasão indevida ao software e verificar se os mecanismos de proteção atuam eficientemente.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Testar o software por um longo período de tempo, observando suas saídas.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Forçar o software a falhar e verificar se a sua recuperação ocorre adequadamente.",
+                            respostacerta: 1
+                        }
+                    ]
+                },
+                {
+                    area: "Qualidade de Software (Tester)",
+                    pergunta: "A qualidade de um software se faz tão importante que existem quinze atributos de qualidade que devem ser considerados. Sabendo disso, assinale a alternativa que apresenta cinco desses atributos:",
+                    respostas: [
+                        {
+                            desc: "Facilidade, Continuidade, Estabilidade, Modularidade e Severidade.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Compreensibilidade, Adaptabilidade, Resiliência, Modularidade e Capacidade de aprendizado.",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Reusabilidade, Competitividade, Testabilidade, Confidencialidade e Praticidade.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Complexidade, Não repúdio, Integridade, Segurança e Portabilidade.",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Qualidade de Software (Tester)",
+                    pergunta: "O gerenciamento tradicional da qualidade de software baseia-se na suposição de que a qualidade do software está diretamente relacionada à qualidade do processo de desenvolvimento desse software:",
+                    respostas: [
+                        {
+                            desc: "Certo.",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Errado",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Qualidade de Software (Tester)",
+                    pergunta: "No processo de desenvolvimento para dispositivos móveis, os testes de configuração incluem a verificação dos tempos de resposta e dos métodos de recuperação do aplicativo quando o hardware falha ou se comporta mal.",
+                    respostas: [
+                        {
+                            desc: "erto",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Errado",
+                            respostacerta: 1
+                        }
+                    ]
+                },
+                {
+                    area: "Qualidade de Software (Tester)",
+                    pergunta: "Assinale a alternativa correspondente ao processo de desenvolvimento de software, cujos valores centrais são comunicação, simplicidade, feedback, coragem e respeito:",
+                    respostas: [
+                        {
+                            desc: "Scrum",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "TDD",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Modelo Interativo",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "XP",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Qualidade de Software (Tester)",
+                    pergunta: "Num Help Desk, é o grupo que resolve o problema por meio do uso de ferramentas complementares, tais como, base de conhecimento e software de controle remoto, visando ao encerramento do problema sem a necessidade de escalonar o assunto para outro nível. Trata-se do grupo de:",
+                    respostas: [
+                        {
+                            desc: "egundo nível solucionador.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Primeiro nível direcionador.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Segundo nível especializado.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Primeiro nível solucionador.",
+                            respostacerta: 1
+                        }
+                    ]
+                },
+                {
+                    area: "Qualidade de Software (Tester)",
+                    pergunta: "Uma estrutura de atendimento, em primeiro nível, às solicitações dos usuários, deve estar equipada e composta de:",
+                    respostas: [
+                        {
+                            desc: "tendentes não técnicos preparados para registrar os chamados e solucionar remotamente os problemas básicos.",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Atendentes especialistas preparados para solucionar os problemas em laboratório.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Atendentes técnicos preparados para solucionar os problemas em campo (remota ou presencialmente).",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Profissionais responsáveis pela gestão, monitoração e elaboração de estatísticas sobre os chamados.",
+                            respostacerta: 0
+                        }
+                    ]
+                }
+            ]
+        }, {
+            grupo: "suporte",
+            pgts: [
+                {
+                    area: "Suporte Técnico",
+                    pergunta: "Sobre Help Desk assinale a INCORRETA:",
+                    respostas: [
+                        {
+                            desc: "O Help Desk é um termo em inglês que significa literalmente \"balcão de ajuda\" e que se refere a um serviço de atendimento aos clientes que procuram por soluções, esclarecimentos sobre dúvidas e outras solicitações para problemas técnicos relacionados a telefonia, informática, tecnologia da informação ou, ainda, pré e pós-vendas.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "O Help Desk é realizado de modo síncrono e exclusivamente por meio de comunicação online.",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "A melhoria constante dos processos do serviço de Help Desk é importante e necessária para a qualidade do atendimento prestado ao usuário/cliente.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "O serviço de Help Desk centraliza o recebimento das solicitações dos clientes, o que facilita as respostas e resolução dos problemas.",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Suporte Técnico",
+                    pergunta: "O serviço de apoio a usuários para suporte e resolução de problemas técnicos em informática, telefonia e tecnologias de informação é comumente denominado help desk. Com relação a help desk, assinale a opção correta:",
+                    respostas: [
+                        {
+                            desc: "Em uma estrutura de help desk, os problemas são resolvidos sempre no primeiro nível de atendimento.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Um dos objetivos do help desk é fornecer um ponto único de contato aos usuários de tecnologia da informação.",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Um help desk trabalha sem o conceito de SLA (service level agreement), porque as métricas para help desk são padronizadas internacionalmente.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "A evolução natural do help desk se denomina web desk.",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Suporte Técnico",
+                    pergunta: "Um dos principais objetivos de uma solução para gerenciamento de Help Desk é:",
+                    respostas: [
+                        {
+                            desc: "Criar um histórico de todas as auditorias realizadas.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Controlar todas as solicitações pendentes dos usuários.",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Registrar todas as estações de trabalho não conectadas à rede.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Detectar as alterações de hardware realizadas nas estações da rede.",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Suporte Técnico",
+                    pergunta: "Num Help Desk, é o grupo que resolve o problema por meio do uso de ferramentas complementares, tais como, base de conhecimento e software de controle remoto, visando ao encerramento do problema sem a necessidade de escalonar o assunto para outro nível. Trata-se do grupo de:",
+                    respostas: [
+                        {
+                            desc: "Segundo nível solucionador",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Primeiro nível direcionador.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Segundo nível especializado.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Primeiro nível solucionador.",
+                            respostacerta: 1
+                        }
+                    ]
+                }
+            ]
         }],
 
 };

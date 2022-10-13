@@ -168,7 +168,7 @@ SVG#estrelinha-p {
   border-bottom-right-radius: 32px;
   width: 100vw;
   margin-top: -200px;
-  background-color: #fac710;
+  /* background-color: #fac710; */
   margin-top: 0px;
   display: flex;
   flex-direction: column;

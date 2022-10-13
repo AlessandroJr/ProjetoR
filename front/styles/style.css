@@ -4,8 +4,8 @@
 }
 
 body {
-  overflow-y: hidden !important;
-  overflow-x: hidden !important;
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 
@@ -95,6 +95,7 @@ body {
 
 .janelinha-pgt {
   margin-top: 50px;
+  margin-bottom: 60px;
 }
 
 #janelinha {
@@ -218,7 +219,7 @@ body {
 }
 
 #respostas{
-  background-color: #ff4081;
+  /* background-color: #ff4081; */
   height: 100%;
 }
 
@@ -241,7 +242,7 @@ body {
   font-family: Ultra;
   text-shadow: -1px -1px 0px #2a2929, -1px 1px 0px #2a2929, 1px -1px 0px #2a2929, 1px 0px 0px #2a2929;
   color: #FFFEE2;
-  margin-top: -90px;
+  margin-top: -86px;
 }
 .left {
   height: 120px;
@@ -251,7 +252,7 @@ body {
   
   /* display: inline-block; */
 }
-#desc-resposta{
+.desc-resposta{
   flex: 1fr;
   padding: 26px 16px;
   color: #2A2929;
@@ -259,6 +260,7 @@ body {
   font-size: 14px;
   text-align: left;
   border-left: 2px solid #2A2929;
+  min-height: 68px;
 }
 .grafic svg {
   z-index: 9;

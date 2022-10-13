@@ -58,18 +58,21 @@ body {
   justify-content: center;
 }
 
+.header {display: flex;}
+
 .content {
   display: flex;
   justify-content: center;
   position: relative;
+  height: 90vh;
 }
 
 .logo-topo {
-  margin-top: 3%;
+  margin-top: 20px;
   width: 130px;
 }
 
-.janelinha {
+.janelinha, .resposta {
   background-color: #fffee2;
   border: 2px #2a2929 solid;
   border-radius: 3px;
@@ -83,8 +86,27 @@ body {
   box-shadow: -6px 6px 0px 0px #2a2929;
 }
 
+.janelinha-pgt, .resposta {
+  position: unset;
+  border-radius: 8px;
+  height: auto;
+  top: 210px;
+}
+
+.janelinha-pgt {
+  margin-top: 50px;
+}
+
 #janelinha {
   transform: scale(0.001);
+}
+
+#pergunta {
+  padding: 24px 16px;
+  color: #2A2929;
+  font-family: Roboto;
+  font-size: 14px;
+  text-align: left;
 }
 
 .frase-efeito {
@@ -180,12 +202,67 @@ body {
 
 .janelinha-header {
   display: flex;
-  /* transform: scale(0.001); */
   justify-content: space-between;
   background-color: #652cb3;
   color: #fff;
   padding: 6px 6px;
 
+}
+
+.janelinha-pgt .janelinha-header{
+  background-color: #FFF6D6;
+  border-bottom: 2px #2a2929 solid;
+  color: #2A2929;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+#respostas{
+  background-color: #ff4081;
+  height: 100%;
+}
+
+.resposta {
+  /* text-align: left!important; */
+  border-radius: 32px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 120px;
+}
+
+.letra-opt {
+  width: 83px;
+  text-align: center;
+  margin: auto;
+  font-size: 28px;
+  font-family: Ultra;
+  text-shadow: -1px -1px 0px #2a2929, -1px 1px 0px #2a2929, 1px -1px 0px #2a2929, 1px 0px 0px #2a2929;
+  color: #FFFEE2;
+  margin-top: -90px;
+}
+.left {
+  height: 120px;
+}
+.grafic {
+  flex: 80px;
+  
+  /* display: inline-block; */
+}
+#desc-resposta{
+  flex: 1fr;
+  padding: 26px 16px;
+  color: #2A2929;
+  font-family: Roboto;
+  font-size: 14px;
+  text-align: left;
+  border-left: 2px solid #2A2929;
+}
+.grafic svg {
+  z-index: 9;
+  padding: 22px 0px 30px 0px;
 }
 
 #ola {
@@ -254,6 +331,7 @@ body {
 .btn-bottom {
   position: absolute;
   margin: auto;
+  bottom: 20px;
 }
 
 .btn-yellow {
@@ -346,4 +424,9 @@ input {
   right: -6px;
   font-size: 32px;
   font-weight: 800;
+}
+
+.clickable {
+  cursor: pointer;
+  z-index: 10;
 }

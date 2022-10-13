@@ -159,11 +159,51 @@ SVG#estrelinha-p {
   margin-top: 77px;
 }
 
+/*-----------------------------------*/
+
+.header-pergunta {
+  height: 190px;
+  border: 2px solid #2A2929;
+  border-bottom-left-radius: 32px;
+  border-bottom-right-radius: 32px;
+  width: 100vw;
+  margin-top: -200px;
+  background-color: #fac710;
+  margin-top: 0px;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+}
+
+#qstid{
+  position: relative;
+  top: 31px
+}
+
+#exp-svg {
+  width: 75px;
+}
+
+#numero-qst {
+  position: absolute;
+    width: 75px;
+    margin: auto;
+    /* justify-content: center; */
+    font-size: 28px;
+    font-family: Ultra;
+    text-shadow: -1px -1px 0px #2a2929, -1px 1px 0px #2a2929, 1px -1px 0px #2a2929, 1px 0px 0px #2a2929;
+    color: #FFFEE2;
+    top: 19px;
+}
+
+
 /*---------------------------------------------------------------------------------------------------------*/
 /*              AJUSTES GERAIS                                                                             */
 /*---------------------------------------------------------------------------------------------------------*/
 
-
+.exp-background{fill:#FAC710;}
+.exp-border{fill:#2A2929;}
 
 /*---------------------------------------------------------------------------------------------------------*/
 /*              SUAVIZAÇÕES                                                                                */
@@ -202,7 +242,8 @@ svg#explosao,
 #ola,
 .txt1,
 .txt2,
-#planeta-loading
+#planeta-loading,
+.header-pergunta
 {
   transition: all 0.5s ease;
 }
@@ -215,8 +256,7 @@ svg#explosao,
 #btns-carreiras,
 #olho-easter,
 #curva-verde,
-#curva-vermelha,
-.header-pergunta
+#curva-vermelha
 {
   transition: all 1s ease;
 }

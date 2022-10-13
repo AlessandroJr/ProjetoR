@@ -2,6 +2,24 @@
 
 let Anima = {
 
+    carreira: '',
+
+    cores: [{
+        header: '#fac710',
+        exp: '#D90F0F'
+    }, {
+        header: '#D90F0F',
+        exp: '#fac710'
+    }, {
+        header: '#652CB3',
+        exp: '#16D1A7'
+    }, {
+        header: '#16D1A7',
+        exp: '#652CB3'
+    }],
+
+    coresPgts: [],
+
     player: {
         nome: ''
     },
@@ -24,6 +42,11 @@ let Anima = {
     },
 
     onClickCarreira: function (carreira) {
+        Anima.carreira = carreira;
+
+        this.loadingPerguntas();
+
+        return;
 
         switch (carreira) {
             case 'design':
@@ -81,7 +104,7 @@ let Anima = {
             </div>
         </div>`;
 
-        let curvas =`<div id="curva-verde"><svg class="floatingDefault" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+        let curvas = `<div id="curva-verde"><svg class="floatingDefault" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
               viewBox="0 0 347 142" style="enable-background:new 0 0 347 142;" xml:space="preserve">
          <style type="text/css">
              .st0{clip-path:url(#SVGID_00000181781177258171903250000010890193186801933449_);fill:#269385;}
@@ -135,23 +158,23 @@ let Anima = {
   
               </div>
         `;
-        
+
         $('#planeta-loading').css('transform', 'rotate(0deg) translate(0px, 0px)');
         $('#btns-carreiras').css('transform', 'translate(-200vh, 0px)');
         $('.seguircarreira').css('transform', 'translate(-200vh, 0px)');
 
-        
+
         $('.content').append(html);
         $('.backdoor').append(curvas);
 
         $('#curva-vermelha').css('margin-top', '200vh');
         $('.agorashow').css('margin-top', '20vh');
-        
+
         setTimeout(() => {
 
             $('#curva-verde').css('margin-top', '12vh');
             $('#curva-vermelha').css('margin-top', '20vh');
-            
+
             setTimeout(() => {
                 $('#planeta-loading').css('transform', 'rotate(360deg) translate(0px, 0px)');
 
@@ -166,9 +189,9 @@ let Anima = {
                             $('#curva-verde').css('margin-top', '-150vh');
                             $('#curva-vermelha').css('margin-top', '300vh');
                             $('.agorashow').css('margin-left', '200vw');
-                            
+
                             setTimeout(() => {
-                                $('.content').html('');    
+                                $('.content').html('');
 
                                 $('body').css('background-color', '#FFF6D6');
 
@@ -178,9 +201,9 @@ let Anima = {
                         }, 2500);
 
                     }, 500);
-                    
+
                 }, 1000);
-                
+
             }, 1000);
 
         }, 1000);
@@ -189,11 +212,128 @@ let Anima = {
     abrirPerguntas: function () {
         let header = `
             <div class="header-pergunta">
+                <svg class="logo-topo" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                        viewBox="0 0 1211.4 374.8" style="enable-background:new 0 0 1211.4 374.8;" xml:space="preserve">
+                <style type="text/css">
+                    .white{fill:#FFFFFF;}
+                </style>
+                <g>
+                    <path class="white" d="M781.8,133.2c-1.4,0-2.5,0-3.9,0c-46.2,1.8-67.5,40.1-67.5,74.9c0,42.3,24.5,69.2,67.5,72.1
+                        c2.5,0,5.3,0.4,7.8,0.4c19.2,0,36.2-3.2,51.8-9.9l-7.5-28.8c-11.7,3.9-23.1,6-38,6c-5,0-9.6-0.7-14.2-1.8
+                        c-13.8-3.2-24.5-11.4-25.6-25.6h25.6h65.3c0.4-3.2,1.4-9.6,1.4-17C844.7,168.4,827.3,133.2,781.8,133.2z M777.9,190.7H752
+                        c1.1-11.4,8.5-27.7,25.9-28.4c0.7,0,1.1,0,1.4,0c19.9,0,24.5,18.1,24.5,28.4H777.9z"/>
+                    <path class="white" d="M540,212.4c0,20.2-6.4,32.3-21.7,32.7c-14.9-0.4-21.3-12.4-21.3-32.7v-76h-44v82.7c0,81.7,130.7,81.7,130.7,0
+                        v-82.7H540V212.4z"/>
+                    <path class="white" d="M657.9,163.7c11.7,0,24.5,4.6,30.9,7.8l13.8-28.4c-8.9-4.3-28.4-9.9-46.2-9.9c-35.2,0.7-57.5,19.9-57.5,46.5
+                        c-0.4,16.3,11,32.7,40.5,42.3c16,5.3,20.2,8.9,20.2,16.3c0,7.1-5.3,11.4-18.5,11.4s-30.2-5.3-38-10.3l-13.8,29.5
+                        c11.4,7.5,33.4,11.7,51.8,11.7c40.1,0,60.7-19.2,60.7-45.8c-0.4-20.2-11.4-34.1-38-43.3c-17.4-6-22.7-9.2-22.7-16.3
+                        C641.2,168.4,647.3,163.7,657.9,163.7z"/>
+                    <path class="white" d="M977.5,194.3c0-33.4-14.9-61.1-61.8-61.1c-0.4,0-0.7,0-1.1,0c-25.2,0.4-45.1,6.7-57.5,13.8l11.7,27
+                        c9.2-5.7,24.5-10.3,39.1-10.3c2.5,0,4.6,0,6.7,0.4c15.6,1.8,18.8,11,18.8,17.8v1.8c-6.4,0-12.8,0.4-18.8,0.7
+                        c-39.1,4.3-63.9,21.3-63.9,52.9c0,22.7,17,43.3,45.8,43.3c6.4,0,12.4-0.7,18.1-2.5c8.9-2.8,16.3-7.8,22-14.9h1.1l2.5,14.2h39.4
+                        c-1.8-7.8-2.1-20.6-2.1-34.1V194.3z M934.9,226.2c0,2.5-0.4,5-0.7,7.5c-2.5,7.8-10.3,14.6-19.5,16c-1.1,0-2.1,0-3.2,0
+                        c-9.9,0-17.4-5.3-17.4-16.7c0-11.4,8.2-17.4,20.6-20.2c6-1.4,12.8-1.8,20.2-1.8V226.2z"/>
+                    <path class="white" d="M1038.6,220.2c0-72.4,0-20.2,0-83.8h-43c0,46.2,0,28.1,0,90.5c0,19.9,4.3,33.4,12.1,41.5
+                        c7.5,7.5,19.2,12.1,33.4,12.1c12.1,0,27-2.1,32.7-4.3l-5.7-32.7C1048.5,247.9,1038.6,242.9,1038.6,220.2z"/>
+                    <path class="white" d="M1124.1,220.2c0-72.4,0-20.2,0-83.8h-43c0,46.2,0,28.1,0,90.5c0,19.9,3.9,33.4,12.1,41.5
+                        c7.1,7.5,18.8,12.1,33,12.1c12.1,0,27.3-2.1,32.7-4.3l-5.7-32.7C1133.7,247.9,1124.1,242.9,1124.1,220.2z"/>
+                    <path class="white" d="M140.2,111.9c27.3,0,49.4-22.4,49.4-49.7s-22-49.7-49.4-49.7c-27.7,0-49.7,22.4-49.7,49.7
+                        S112.5,111.9,140.2,111.9z"/>
+                    <path class="white" d="M229.7,222.7c-21.3,0-45.5-41.2-61.1-57.9c-17-17.8-39.4-27.7-64.3-27.7c-78.1,0-91.6,83.1-91.6,143.8h57.2
+                        c0.7-26.3-3.6-85.9,35.5-85.9c19.5,0,36.6,29.1,48.3,43c22.4,25.6,42.3,42.6,77.1,42.6c77.4,0,91.6-83.4,91.6-143.8h-57.2
+                        C264.5,163.4,267.7,222.7,229.7,222.7z"/>
+                    <path class="white" d="M1191.2,143.9c-4.3-4.6-10.3-7.5-17.4-7.5c-6.7,0-12.8,2.8-17.4,7.5c-4.3,4.3-7.1,10.3-7.1,17.4
+                        c0,6.7,2.8,12.8,7.1,17.4c4.6,4.3,10.7,7.1,17.4,7.1c7.1,0,13.1-2.8,17.4-7.1c4.6-4.6,7.5-10.7,7.5-17.4
+                        C1198.7,154.2,1195.9,148.1,1191.2,143.9z M1188.4,175.5c-3.9,3.6-8.9,5.7-14.6,5.7c-5.3,0-10.3-2.1-14.2-5.7
+                        c-3.6-3.9-5.7-8.9-5.7-14.2c0-5.7,2.1-10.7,5.7-14.6c3.9-3.6,8.9-5.7,14.2-5.7c5.7,0,10.7,2.1,14.6,5.7c3.6,3.9,5.7,8.9,5.7,14.6
+                        C1194.1,166.6,1192,171.6,1188.4,175.5z"/>
+                    <path class="white" d="M1181.7,164.1c-0.7-0.7-1.8-1.4-2.8-2.1c2.1-0.4,3.9-1.1,5.3-2.5c1.1-1.4,1.4-2.8,1.4-5c0-1.4-0.4-2.8-1.1-4.3
+                        c-0.7-1.1-1.8-1.8-2.8-2.5c-1.4-0.4-3.6-0.7-6.4-0.7h-0.4h-10.7v26.3h5.3v-11h1.1c1.1,0,2.1,0.4,2.5,0.4c0.7,0.4,1.4,0.7,1.8,1.1
+                        c0.4,0.7,1.4,2.1,2.8,3.9l3.9,5.7h6l-3.2-5C1183.4,166.2,1182.4,164.8,1181.7,164.1z M1174.9,158.4c-0.4,0-1.1,0-1.4,0h-3.9v-6.7
+                        h3.9c0.7,0,1.1,0,1.4,0c1.4,0,2.1,0,2.5,0c1.1,0.4,1.8,0.7,2.1,1.1c0.4,0.7,0.7,1.4,0.7,2.1c0,0.7,0,1.4-0.4,2.1
+                        c-0.4,0.4-1.1,0.7-1.8,1.1C1177.8,158.1,1176.7,158.4,1174.9,158.4z"/>
+                </g>
+                </svg>
 
+                <div id="qstid">
+                    <div id="numero-qst">
+                        1
+                    </div>
+                    <svg id="exp-svg" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                        viewBox="0 0 67.6 67.7" style="enable-background:new 0 0 67.6 67.7;" xml:space="preserve">
+                    <g id="Polígono_13">
+                        <path class="exp-background" d="M41.5,63l-7.2-11l-0.4-0.6L33.4,52l-7.2,11l-0.9-13.3l0-0.8l-0.7,0.3l-11.7,5.9l5.7-11.9l0.3-0.7l-0.7-0.1
+                            l-13-0.9l10.8-7.4l0.6-0.4l-0.6-0.4L5.3,26l13-0.9l0.7-0.1l-0.3-0.7l-5.7-11.9l11.7,5.9l0.7,0.3l0-0.8l0.9-13.3l7.2,11l0.4,0.6
+                            l0.4-0.6l7.2-11l0.9,13.3l0,0.8l0.7-0.3l11.7-5.9L49,24.4l-0.3,0.7l0.7,0.1l13,0.9l-10.8,7.4l-0.6,0.4l0.6,0.4l10.8,7.4l-13,0.9
+                            l-0.7,0.1l0.3,0.7l5.7,11.9L43,49.3L42.4,49l0,0.8L41.5,63z"/>
+                        <path class="exp-border" d="M41.1,6.2l-7.2,11.1L26.6,6.2l-0.9,13.3L14,13.6l5.7,12l-13,0.9l10.8,7.4L6.8,41.3l13,0.9l-5.7,12l11.7-5.9
+                            l0.9,13.3l7.2-11.1l7.2,11.1l0.9-13.3l11.7,5.9l-5.7-12l13-0.9l-10.8-7.4l10.8-7.4l-13-0.9l5.7-12l-11.7,5.9L41.1,6.2 M41.9,3.1
+                            l1,14.8l13-6.5l-6.4,13.3l14.4,1l-12,8.2l12,8.2l-14.4,1l6.4,13.3l-13-6.5l-1,14.8l-8-12.3l-8,12.3l-1-14.8l-13,6.5L18.2,43
+                            l-14.4-1l12-8.2l-12-8.2l14.4-1l-6.4-13.3l13,6.5l1-14.8l8,12.3L41.9,3.1z"/>
+                    </g>
+                    </svg>
+                </div>
             </div>
         `;
+
+        $('#header').html(header);
+        $('.header-pergunta').css('margin-top', '-200px');
+
+        setTimeout(() => {
+            $('.header-pergunta').css('margin-top', '0');
+            $('body').css('overflow-y', 'scroll');
+        }, 1000);
+
+        Anima.prepararPerguntasCarreira(this.carreira);
+        // Anima.gerarCoresTemaPgts();
     },
-    
+
+    gerarCoresTemaPgts: function () {
+        for (let index = 0; index < array.length; index++) {
+            const element = array[index];
+
+        }
+        this.coresPgts = {
+            header: Math.floor(Math.random() * 3),
+            exp: 1
+        }
+    },
+
+    prepararPerguntasCarreira: function () {
+        let pgtSlctd = [];
+
+        let pgtsCarreira = Anima.perguntas.find(element => element.grupo == Anima.carreira);
+
+        const maxNumbers = pgtsCarreira.pgts.length;
+        let list = [];
+        let randomNumber;
+        let tmp;
+
+        for (let i = 0; i < maxNumbers; i++) {
+            list[i] = i + 1;
+        }
+
+        for (let i = list.length; i;) {
+            randomNumber = Math.random() * i-- | 0;
+            tmp = list[randomNumber];
+            // troca o número aleatório pelo atual
+            list[randomNumber] = list[i];
+            // troca o atual pelo aleatório
+            list[i] = tmp;
+        }
+
+        for (let index = 0; index < 3; index++) {
+            pgtSlctd.push(pgtsCarreira.pgts[list[index]-1]);
+        }
+
+        Anima.player.pgts =  pgtSlctd;
+    },
+
+    renderPerguntas: function () {
+        let html = [];
+
+        html.push('');
+    },
 
     currentFrame: {},
 
@@ -587,6 +727,7 @@ let Anima = {
                         setTimeout(() => {
                             let janela = document.getElementById('janelinha');
                             let distancia;
+
                             if (janela) {
                                 distancia = janela.getBoundingClientRect().y + janela.getBoundingClientRect().height + document.getElementById('header').getBoundingClientRect().height + 65;
                             }
@@ -604,7 +745,7 @@ let Anima = {
                             `;
 
                             $('.content').append(btn);
-                            $('.btn-bottom').css('top', distancia);
+                            // $('.btn-bottom').css('top', distancia);
                             $('.overlay').css('width', '1px');
                             $('#overlay').css('width', '1px');
                             $('.overlay').css('height', '1px');
@@ -612,8 +753,6 @@ let Anima = {
 
                             $('#janelinha').css('transition', 'all 1s ease');
                             $('#janelinha').css('margin-left', '0vw');
-
-
 
                         }, 200);
 
@@ -780,7 +919,7 @@ let Anima = {
                 <input id="player-nome" class="input100" type="text" name="name" placeholder="{seu_nome_aqui}">
                 <span class="focus-input100"></span>
                 </div>
-                <div onclick="Anima.onClickAction(${frame.sceneid}, 'playernome')" class="material-symbols-outlined arrow-input">
+                <div onclick="Anima.onClickAction(${frame.sceneid}, 'playernome')" class="material-symbols-outlined clickable arrow-input">
                     arrow_forward
                 </div>
                 <div>
@@ -1106,6 +1245,224 @@ let Anima = {
 
             $('#' + desenho).css('transform', `scale(${((100 * ((window.innerWidth + window.innerHeight) / 2)) / 374) * 0.007})`);
         }
-    }
+    },
+
+    perguntas:
+        [{
+            grupo: "design",
+            pgts: [{
+                area: "Design",
+                pergunta: "Qual a importância de um Design System para um produto?",
+                respostas: [
+                    {
+                        desc: "Nenhuma, só vai me gerar mais trabalho",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "Para formatar visualmente todas as partes de um produto",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "Para que todas as partes de um mesmo produto sigam as mesmas regras visuais e de comportamento",
+                        respostacerta: 1
+                    },
+                    {
+                        desc: "Para ficar bonito no meu portfólio.",
+                        respostacerta: 0
+                    }
+                ]
+            },
+            {
+                area: "Design",
+                pergunta: "Como se chama o nome da metodologia que aplica as seguintes etapas: descobrir, definir, desenvolver e entregar?",
+                respostas: [
+                    {
+                        desc: "Design Thinking",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "Diamante Duplo",
+                        respostacerta: 1
+                    },
+                    {
+                        desc: "Munari",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "Lobach",
+                        respostacerta: 0
+                    }
+                ]
+            },
+            {
+                area: "Design",
+                pergunta: "Qual a unidade de medida mais usada para a prototipação de telas?",
+                respostas: [
+                    {
+                        desc: "DPI",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "Polegadas",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "Pés",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "Pixels",
+                        respostacerta: 1
+                    }
+                ]
+            },
+            {
+                area: "Design",
+                pergunta: "Como se chama a forma de pensamento voltada a resolução de problemas de maneira inteligente?",
+                respostas: [
+                    {
+                        desc: "Design Council",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "Pensamento Crítico",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "Design Thinking",
+                        respostacerta: 1
+                    },
+                    {
+                        desc: "Teoria do arroz verde",
+                        respostacerta: 0
+                    }
+                ]
+            },
+            {
+                area: "Design",
+                pergunta: "Qual o padrão de cores utilizado para materiais feitos para telas?",
+                respostas: [
+                    {
+                        desc: "Fogra39",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "CMYK",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "RGB",
+                        respostacerta: 1
+                    },
+                    {
+                        desc: "WebCoated",
+                        respostacerta: 0
+                    }
+                ]
+            },
+            {
+                area: "Design",
+                pergunta: "Que nome se dá ao processo de validação de protótipos com o usuário?",
+                respostas: [
+                    {
+                        desc: "Teste de Usabilidade",
+                        respostacerta: 1
+                    },
+                    {
+                        desc: "Versaõ Beta",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "Teste A/B",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "Aprovação de protótipo",
+                        respostacerta: 0
+                    }
+                ]
+            },
+            {
+                area: "Design",
+                pergunta: "UX/UI Designers precisam saber programar?",
+                respostas: [
+                    {
+                        desc: "Sim",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "Não",
+                        respostacerta: 1
+                    }
+                ]
+            },
+            {
+                area: "Design",
+                pergunta: "Qual o nome dado ao profissional de faz UX, UI e Front-End?",
+                respostas: [
+                    {
+                        desc: "Designer Unicórnio",
+                        respostacerta: 1
+                    },
+                    {
+                        desc: "Severino",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "Designer Pleno",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "Designer Fullstack",
+                        respostacerta: 0
+                    }
+                ]
+            },
+            {
+                area: "Design",
+                pergunta: "O que faz um UX/UI Designer?",
+                respostas: [
+                    {
+                        desc: "Telas bonitas",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "Projetos de interface e experiência do usuário",
+                        respostacerta: 1
+                    },
+                    {
+                        desc: "Criação de publicidades para redes sociais",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "Atendimento ao clinete",
+                        respostacerta: 0
+                    }
+                ]
+            },
+            {
+                area: "Design",
+                pergunta: "São trabalhos de um UX/UI Designer todos, EXCETO: ",
+                respostas: [
+                    {
+                        desc: "Projetos de planta baixa",
+                        respostacerta: 1
+                    },
+                    {
+                        desc: "Arquitetura da informação",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "Gamificação",
+                        respostacerta: 0
+                    },
+                    {
+                        desc: "Design de interface",
+                        respostacerta: 0
+                    }
+                ]
+            }]
+        }],
+
 };
 

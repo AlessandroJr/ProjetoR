@@ -316,10 +316,18 @@ let Anima = {
 
         let pgtsCarreira = Anima.perguntas.find(element => element.grupo == carreira);
 
+        let pgtsGeral = Anima.perguntas.find(element => element.grupo == 'gerais');
+
+        let pgtsComp = Anima.perguntas.find(element => element.grupo == 'comportamento');
+
+        let pgtsPerfil = Anima.perguntas.find(element => element.grupo == 'perfil');
+
         const maxNumbers = pgtsCarreira.pgts.length;
         let list = [];
         let randomNumber;
         let tmp;
+
+        // CARREIRA -----------------------------------------------------------------------------------------------------------------------------------
 
         for (let i = 0; i < maxNumbers; i++) {
             list[i] = i + 1;
@@ -336,6 +344,64 @@ let Anima = {
 
         for (let index = 0; index < 3; index++) {
             pgtSlctd.push(pgtsCarreira.pgts[list[index] - 1]);
+
+        }
+
+        // GERAL -------------------------------------------------------------------------------------------------------------------------------------
+
+        for (let i = 0; i < pgtsGeral.length; i++) {
+            list[i] = i + 1;
+        }
+
+        for (let i = list.length; i;) {
+            randomNumber = Math.random() * i-- | 0;
+            tmp = list[randomNumber];
+            // troca o número aleatório pelo atual
+            list[randomNumber] = list[i];
+            // troca o atual pelo aleatório
+            list[i] = tmp;
+        }
+
+        for (let index = 0; index < 1; index++) {
+            pgtSlctd.push(pgtsGeral.pgts[list[index] - 1]);
+        }
+
+        // PERFIL -------------------------------------------------------------------------------------------------------------------------------------
+
+        for (let i = 0; i < pgtsPerfil.length; i++) {
+            list[i] = i + 1;
+        }
+
+        for (let i = list.length; i;) {
+            randomNumber = Math.random() * i-- | 0;
+            tmp = list[randomNumber];
+            // troca o número aleatório pelo atual
+            list[randomNumber] = list[i];
+            // troca o atual pelo aleatório
+            list[i] = tmp;
+        }
+
+        for (let index = 0; index < 3; index++) {
+            pgtSlctd.push(pgtsPerfil.pgts[list[index] - 1]);
+        }
+
+        // COMPORTAMENTAL -------------------------------------------------------------------------------------------------------------------------------------
+
+        for (let i = 0; i < pgtsComp.length; i++) {
+            list[i] = i + 1;
+        }
+
+        for (let i = list.length; i;) {
+            randomNumber = Math.random() * i-- | 0;
+            tmp = list[randomNumber];
+            // troca o número aleatório pelo atual
+            list[randomNumber] = list[i];
+            // troca o atual pelo aleatório
+            list[i] = tmp;
+        }
+
+        for (let index = 0; index < 4; index++) {
+            pgtSlctd.push(pgtsComp.pgts[list[index] - 1]);
         }
 
         Anima.player.pgts = pgtSlctd;
@@ -370,9 +436,8 @@ let Anima = {
 
 
         </div>
-    </div>
-
-    <div id="respostas">
+<div>
+    <divid=respostas>
     </div>
         `;
 
@@ -1374,218 +1439,220 @@ let Anima = {
     perguntas:
         [{
             grupo: "design",
-            pgts: [{
-                area: "Design",
-                pergunta: "Qual a importância de um Design System para um produto?",
-                respostas: [
-                    {
-                        desc: "Nenhuma, só vai me gerar mais trabalho",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "Para formatar visualmente todas as partes de um produto",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "Para que todas as partes de um mesmo produto sigam as mesmas regras visuais e de comportamento",
-                        respostacerta: 1
-                    },
-                    {
-                        desc: "Para ficar bonito no meu portfólio.",
-                        respostacerta: 0
-                    }
-                ]
-            },
-            {
-                area: "Design",
-                pergunta: "Como se chama o nome da metodologia que aplica as seguintes etapas: descobrir, definir, desenvolver e entregar?",
-                respostas: [
-                    {
-                        desc: "Design Thinking",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "Diamante Duplo",
-                        respostacerta: 1
-                    },
-                    {
-                        desc: "Munari",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "Lobach",
-                        respostacerta: 0
-                    }
-                ]
-            },
-            {
-                area: "Design",
-                pergunta: "Qual a unidade de medida mais usada para a prototipação de telas?",
-                respostas: [
-                    {
-                        desc: "DPI",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "Polegadas",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "Pés",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "Pixels",
-                        respostacerta: 1
-                    }
-                ]
-            },
-            {
-                area: "Design",
-                pergunta: "Como se chama a forma de pensamento voltada a resolução de problemas de maneira inteligente?",
-                respostas: [
-                    {
-                        desc: "Design Council",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "Pensamento Crítico",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "Design Thinking",
-                        respostacerta: 1
-                    },
-                    {
-                        desc: "Teoria do arroz verde",
-                        respostacerta: 0
-                    }
-                ]
-            },
-            {
-                area: "Design",
-                pergunta: "Qual o padrão de cores utilizado para materiais feitos para telas?",
-                respostas: [
-                    {
-                        desc: "Fogra39",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "CMYK",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "RGB",
-                        respostacerta: 1
-                    },
-                    {
-                        desc: "WebCoated",
-                        respostacerta: 0
-                    }
-                ]
-            },
-            {
-                area: "Design",
-                pergunta: "Que nome se dá ao processo de validação de protótipos com o usuário?",
-                respostas: [
-                    {
-                        desc: "Teste de Usabilidade",
-                        respostacerta: 1
-                    },
-                    {
-                        desc: "Versão Beta",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "Teste A/B",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "Aprovação de protótipo",
-                        respostacerta: 0
-                    }
-                ]
-            },
-            {
-                area: "Design",
-                pergunta: "UX/UI Designers precisam saber programar?",
-                respostas: [
-                    {
-                        desc: "Sim",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "Não",
-                        respostacerta: 1
-                    }
-                ]
-            },
-            {
-                area: "Design",
-                pergunta: "Qual o nome dado ao profissional de faz UX, UI e Front-End?",
-                respostas: [
-                    {
-                        desc: "Designer Unicórnio",
-                        respostacerta: 1
-                    },
-                    {
-                        desc: "Severino",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "Designer Pleno",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "Designer Fullstack",
-                        respostacerta: 0
-                    }
-                ]
-            },
-            {
-                area: "Design",
-                pergunta: "O que faz um UX/UI Designer?",
-                respostas: [
-                    {
-                        desc: "Telas bonitas",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "Projetos de interface e experiência do usuário",
-                        respostacerta: 1
-                    },
-                    {
-                        desc: "Criação de publicidades para redes sociais",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "Atendimento ao clinete",
-                        respostacerta: 0
-                    }
-                ]
-            },
-            {
-                area: "Design",
-                pergunta: "São trabalhos de um UX/UI Designer todos, EXCETO: ",
-                respostas: [
-                    {
-                        desc: "Projetos de planta baixa",
-                        respostacerta: 1
-                    },
-                    {
-                        desc: "Arquitetura da informação",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "Gamificação",
-                        respostacerta: 0
-                    },
-                    {
-                        desc: "Design de interface",
-                        respostacerta: 0
-                    }
-                ]
-            }]
+            pgts: [
+                {
+                    area: "Design",
+                    pergunta: "Qual a importância de um Design System para um produto?",
+                    respostas: [
+                        {
+                            desc: "Nenhuma, só vai me gerar mais trabalho",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Para formatar visualmente todas as partes de um produto",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Para que todas as partes de um mesmo produto sigam as mesmas regras visuais e de comportamento",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Para ficar bonito no meu portfólio.",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Design",
+                    pergunta: "Como se chama o nome da metodologia que aplica as seguintes etapas: descobrir, definir, desenvolver e entregar?",
+                    respostas: [
+                        {
+                            desc: "Design Thinking",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Diamante Duplo",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Munari",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Lobach",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Design",
+                    pergunta: "Qual a unidade de medida mais usada para a prototipação de telas?",
+                    respostas: [
+                        {
+                            desc: "DPI",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Polegadas",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Pés",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Pixels",
+                            respostacerta: 1
+                        }
+                    ]
+                },
+                {
+                    area: "Design",
+                    pergunta: "Como se chama a forma de pensamento voltada a resolução de problemas de maneira inteligente?",
+                    respostas: [
+                        {
+                            desc: "Design Council",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Pensamento Crítico",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Design Thinking",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Teoria do arroz verde",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Design",
+                    pergunta: "Qual o padrão de cores utilizado para materiais feitos para telas?",
+                    respostas: [
+                        {
+                            desc: "Fogra39",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "CMYK",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "RGB",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "WebCoated",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Design",
+                    pergunta: "Que nome se dá ao processo de validação de protótipos com o usuário?",
+                    respostas: [
+                        {
+                            desc: "Teste de Usabilidade",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Versão Beta",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Teste A/B",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Aprovação de protótipo",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Design",
+                    pergunta: "UX/UI Designers precisam saber programar?",
+                    respostas: [
+                        {
+                            desc: "Sim",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Não",
+                            respostacerta: 1
+                        }
+                    ]
+                },
+                {
+                    area: "Design",
+                    pergunta: "Qual o nome dado ao profissional de faz UX, UI e Front-End?",
+                    respostas: [
+                        {
+                            desc: "Designer Unicórnio",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Severino",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Designer Pleno",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Designer Fullstack",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Design",
+                    pergunta: "O que faz um UX/UI Designer?",
+                    respostas: [
+                        {
+                            desc: "Telas bonitas",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Projetos de interface e experiência do usuário",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Criação de publicidades para redes sociais",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Atendimento ao clinete",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Design",
+                    pergunta: "São trabalhos de um UX/UI Designer todos, EXCETO: ",
+                    respostas: [
+                        {
+                            desc: "Projetos de planta baixa",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Arquitetura da informação",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Gamificação",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Design de interface",
+                            respostacerta: 0
+                        }
+                    ]
+                }
+            ]
         }, {
             grupo: "desenvolvimento",
             pgts: [
@@ -2068,6 +2135,1090 @@ let Anima = {
                         {
                             desc: "Primeiro nível solucionador.",
                             respostacerta: 1
+                        }
+                    ]
+                }
+            ]
+        }, {
+            grupo: "mkt",
+            pgts: [
+                {
+                    area: "Marketing",
+                    pergunta: "Assinale a opção correspondente a ordem correta do funil de marketing:",
+                    respostas: [
+                        {
+                            desc: "Lead > Visitante > Tráfego > Oportunidade > Cliente",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Tráfego > Visitante > Lead > Oportunidade > Cliente",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Cliente > Visitante > Lead > Tráfego > Oportunidade",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Tráfego > Visitante > Oportunidade > Lead > Cliente",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Marketing",
+                    pergunta: "No inbound marketing, é comum segmentarmos o conteúdo de acordo com a etapa da jornada do cliente em que cada lead se encontra. Nesse sentido, a utilização de cases de sucesso e materiais apresentando os benefícios do produto ou serviço é utilizado comumente na etapa:",
+                    respostas: [
+                        {
+                            desc: "Topo de funil",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Meio de funil",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Fundo de funil",
+                            respostacerta: 1
+                        }
+                    ]
+                },
+                {
+                    area: "Marketing",
+                    pergunta: "A técnica de escrita muito utilizada no marketing e conhecida por direcionar o leitor de forma persuasiva a realizar uma ação específica, é conhecida como:",
+                    respostas: [
+                        {
+                            desc: "Copywriting",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Outbound Marketing",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Briefing",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Conversão",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Marketing",
+                    pergunta: "Em um mercado altamente competitivo, é fundamental se posicionar com os vários tipos de marketing. Analise as definições e qual conceito consiste em campanhas não convencionais que tem foco na criatividade e buscam criar uma experiência inesquecível para o consumidor os conceitos deste que correspondem a cada um deles.",
+                    respostas: [
+                        {
+                            desc: "Marketing de Guerrilha",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Outbound Marketing",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Endomarketing",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Marketing de Relacionamento",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Marketing",
+                    pergunta: "Quais das alternativas não se encaixam na definição, características ou exemplos de Personas:",
+                    respostas: [
+                        {
+                            desc: "É a personificação do público ao qual a empresa se direciona.",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Tem como foco características abrangentes, tais como gênero, idade e região.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Auxiliam as empresas a ter uma visão mais clara e objetiva de seus usuários.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Podem ser criadas de forma intuitiva, a partir da percepção que as empresas têm de seus clientes.",
+                            respostacerta: 1
+                        }
+                    ]
+                }
+            ]
+        }, {
+            grupo: "adm",
+            pgts: [
+                {
+                    area: "Administrativo",
+                    pergunta: "Para fins de aplicação da LGPD, dado pessoal é o que permite identificar ou tornar identificável, de forma inequívoca, um indivíduo.",
+                    respostas: [
+                        {
+                            desc: "Certo",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Errado",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Administrativo",
+                    pergunta: "De acordo com a Lei Geral de Proteção de Dados Pessoais, assinale a opção que indica quem deve comunicar à autoridade nacional a ocorrência de incidente de segurança relacionado a dados pessoais que possa acarretar risco ou dano relevante: ",
+                    respostas: [
+                        {
+                            desc: "Titular",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Segurança de TI",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Operador",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Controlador",
+                            respostacerta: 1
+                        }
+                    ]
+                },
+                {
+                    area: "Administrativo",
+                    pergunta: "O método de desenvolvimento de pessoas que, para ser levado a efeito, movimenta as pessoas em várias posições na organização, no esforço de expandir suas habilidades, conhecimentos e capacidades, é conhecido como:",
+                    respostas: [
+                        {
+                            desc: "Rotação de cargos",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Apredizagem prática",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Exercícios de simulação",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Atribuições de comissões",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Administrativo",
+                    pergunta: "A informação a respeito do que o ocupante do cargo faz e dos conhecimentos, habilidades e capacidades de que necessita para desempenhar o cargo adequadamente, relaciona-se com a definição de:",
+                    respostas: [
+                        {
+                            desc: "Análise de cargos",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Desenho de cargos",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Descrição de cargos",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Ampliação de cargos",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Administrativo",
+                    pergunta: "A avaliação do desempenho é um processo dinâmico que envolve o avaliado e seu gerente e representa uma técnica de direção imprescindível nas atividades de administração das organizações. O desempenho do funcionário é medido pelo grau de alcance dos requisitos de seu trabalho, porém, deve proporcionar benefícios para a organização e para as pessoas, atendendo a diversas linhas básicas, dentre as quais a de:",
+                    respostas: [
+                        {
+                            desc: "Ser aceita por ambas as partes: avaliador e avaliado",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Abarcar somente o desempenho dentro do cargo ocupado",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Enfatizar a impressão a respeito dos hábitos pessoais observados no trabalho",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Ser utilizada para punir o mau desempenho e excluir da organização os reincidentes",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Administrativo",
+                    pergunta: "De acordo com a Lei Geral de Proteção de Dados Pessoais, a utilização de meios técnicos razoáveis e disponíveis no momento do tratamento, por meio dos quais um dado perde a possibilidade de associação direta ou indireta a um indivíduo, consiste na técnica de:",
+                    respostas: [
+                        {
+                            desc: "Bloqueio",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Anonimato",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Eliminação",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Anonimização",
+                            respostacerta: 1
+                        }
+                    ]
+                },
+                {
+                    area: "Administrativo",
+                    pergunta: "Em BPM, a ferramenta abaixo que é uma boa prática para comparar o desempenho de um processo com processos semelhantes no segmento de negócio é:",
+                    respostas: [
+                        {
+                            desc: "Análise SWOT.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Benchmarking",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Brainstorming.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "5W2H.",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Administrativo",
+                    pergunta: "A sigla LGPD significa \"Lei Geral de Proteção de Dados\"",
+                    respostas: [
+                        {
+                            desc: "Certo",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Errado",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Administrativo",
+                    pergunta: "Determinada sociedade empresária resolve passar a produzir bens na Zona Franca de Manaus, que serão destinados à comercialização no território nacional e busca informações sobre as isenções a que terá direito. Assinale a opção que indica as isenções a que terá direito:",
+                    respostas: [
+                        {
+                            desc: "Do IPI.",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Do IPI e do ICMS.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Do IPI e do Imposto de Importação integral.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Do Imposto de Exportação.",
+                            respostacerta: 0
+                        }
+                    ]
+                }
+            ]
+        }, {
+            grupo: "infra",
+            pgts: [
+                {
+                    area: "Infra",
+                    pergunta: "No Brasil, a tecnologia de computação em nuvem é muito recente, mas está se tornando madura muito rapidamente. Empresas de médio, pequeno e grande porte estão adotando a tecnologia gradativamente. O serviço começou a ser oferecido comercialmente em:",
+                    respostas: [
+                        {
+                            desc: "2007",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "2008",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "2010",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "2011",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Infra	",
+                    pergunta: "Nas redes de computadores, existe um servidor que pode residir no computador local do usuário ou em qualquer ponto entre o computador do usuário e os servidores de destino na Internet. Esse servidor passa solicitações e respostas não modificadas, armazenando em cache as páginas mais acessadas. A qual servidor o enunciado se refere?",
+                    respostas: [
+                        {
+                            desc: "Servidor de banco de dados.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Servidor proxy.",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Servidor de redes.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Servidor certificado.",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Infra",
+                    pergunta: "No que diz respeito à Administração de Servidores Windows, considere as seguintes afirmativas sobre o Windows Admin Center. <br>1. Substitui completamente o MMC (Microsoft Management Console) e contempla suas ferramentas na totalidade. <br>2. É otimizado e recomendado para o Windows Server 2019, embora possa ser utilizado para gerenciar servidores Windows Server 2012 também. <br>3. A solução Gerenciamento do Computador fornece um subconjunto de recursos para gerenciar computadores cliente com Windows 7, 8 e 10.<br>Assinale a alternativa que indica todas as afirmativas corretas:",
+                    respostas: [
+                        {
+                            desc: "Pendrive.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "CMOS(Complementary metal-oxide-semiconductor).",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "SSD (Solid State Drive).",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "BD-R (Blu-ray Recordable Disc).",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Infra",
+                    pergunta: "Certificado digital é um documento eletrônico que contém dados sobre a pessoa física ou jurídica que o utiliza, servindo como uma identidade virtual que confere validade jurídica e aspectos de segurança digital em transações digitais. Esse documento utiliza um sistema conhecido como:",
+                    respostas: [
+                        {
+                            desc: "Criptografia.",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Autenticidade.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Integridade.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Confidencialidade.",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Infra",
+                    pergunta: "Máquinas virtuais e contêineres são ambientes de computação que combinam diversos componentes de tecnologia da informação isolando-os do restante do sistema computacional. Em alguns serviços, as máquinas virtuais são mais apropriadas do que os contêineres, a exemplo:",
+                    respostas: [
+                        {
+                            desc: "Do empacotamento de microsserviços.",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Da transferências de projetos entre diversas infraestruturas de TI com o mesmo sistema operacional.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Da criação de aplicações nativas em nuvem.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Da confidencialidade.",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Infra",
+                    pergunta: "Os aplicativos de mensagens não usam criptografia de ponta a ponta.",
+                    respostas: [
+                        {
+                            desc: "Certo",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Errado",
+                            respostacerta: 1
+                        }
+                    ]
+                },
+                {
+                    area: "Infra",
+                    pergunta: "Entre alternativas a seguir, qual é a mídia portátil mais utilizada pelos usuários de computadores atualmente e que é utilizada por meio de uma porta USB?",
+                    respostas: [
+                        {
+                            desc: "Android",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Gabinete",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Disco Rígido (HD)",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Pen Drive",
+                            respostacerta: 1
+                        }
+                    ]
+                }
+            ]
+        }, {
+            grupo: "comportamento",
+            pgts: [
+                {
+                    area: "Comportamento",
+                    pergunta: "O que eu faço no fim de semana?",
+                    respostas: [
+                        {
+                            desc: "Fico de boas",
+                            pontos: {
+                                Rock: 2,
+                                Lofi: 3,
+                                Sertanejo: 1,
+                                Eletrônica: 0,
+                                Pop: 1,
+                                Funk: 0,
+                                Pagode: 2,
+                                Rap: 0
+                            }
+                        },
+                        {
+                            desc: "Saio com meu amigos",
+                            pontos: {
+                                Rock: 0,
+                                Lofi: 0,
+                                Sertanejo: 4,
+                                Eletrônica: 2,
+                                Pop: 2,
+                                Funk: 5,
+                                Pagode: 3,
+                                Rap: 3
+                            }
+                        },
+                        {
+                            desc: "Jogo até tarde",
+                            pontos: {
+                                Rock: 1,
+                                Lofi: 2,
+                                Sertanejo: 0,
+                                Eletrônica: 3,
+                                Pop: 0,
+                                Funk: 0,
+                                Pagode: 0,
+                                Rap: 0
+                            }
+                        },
+                        {
+                            desc: "Meto aquele treino",
+                            pontos: {
+                                Rock: 0,
+                                Lofi: 0,
+                                Sertanejo: 0,
+                                Eletrônica: 1,
+                                Pop: 2,
+                                Funk: 0,
+                                Pagode: 1,
+                                Rap: 2
+                            }
+                        }
+                    ]
+                },
+                {
+                    area: "Comportamento",
+                    pergunta: "O que eu faria se alguém furasse a fila na minha frente?",
+                    respostas: [
+                        {
+                            desc: "Sairia no soco",
+                            pontos: {
+                                Rock: 5,
+                                Lofi: 0,
+                                Sertanejo: 1,
+                                Eletrônica: 0,
+                                Pop: 0,
+                                Funk: 2,
+                                Pagode: 0,
+                                Rap: 4
+                            }
+                        },
+                        {
+                            desc: "Xingo muito (mentalmente)",
+                            pontos: {
+                                Rock: 0,
+                                Lofi: 2,
+                                Sertanejo: 1,
+                                Eletrônica: 3,
+                                Pop: 4,
+                                Funk: 1,
+                                Pagode: 2,
+                                Rap: 0
+                            }
+                        },
+                        {
+                            desc: "Xingo na cara da pessoa",
+                            pontos: {
+                                Rock: 1,
+                                Lofi: 1,
+                                Sertanejo: 4,
+                                Eletrônica: 1,
+                                Pop: 1,
+                                Funk: 5,
+                                Pagode: 0,
+                                Rap: 3
+                            }
+                        },
+                        {
+                            desc: "Nem ligo",
+                            pontos: {
+                                Rock: 0,
+                                Lofi: 2,
+                                Sertanejo: 2,
+                                Eletrônica: 2,
+                                Pop: 0,
+                                Funk: 0,
+                                Pagode: 3,
+                                Rap: 0
+                            }
+                        }
+                    ]
+                },
+                {
+                    area: "Comportamento",
+                    pergunta: "O que faço quando um(a) amigo(a) meu termina o relacionamento?",
+                    respostas: [
+                        {
+                            desc: "Ligo pra consolar",
+                            pontos: {
+                                Rock: 0,
+                                Lofi: 2,
+                                Sertanejo: 0,
+                                Eletrônica: 2,
+                                Pop: 3,
+                                Funk: 0,
+                                Pagode: 1,
+                                Rap: 0
+                            }
+                        },
+                        {
+                            desc: "Pego o(a) ex dele(a)",
+                            pontos: {
+                                Rock: 0,
+                                Lofi: 0,
+                                Sertanejo: 5,
+                                Eletrônica: 0,
+                                Pop: 0,
+                                Funk: 5,
+                                Pagode: 0,
+                                Rap: 4
+                            }
+                        },
+                        {
+                            desc: "Não sei o que falar (eh fod@)",
+                            pontos: {
+                                Rock: 2,
+                                Lofi: 3,
+                                Sertanejo: 0,
+                                Eletrônica: 2,
+                                Pop: 0,
+                                Funk: 0,
+                                Pagode: 0,
+                                Rap: 0
+                            }
+                        },
+                        {
+                            desc: "Convido pra afogar as mágoas no barzinho",
+                            pontos: {
+                                Rock: 0,
+                                Lofi: 0,
+                                Sertanejo: 5,
+                                Eletrônica: 0,
+                                Pop: 2,
+                                Funk: 2,
+                                Pagode: 4,
+                                Rap: 1
+                            }
+                        }
+                    ]
+                },
+                {
+                    area: "Comportamento",
+                    pergunta: "Quem sou eu trabalhando em grupo?",
+                    respostas: [
+                        {
+                            desc: "O que faz tudo sozinho",
+                            pontos: {
+                                Rock: 0,
+                                Lofi: 1,
+                                Sertanejo: 0,
+                                Eletrônica: 3,
+                                Pop: 2,
+                                Funk: 0,
+                                Pagode: 0,
+                                Rap: 0
+                            }
+                        },
+                        {
+                            desc: "Pego carona com o que faz tudo sozinho",
+                            pontos: {
+                                Rock: 0,
+                                Lofi: 0,
+                                Sertanejo: 5,
+                                Eletrônica: 1,
+                                Pop: 0,
+                                Funk: 3,
+                                Pagode: 3,
+                                Rap: 2
+                            }
+                        },
+                        {
+                            desc: "Fico stressado",
+                            pontos: {
+                                Rock: 3,
+                                Lofi: 2,
+                                Sertanejo: 0,
+                                Eletrônica: 2,
+                                Pop: 0,
+                                Funk: 4,
+                                Pagode: 0,
+                                Rap: 1
+                            }
+                        },
+                        {
+                            desc: "Tento ser o líder",
+                            pontos: {
+                                Rock: 0,
+                                Lofi: 2,
+                                Sertanejo: 1,
+                                Eletrônica: 3,
+                                Pop: 3,
+                                Funk: 2,
+                                Pagode: 2,
+                                Rap: 0
+                            }
+                        }
+                    ]
+                }
+            ]
+        }, {
+            grupo: "gerais",
+            pgts: [
+                {
+                    area: "Conhecimentos gerais",
+                    pergunta: "A diversidade regional é característica predominante na cultura brasileira, mas a falta de conhecimento e aceitação das diferenças por uma parcela da população leva tal multiplicidade a diversos tipos de preconceito.",
+                    respostas: [
+                        {
+                            desc: "Certo",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Errado",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Conhecimentos gerais",
+                    pergunta: "A ventilação pulmonar nos mamíferos ocorre em função dos movimentos respiratórios de inspiração e expiração, que, respectivamente, elevam e reduzem a pressão nos alvéolos pulmonares. Tal variação de pressão permite:",
+                    respostas: [
+                        {
+                            desc: "O transporte ativo do gás carbônico do plasma sanguíneo para os alvéolos pulmonares e, posteriormente, sua eliminação.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "A difusão do gás oxigênio dos alvéolos para o interior das hemácias, onde localizam-se as moléculas de hemoglobina.",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "O transporte ativo do gás oxigênio dos alvéolos para o plasma sanguíneo, onde localizam-se as hemácias.",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "A difusão do gás carbônico do plasma sanguíneo para os alvéolos, para que sejam formados os íons bicarbonato.",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Conhecimentos gerais",
+                    pergunta: "A intensidade de um som ou dinâmica é, na física, geralmente associada à amplitude da onda sonora.",
+                    respostas: [
+                        {
+                            desc: "Certo",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Errado",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Conhecimentos gerais",
+                    pergunta: "Atente para a seguinte lista de números naturais que foi construída seguindo uma lógica estrutural própria:4, 9, 25, 49, 121, .......... Considerando essa lógica, é correto dizer que a soma do oitavo com o nono número da lista é igual:",
+                    respostas: [
+                        {
+                            desc: "790",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "970",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "890",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "980",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Conhecimentos gerais",
+                    pergunta: "Possibilidade e probabilidade são conceitos equivalentes.",
+                    respostas: [
+                        {
+                            desc: "Certo",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Errado",
+                            respostacerta: 1
+                        }
+                    ]
+                },
+                {
+                    area: "Conhecimentos gerais",
+                    pergunta: "De quem é a famosa frase “Penso, logo existo”?",
+                    respostas: [
+                        {
+                            desc: "Platão",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Galileu Galilei",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Descartes",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Sócrates",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Conhecimentos gerais",
+                    pergunta: "De onde é a invenção do chuveiro elétrico?",
+                    respostas: [
+                        {
+                            desc: "França",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Inglaterra",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Brasil",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Austrália",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Conhecimentos gerais",
+                    pergunta: "Quais os planetas do sistema solar?",
+                    respostas: [
+                        {
+                            desc: "Terra, Vênus, Saturno, Urano, Júpiter, Marte, Netuno e Mercúrio",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Júpiter, Marte, Mercúrio, Netuno, Plutão, Saturno, Terra, Urano e Vênus",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Vênus, Saturno, Urano, Júpiter, Marte, Netuno e Mercúrio",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Júpiter, Marte, Mercúrio, Netuno, Plutão, Saturno, Sol, Terra, Urano e Vênus",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Conhecimentos gerais",
+                    pergunta: "Em que período da pré-história o fogo foi descoberto?",
+                    respostas: [
+                        {
+                            desc: "Neolítico",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Paleolítico",
+                            respostacerta: 1
+                        },
+                        {
+                            desc: "Idade dos Metais",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Período da Pedra Polida",
+                            respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Conhecimentos gerais",
+                    pergunta: "Qual a velocidade da luz?",
+                    respostas: [
+                        {
+                            desc: "300 000 000 metros por segundo (m/s)",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "150 000 000 metros por segundo (m/s)",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "199 792 458 metros por segundo (m/s)",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "299 792 458 metros por segundo (m/s)",
+                            respostacerta: 1
+                        }
+                    ]
+                }
+            ]
+        }, {
+            grupo: "perfil",
+            pgts: [
+                {
+                    area: "Perfil",
+                    pergunta: "Eu gosto de...",
+                    respostas: [
+                        {
+                            desc: "Ser piloto",
+                            tipo: "A"
+                        },
+                        {
+                            desc: "Conversar com os passageiros",
+                            tipo: "C"
+                        },
+                        {
+                            desc: "Planejar a viagem",
+                            tipo: "O"
+                        },
+                        {
+                            desc: "Explorar novas rotas",
+                            tipo: "I"
+                        }
+                    ]
+                },
+                {
+                    area: "Perfil",
+                    pergunta: "Para conseguir obter bons resultados é preciso...",
+                    respostas: [
+                        {
+                            desc: "Ter incertezas",
+                            tipo: "I"
+                        },
+                        {
+                            desc: "Diversão e celebração",
+                            tipo: "C"
+                        },
+                        {
+                            desc: "Controlar o essencial",
+                            tipo: "O"
+                        },
+                        {
+                            desc: "Planejar e obter recursos",
+                            tipo: "A"
+                        }
+                    ]
+                },
+                {
+                    area: "Perfil",
+                    pergunta: "Minha preocupação é...",
+                    respostas: [
+                        {
+                            desc: "Gerar a ideia global",
+                            tipo: "I"
+                        },
+                        {
+                            desc: "Fazer com que as pessoas gostem de mim",
+                            tipo: "C"
+                        },
+                        {
+                            desc: "Fazer com que funcione",
+                            tipo: "O"
+                        },
+                        {
+                            desc: "Fazer com que aconteça",
+                            tipo: "A"
+                        }
+                    ]
+                },
+                {
+                    area: "Perfil",
+                    pergunta: "Eu gosto de...",
+                    respostas: [
+                        {
+                            desc: "Fazer progresso",
+                            tipo: "A"
+                        },
+                        {
+                            desc: "Construir memórias",
+                            tipo: "C"
+                        },
+                        {
+                            desc: "Fazer sentido",
+                            tipo: "O"
+                        },
+                        {
+                            desc: "Tornar as pessoas confortáveis",
+                            tipo: "I"
+                        }
+                    ]
+                },
+                {
+                    area: "Perfil",
+                    pergunta: "Um ótimo dia para mim é quando...",
+                    respostas: [
+                        {
+                            desc: "Consigo fazer muitas coisas",
+                            tipo: "A"
+                        },
+                        {
+                            desc: "Me divirto com os meus amigos",
+                            tipo: "C"
+                        },
+                        {
+                            desc: "Tudo segue conforme o planejado",
+                            tipo: "O"
+                        },
+                        {
+                            desc: "Desfruto de coisas novas e estimulantes",
+                            tipo: "I"
+                        }
+                    ]
+                },
+                {
+                    area: "Perfil",
+                    pergunta: "Eu gosto de mudanças se...",
+                    respostas: [
+                        {
+                            desc: "Me der uma vantagem competitiva",
+                            tipo: "A"
+                        },
+                        {
+                            desc: "For me divertir e puder ser compartilhado",
+                            tipo: "C"
+                        },
+                        {
+                            desc: "Me dê mais liberdade e variedade",
+                            tipo: "I"
+                        },
+                        {
+                            desc: "Melhorar ou me der mais controle",
+                            tipo: "O"
+                        }
+                    ]
+                },
+                {
+                    area: "Perfil",
+                    pergunta: "Meu lema é...",
+                    respostas: [
+                        {
+                            desc: "Fazer o que precisa ser feito",
+                            tipo: "I"
+                        },
+                        {
+                            desc: "Fazer bem feito",
+                            tipo: "O"
+                        },
+                        {
+                            desc: "Fazer junto com o grupo",
+                            tipo: "C"
+                        },
+                        {
+                            desc: "Simplesmente fazer",
+                            tipo: "A"
+                        }
+                    ]
+                },
+                {
+                    area: "Perfil",
+                    pergunta: "Se eu fosse bilionário(a)...",
+                    respostas: [
+                        {
+                            desc: "Faria doações para muitas entidades",
+                            tipo: "C"
+                        },
+                        {
+                            desc: "Criaria uma poupança avantajada",
+                            tipo: "O"
+                        },
+                        {
+                            desc: "Faria o que desse na cabeça",
+                            tipo: "I"
+                        },
+                        {
+                            desc: "Me exibiria bastante com algumas pessoas",
+                            tipo: "A"
+                        }
+                    ]
+                },
+                {
+                    area: "Perfil",
+                    pergunta: "Eu penso que...",
+                    respostas: [
+                        {
+                            desc: "Unidos (as) venceremos, divididos(as) perdemos",
+                            tipo: "C"
+                        },
+                        {
+                            desc: "O ataque é a melhor defesa",
+                            tipo: "A"
+                        },
+                        {
+                            desc: "É bom ser manso(a), mas andar com um porrete",
+                            tipo: "I"
+                        },
+                        {
+                            desc: "Uma pessoa prevenida vale por duas",
+                            tipo: "O"
                         }
                     ]
                 }

@@ -26,6 +26,7 @@ let Anima = {
     player: {
         nome: '',
         perguntaAtual: 0,
+        otherResults: [],
         pgts: [],
         respondidas: [],
         acertos: 0,
@@ -1238,7 +1239,7 @@ let Anima = {
             let html = `
                 <div class="frase-efeito perfeitonome">
                     <div class="txt3">
-                        Perfeito,
+                        Perfeito
                         <br>
                         ${Anima.player.nome}!
                     </div>
@@ -1519,8 +1520,10 @@ let Anima = {
             console.log(Anima.player.pontos);
         } else if (Anima.player.pgts[Anima.player.perguntaAtual].area == 'Perfil') {
             console.log(Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].tipo);
+            Anima.player.otherResults.push(sn);
         } else {
             console.log(sn);
+            Anima.player.otherResults.push(sn);
         }
 
         // } else {
@@ -3939,7 +3942,7 @@ let Anima = {
             </div>
 
             <div class="resultadoAcertos" style="padding: 0 30px 40px;margin:0">
-                <img src="./assets/${Anima.getImgPl()}.png">
+                <img src="./assets/${Anima.getImgPl()}.png" loading="lazy">
             </div>
 
             <div class="resultadoAcertos" style="width:90%;padding: 0;margin:0">
@@ -3959,17 +3962,17 @@ let Anima = {
 
                 <div class="main_div">
                     <div class="group">
-                        <input type="text" required="required" value="${Anima.player.nome || ''}"/>
+                        <input id="nomei" type="text" required="required" value="${Anima.player.nome || ''}"/>
                         <label>Nome</label>
                     </div>
 
                     <div class="group">
-                        <input type="text" required="required"/>
+                        <input id="fonei" type="text" required="required"/>
                         <label>Telefone</label>
                     </div>
 
                     <div class="group">
-                        <input type="text" required="required"/>
+                        <input id="linki" type="text" required="required"/>
                         <label>Manda o link do Github ou Behance ou Linkedin ou ...</label>
                     </div>
 
@@ -4396,5 +4399,66 @@ let Anima = {
         } else {
             return trofeuTres;
         }
-    }
+    },
+
+    configs: {
+        api: 'http://192.168.2.200:1290/api/v1/',
+        front: 'http://192.168.2.200:5000/'
+
+        //produção
+        // api: 'https://desafio.useall.com.br/api/v1/',
+        // front: 'https://desafio.useall.com.br'
+        
+    },
+
+    onClickEnviar: function () {
+        let url = Anima.configs.api + 'inserirInscricao';
+
+        Anima.player.nome = document.getElementById('nomei').value || '';
+        Anima.player.fone = document.getElementById('fonei').value || '';
+        Anima.player.link = document.getElementById('linki').value || '';
+        Anima.player.aceitolgpd = document.getElementById('aceitoLGPD').checked;
+
+        if (!Anima.player.aceitolgpd) {
+            alert('Você precisa aceitar os termos para enviar sua inscrição.');
+            return;
+        }
+
+        Anima.postRequest(url, Anima.player, (response) => {
+            if (response.error) {
+                alert('Falha ao enviar. Por favor, tente novamente!');
+                return;
+            }
+
+            alert('Enviado com sucesso!');
+        });
+    },
+
+    postRequest: function (url, dto, _cb) {
+        let xhr = new XMLHttpRequest();
+
+        // dto.token = localStorage.tokenJogo;
+
+        xhr.open('POST', url, true);
+
+        // xhr.timeout = 10000;
+
+        // xhr.ontimeout = function (e) {
+        //     return Msg.alert('Erro :(', 'Algo de errado não está certo. Parece que acabou o tempo');
+        // };
+
+        xhr.setRequestHeader('Content-type', 'application/json');
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                return _cb(JSON.parse(xhr.responseText));
+            }
+
+            if (xhr.readyState == 4 && xhr.status == 201) {
+                return _cb(JSON.parse(xhr.responseText));
+            }
+        };
+
+        xhr.send(JSON.stringify(dto));
+    },
 };

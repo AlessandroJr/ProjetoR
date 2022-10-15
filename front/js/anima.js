@@ -20,12 +20,25 @@ let Anima = {
 
     coresPgts: [],
 
+    maiorTipo: '',
+    maiorValor: '',
+
     player: {
         nome: '',
         perguntaAtual: 0,
         pgts: [],
         respondidas: [],
-        acertos: 0
+        acertos: 0,
+        pontos: {
+            Rock: 0,
+            Lofi: 0,
+            Sertanejo: 0,
+            Eletronica: 0,
+            Pop: 0,
+            Funk: 0,
+            Pagode: 0,
+            Rap: 0
+        }
     },
 
     onClickAction: function (sceneid, oquesalvar) {
@@ -51,48 +64,6 @@ let Anima = {
         this.loadingPerguntas();
 
         return;
-
-        switch (carreira) {
-            case 'design':
-                Anima.carreiraDesign();
-                break;
-
-            case 'frontend':
-                Anima.carreiraFrontend();
-                break;
-
-            case 'ba':
-                Anima.carreiraBa();
-                break;
-
-            case 'backend':
-                Anima.carreiraBackend();
-                break;
-
-            case 'tester':
-                Anima.carreiraTester();
-                break;
-
-            case 'comercial':
-                Anima.carreiraComercial();
-                break;
-
-            case 'contabil':
-                Anima.carreiraContabil();
-                break;
-
-            case 'adm':
-                Anima.carreiraAdm();
-                break;
-
-            case 'rh':
-                Anima.carreiraRh();
-                break;
-
-            default:
-                break;
-        }
-
     },
 
     carreiraDesign: function () {
@@ -214,7 +185,22 @@ let Anima = {
     },
 
     abrirPerguntas: function () {
-        let cores = Anima.cores[Math.floor(Math.random() * 4)];
+        if (Anima.player.perguntaAtual == 11) {
+            Anima.preparaResultado();
+            return;
+        }
+
+        
+        $('.content').css('transition', 'all 1s ease');
+
+        let cores = Anima.cores[Math.floor(Math.random() * 4)];;
+
+        while (Anima.cor == cores) {
+            cores = Anima.cores[Math.floor(Math.random() * 4)];
+        }
+
+        Anima.cor = cores;
+
         let header = `
             <div class="header-pergunta" style="background-color:${cores.header}">
                 <svg class="logo-topo" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -262,7 +248,7 @@ let Anima = {
 
                 <div id="qstid">
                     <div id="numero-qst">
-                        1
+                        ${Anima.player.perguntaAtual + 1}
                     </div>
                     <svg id="exp-svg" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                         viewBox="0 0 67.6 67.7" style="enable-background:new 0 0 67.6 67.7;" xml:space="preserve">
@@ -291,10 +277,19 @@ let Anima = {
             $('.content').css('display', 'block');
             $('.content').css('height', 'auto');
             $('.content').css('padding-bottom', '50px');
+            $('.content').css('top', '0vh');
+
             // $('.content').css('opacity','0');
-            Anima.prepararPerguntasCarreira(this.carreira, function () {
+
+            if (Anima.player.perguntaAtual == 0) {
+                Anima.prepararPerguntasCarreira(this.carreira, function () {
+                    Anima.renderPergunta(0, cores);
+                });
+            } else {
                 Anima.renderPergunta(0, cores);
-            });
+            }
+
+            scrollToTop();
         }, 1000);
 
         // Anima.gerarCoresTemaPgts();
@@ -309,6 +304,16 @@ let Anima = {
             header: Math.floor(Math.random() * 3),
             exp: 1
         }
+    },
+
+    fecharPerguntas: function () {
+        $('.header-pergunta').css('margin-top', '-200px');
+        $('.content').css('top', '300vh');
+        $('body').css('overflow-y', 'hidden');
+
+        setTimeout(() => {
+            Anima.abrirPerguntas();
+        }, 250);
     },
 
     prepararPerguntasCarreira: function (carreira, _cb) {
@@ -347,9 +352,11 @@ let Anima = {
 
         }
 
+        list = [];
+
         // GERAL -------------------------------------------------------------------------------------------------------------------------------------
 
-        for (let i = 0; i < pgtsGeral.length; i++) {
+        for (let i = 0; i < pgtsGeral.pgts.length; i++) {
             list[i] = i + 1;
         }
 
@@ -366,9 +373,11 @@ let Anima = {
             pgtSlctd.push(pgtsGeral.pgts[list[index] - 1]);
         }
 
+        list = [];
+
         // PERFIL -------------------------------------------------------------------------------------------------------------------------------------
 
-        for (let i = 0; i < pgtsPerfil.length; i++) {
+        for (let i = 0; i < pgtsPerfil.pgts.length; i++) {
             list[i] = i + 1;
         }
 
@@ -385,9 +394,11 @@ let Anima = {
             pgtSlctd.push(pgtsPerfil.pgts[list[index] - 1]);
         }
 
+        list = [];
+
         // COMPORTAMENTAL -------------------------------------------------------------------------------------------------------------------------------------
 
-        for (let i = 0; i < pgtsComp.length; i++) {
+        for (let i = 0; i < 4; i++) {
             list[i] = i + 1;
         }
 
@@ -436,8 +447,8 @@ let Anima = {
 
 
         </div>
-<div>
-    <divid=respostas>
+</div>
+    <div id="respostas">
     </div>
         `;
 
@@ -478,7 +489,7 @@ let Anima = {
                 }
 
                 respostas += `
-                <div class="resposta" onclick="Anima.onClickResposta(${element.respostacerta ? 'certo' : 'errado'})">
+                <div class="resposta" onclick="Anima.onClickResposta('${element.respostacerta ? 'certo' : 'errado'}', '${pergunta.carreira == Anima.carreira ? '' : 'offponto'}', ${index})">
                     <div class="left">
                         <div class="grafic">
                             
@@ -1307,29 +1318,29 @@ let Anima = {
                         <button onclick="Anima.onClickCarreira('design')" class="btn-carreira btn-cian">
                             UI/UX Design
                         </button>
-                        <button onclick="Anima.onClickCarreira('desenvolvimento')" class="btn-carreira btn-purple">
-                            FrontEnd
+                        <button onclick="Anima.onClickCarreira('adm')" class="btn-carreira btn-purple">
+                            Administração
                         </button>
-                        <button onclick="Anima.onClickCarreira('desenvolvimento')" class="btn-carreira btn-red">
-                            Analista de negócios
+                        <button onclick="Anima.onClickCarreira('gerais')" class="btn-carreira btn-red">
+                            Outros
                         </button>
                         <button onclick="Anima.onClickCarreira('desenvolvimento')" class="btn-carreira btn-cian">
                             BackEnd
                         </button>
+                        <button onclick="Anima.onClickCarreira('infra')" class="btn-carreira btn-cian">
+                            Infra
+                        </button>
                         <button onclick="Anima.onClickCarreira('tester')" class="btn-carreira btn-purple">
-                            QA
+                            QA - Tester
                         </button>
-                        <button onclick="Anima.onClickCarreira('comercial')" class="btn-carreira btn-red">
-                            Comercial
+                        <button onclick="Anima.onClickCarreira('mkt')" class="btn-carreira btn-red">
+                            Marketing
                         </button>
-                        <button onclick="Anima.onClickCarreira('rh')" class="btn-carreira btn-cian">
-                            RH
+                        <button onclick="Anima.onClickCarreira('desenvolvimento')" class="btn-carreira btn-red">
+                            Analista de negócios
                         </button>
-                        <button onclick="Anima.onClickCarreira('contabil')" class="btn-carreira btn-purple">
-                            Contabilidade
-                        </button>
-                        <button onclick="Anima.onClickCarreira('adm')" class="btn-carreira btn-red">
-                            Administração
+                        <button onclick="Anima.onClickCarreira('desenvolvimento')" class="btn-carreira btn-purple">
+                            FrontEnd
                         </button>
                     </div>
                 </div>
@@ -1426,18 +1437,104 @@ let Anima = {
         }
     },
 
-    onClickResposta: function (sn) {
-        console.log(sn);
-
+    onClickResposta: function (sn, op, kl) {
         if (sn == 'certo') {
             Anima.player.acertos++;
         }
 
+        // debugger
+        // if (op == 'offponto') {
+        if (Anima.player.pgts[Anima.player.perguntaAtual].area == 'Comportamento') {
+
+            const aux = Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].pontos.map(element => {
+                if (element.pontos > Anima.maiorValor) {
+                    Anima.maiorValor = element.pontos;
+                    Anima.maiorTipo = element.tipo
+                }
+            });
+
+
+            Anima.player.pontos = {
+                Rock: (Anima.player.pontos.Rock || 0) + (Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].pontos.find(element => element.tipo == "Rock").pontos || 0),
+                Lofi: (Anima.player.pontos.Lofi || 0) + (Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].pontos.find(element => element.tipo == "Lofi").pontos || 0),
+                Sertanejo: (Anima.player.pontos.Sertanejo || 0) + (Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].pontos.find(element => element.tipo == "Sertanejo").pontos || 0),
+                Eletronica: (Anima.player.pontos.Eletronica || 0) + (Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].pontos.find(element => element.tipo == "Eletronica").pontos || 0),
+                Pop: (Anima.player.pontos.Pop || 0) + (Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].pontos.find(element => element.tipo == "Pop").pontos || 0),
+                Funk: (Anima.player.pontos.Funk || 0) + (Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].pontos.find(element => element.tipo == "Funk").pontos || 0),
+                Pagode: (Anima.player.pontos.Pagode || 0) + (Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].pontos.find(element => element.tipo == "Pagode").pontos || 0),
+                Rap: (Anima.player.pontos.Rap || 0) + (Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].pontos.find(element => element.tipo == "Rap").pontos || 0),
+            }
+
+            if(Anima.player.pontos.Rock > Anima.player.pontos.Lofi) {
+                Anima.maiorValor = Anima.player.pontos.Rock;
+                Anima.maiorTipo = 'Rock';
+            } else {
+                Anima.maiorValor = Anima.player.pontos.Lofi;
+                Anima.maiorTipo = 'Lofi';
+            }
+
+            if (Anima.maiorValor < Anima.player.pontos.Sertanejo) {
+                Anima.maiorValor = Anima.player.pontos.Sertanejo;
+                Anima.maiorTipo = 'Sertanejo';
+            }
+
+            if (Anima.maiorValor < Anima.player.pontos.Eletronica) {
+                Anima.maiorValor = Anima.player.pontos.Eletronica;
+                Anima.maiorTipo = 'Eletronica';
+            }
+
+            if (Anima.maiorValor < Anima.player.pontos.Pop) {
+                Anima.maiorValor = Anima.player.pontos.Pop;
+                Anima.maiorTipo = 'Pop';
+            }
+
+            if (Anima.maiorValor < Anima.player.pontos.Funk) {
+                Anima.maiorValor = Anima.player.pontos.Funk;
+                Anima.maiorTipo = 'Funk';
+            }
+
+            if (Anima.maiorValor < Anima.player.pontos.Pagode) {
+                Anima.maiorValor = Anima.player.pontos.Pagode;
+                Anima.maiorTipo = 'Pagode';
+            }
+
+            if (Anima.maiorValor < Anima.player.pontos.Rap) {
+                Anima.maiorValor = Anima.player.pontos.Rap;
+                Anima.maiorTipo = 'Rap';
+            }
+
+            console.log('Maior pontos: '+Anima.maiorTipo+' com '+ Anima.maiorValor + 'pontos');
+
+            // Anima.player.pontos = {
+            //     Rock: (Anima.player.pontos.Rock || 0) + Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].pontos.Rock,
+            //     Lofi: (Anima.player.pontos.Lofi || 0) + Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].pontos.Lofi,
+            //     Sertanejo: (Anima.player.pontos.Sertanejo || 0) + Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].pontos.Sertanejo,
+            //     Eletronica: (Anima.player.pontos.Eletronica || 0) + Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].pontos.Eletronica,
+            //     Pop: (Anima.player.pontos.Pop || 0) + Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].pontos.Pop,
+            //     Funk: (Anima.player.pontos.Funk || 0) + Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].pontos.Funk,
+            //     Pagode: (Anima.player.pontos.Pagode || 0) + Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].pontos.Pagode,
+            //     Rap: (Anima.player.pontos.Rap || 0) + Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].pontos.Rap
+            // }
+
+            console.log(Anima.player.pontos);
+        } else if (Anima.player.pgts[Anima.player.perguntaAtual].area == 'Perfil') {
+            console.log(Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].tipo);
+        } else {
+            console.log(sn);
+        }
+
+        // } else {
+        // }
+
         Anima.player.respondidas.push(Anima.player.pgts[Anima.player.perguntaAtual]);
+
+        Anima.player.perguntaAtual++;
+
+        Anima.fecharPerguntas();
     },
 
-    perguntas:
-        [{
+    perguntas: [
+        {
             grupo: "design",
             pgts: [
                 {
@@ -1971,7 +2068,7 @@ let Anima = {
                     pergunta: "No processo de desenvolvimento para dispositivos móveis, os testes de configuração incluem a verificação dos tempos de resposta e dos métodos de recuperação do aplicativo quando o hardware falha ou se comporta mal.",
                     respostas: [
                         {
-                            desc: "erto",
+                            desc: "Certo",
                             respostacerta: 0
                         },
                         {
@@ -2007,7 +2104,7 @@ let Anima = {
                     pergunta: "Num Help Desk, é o grupo que resolve o problema por meio do uso de ferramentas complementares, tais como, base de conhecimento e software de controle remoto, visando ao encerramento do problema sem a necessidade de escalonar o assunto para outro nível. Trata-se do grupo de:",
                     respostas: [
                         {
-                            desc: "egundo nível solucionador.",
+                            desc: "Segundo nível solucionador.",
                             respostacerta: 0
                         },
                         {
@@ -2594,55 +2691,119 @@ let Anima = {
                     respostas: [
                         {
                             desc: "Fico de boas",
-                            pontos: {
-                                Rock: 2,
-                                Lofi: 3,
-                                Sertanejo: 1,
-                                Eletrônica: 0,
-                                Pop: 1,
-                                Funk: 0,
-                                Pagode: 2,
-                                Rap: 0
+                            pontos: [{
+                                tipo: "Rock",
+                                pontos: 2
+                            }, {
+                                tipo: "Lofi",
+                                pontos: 3
+                            }, {
+                                tipo: "Sertanejo",
+                                pontos: 1
+                            }, {
+                                tipo: "Eletronica",
+                                pontos: 0
+                            }, {
+                                tipo: "Pop",
+                                pontos: 1
+                            }, {
+                                tipo: "Funk",
+                                pontos: 0
+                            }, {
+                                tipo: "Pagode",
+                                pontos: 2
+                            }, {
+                                tipo: "Rap",
+                                pontos: 0
                             }
+                            ]
                         },
                         {
                             desc: "Saio com meu amigos",
-                            pontos: {
-                                Rock: 0,
-                                Lofi: 0,
-                                Sertanejo: 4,
-                                Eletrônica: 2,
-                                Pop: 2,
-                                Funk: 5,
-                                Pagode: 3,
-                                Rap: 3
+                            pontos: [{
+                                tipo: "Rock",
+                                pontos: 0
+                            }, {
+                                tipo: "Lofi",
+                                pontos: 0
+                            }, {
+                                tipo: "Sertanejo",
+                                pontos: 4
+                            }, {
+                                tipo: "Eletronica",
+                                pontos: 2
+                            }, {
+                                tipo: "Pop",
+                                pontos: 2
+                            }, {
+                                tipo: "Funk",
+                                pontos: 5
+                            }, {
+                                tipo: "Pagode",
+                                pontos: 3
+                            }, {
+                                tipo: "Rap",
+                                pontos: 3
                             }
+                            ]
                         },
                         {
                             desc: "Jogo até tarde",
-                            pontos: {
-                                Rock: 1,
-                                Lofi: 2,
-                                Sertanejo: 0,
-                                Eletrônica: 3,
-                                Pop: 0,
-                                Funk: 0,
-                                Pagode: 0,
-                                Rap: 0
+                            pontos: [{
+                                tipo: "Rock",
+                                pontos: 1
+                            }, {
+                                tipo: "Lofi",
+                                pontos: 2
+                            }, {
+                                tipo: "Sertanejo",
+                                pontos: 0
+                            }, {
+                                tipo: "Eletronica",
+                                pontos: 3
+                            }, {
+                                tipo: "Pop",
+                                pontos: 0
+                            }, {
+                                tipo: "Funk",
+                                pontos: 0
+                            }, {
+                                tipo: "Pagode",
+                                pontos: 0
+                            }, {
+                                tipo: "Rap",
+                                pontos: 0
                             }
+                            ]
                         },
                         {
                             desc: "Meto aquele treino",
-                            pontos: {
-                                Rock: 0,
-                                Lofi: 0,
-                                Sertanejo: 0,
-                                Eletrônica: 1,
-                                Pop: 2,
-                                Funk: 0,
-                                Pagode: 1,
-                                Rap: 2
+                            pontos: [{
+                                tipo: "Rock",
+                                pontos: 0
+                            }, {
+                                tipo: "Lofi",
+                                pontos: 0
+                            }, {
+                                tipo: "Sertanejo",
+                                pontos: 0
+                            }, {
+                                tipo: "Eletronica",
+                                pontos: 1
+                            }, {
+                                tipo: "Pop",
+                                pontos: 2
+                            }, {
+                                tipo: "Funk",
+                                pontos: 0
+                            }, {
+                                tipo: "Pagode",
+                                pontos: 1
+                            }, {
+                                tipo: "Rap",
+                                pontos: 2
                             }
+                            ]
                         }
                     ]
                 },
@@ -2652,55 +2813,119 @@ let Anima = {
                     respostas: [
                         {
                             desc: "Sairia no soco",
-                            pontos: {
-                                Rock: 5,
-                                Lofi: 0,
-                                Sertanejo: 1,
-                                Eletrônica: 0,
-                                Pop: 0,
-                                Funk: 2,
-                                Pagode: 0,
-                                Rap: 4
+                            pontos: [{
+                                tipo: "Rock",
+                                pontos: 5
+                            }, {
+                                tipo: "Lofi",
+                                pontos: 0
+                            }, {
+                                tipo: "Sertanejo",
+                                pontos: 1
+                            }, {
+                                tipo: "Eletronica",
+                                pontos: 0
+                            }, {
+                                tipo: "Pop",
+                                pontos: 0
+                            }, {
+                                tipo: "Funk",
+                                pontos: 2
+                            }, {
+                                tipo: "Pagode",
+                                pontos: 0
+                            }, {
+                                tipo: "Rap",
+                                pontos: 4
                             }
+                            ]
                         },
                         {
                             desc: "Xingo muito (mentalmente)",
-                            pontos: {
-                                Rock: 0,
-                                Lofi: 2,
-                                Sertanejo: 1,
-                                Eletrônica: 3,
-                                Pop: 4,
-                                Funk: 1,
-                                Pagode: 2,
-                                Rap: 0
+                            pontos: [{
+                                tipo: "Rock",
+                                pontos: 0
+                            }, {
+                                tipo: "Lofi",
+                                pontos: 2
+                            }, {
+                                tipo: "Sertanejo",
+                                pontos: 1
+                            }, {
+                                tipo: "Eletronica",
+                                pontos: 3
+                            }, {
+                                tipo: "Pop",
+                                pontos: 4
+                            }, {
+                                tipo: "Funk",
+                                pontos: 1
+                            }, {
+                                tipo: "Pagode",
+                                pontos: 2
+                            }, {
+                                tipo: "Rap",
+                                pontos: 0
                             }
+                            ]
                         },
                         {
                             desc: "Xingo na cara da pessoa",
-                            pontos: {
-                                Rock: 1,
-                                Lofi: 1,
-                                Sertanejo: 4,
-                                Eletrônica: 1,
-                                Pop: 1,
-                                Funk: 5,
-                                Pagode: 0,
-                                Rap: 3
+                            pontos: [{
+                                tipo: "Rock",
+                                pontos: 1
+                            }, {
+                                tipo: "Lofi",
+                                pontos: 1
+                            }, {
+                                tipo: "Sertanejo",
+                                pontos: 4
+                            }, {
+                                tipo: "Eletronica",
+                                pontos: 1
+                            }, {
+                                tipo: "Pop",
+                                pontos: 1
+                            }, {
+                                tipo: "Funk",
+                                pontos: 5
+                            }, {
+                                tipo: "Pagode",
+                                pontos: 0
+                            }, {
+                                tipo: "Rap",
+                                pontos: 3
                             }
+                            ]
                         },
                         {
                             desc: "Nem ligo",
-                            pontos: {
-                                Rock: 0,
-                                Lofi: 2,
-                                Sertanejo: 2,
-                                Eletrônica: 2,
-                                Pop: 0,
-                                Funk: 0,
-                                Pagode: 3,
-                                Rap: 0
+                            pontos: [{
+                                tipo: "Rock",
+                                pontos: 0
+                            }, {
+                                tipo: "Lofi",
+                                pontos: 2
+                            }, {
+                                tipo: "Sertanejo",
+                                pontos: 2
+                            }, {
+                                tipo: "Eletronica",
+                                pontos: 2
+                            }, {
+                                tipo: "Pop",
+                                pontos: 0
+                            }, {
+                                tipo: "Funk",
+                                pontos: 0
+                            }, {
+                                tipo: "Pagode",
+                                pontos: 3
+                            }, {
+                                tipo: "Rap",
+                                pontos: 0
                             }
+                            ]
                         }
                     ]
                 },
@@ -2710,55 +2935,119 @@ let Anima = {
                     respostas: [
                         {
                             desc: "Ligo pra consolar",
-                            pontos: {
-                                Rock: 0,
-                                Lofi: 2,
-                                Sertanejo: 0,
-                                Eletrônica: 2,
-                                Pop: 3,
-                                Funk: 0,
-                                Pagode: 1,
-                                Rap: 0
+                            pontos: [{
+                                tipo: "Rock",
+                                pontos: 0
+                            }, {
+                                tipo: "Lofi",
+                                pontos: 2
+                            }, {
+                                tipo: "Sertanejo",
+                                pontos: 0
+                            }, {
+                                tipo: "Eletronica",
+                                pontos: 2
+                            }, {
+                                tipo: "Pop",
+                                pontos: 3
+                            }, {
+                                tipo: "Funk",
+                                pontos: 0
+                            }, {
+                                tipo: "Pagode",
+                                pontos: 1
+                            }, {
+                                tipo: "Rap",
+                                pontos: 0
                             }
+                            ]
                         },
                         {
                             desc: "Pego o(a) ex dele(a)",
-                            pontos: {
-                                Rock: 0,
-                                Lofi: 0,
-                                Sertanejo: 5,
-                                Eletrônica: 0,
-                                Pop: 0,
-                                Funk: 5,
-                                Pagode: 0,
-                                Rap: 4
+                            pontos: [{
+                                tipo: "Rock",
+                                pontos: 0
+                            }, {
+                                tipo: "Lofi",
+                                pontos: 0
+                            }, {
+                                tipo: "Sertanejo",
+                                pontos: 5
+                            }, {
+                                tipo: "Eletronica",
+                                pontos: 0
+                            }, {
+                                tipo: "Pop",
+                                pontos: 0
+                            }, {
+                                tipo: "Funk",
+                                pontos: 5
+                            }, {
+                                tipo: "Pagode",
+                                pontos: 0
+                            }, {
+                                tipo: "Rap",
+                                pontos: 4
                             }
+                            ]
                         },
                         {
                             desc: "Não sei o que falar (eh fod@)",
-                            pontos: {
-                                Rock: 2,
-                                Lofi: 3,
-                                Sertanejo: 0,
-                                Eletrônica: 2,
-                                Pop: 0,
-                                Funk: 0,
-                                Pagode: 0,
-                                Rap: 0
+                            pontos: [{
+                                tipo: "Rock",
+                                pontos: 2
+                            }, {
+                                tipo: "Lofi",
+                                pontos: 3
+                            }, {
+                                tipo: "Sertanejo",
+                                pontos: 0
+                            }, {
+                                tipo: "Eletronica",
+                                pontos: 2
+                            }, {
+                                tipo: "Pop",
+                                pontos: 0
+                            }, {
+                                tipo: "Funk",
+                                pontos: 0
+                            }, {
+                                tipo: "Pagode",
+                                pontos: 0
+                            }, {
+                                tipo: "Rap",
+                                pontos: 0
                             }
+                            ]
                         },
                         {
                             desc: "Convido pra afogar as mágoas no barzinho",
-                            pontos: {
-                                Rock: 0,
-                                Lofi: 0,
-                                Sertanejo: 5,
-                                Eletrônica: 0,
-                                Pop: 2,
-                                Funk: 2,
-                                Pagode: 4,
-                                Rap: 1
+                            pontos: [{
+                                tipo: "Rock",
+                                pontos: 0
+                            }, {
+                                tipo: "Lofi",
+                                pontos: 0
+                            }, {
+                                tipo: "Sertanejo",
+                                pontos: 5
+                            }, {
+                                tipo: "Eletronica",
+                                pontos: 0
+                            }, {
+                                tipo: "Pop",
+                                pontos: 2
+                            }, {
+                                tipo: "Funk",
+                                pontos: 2
+                            }, {
+                                tipo: "Pagode",
+                                pontos: 4
+                            }, {
+                                tipo: "Rap",
+                                pontos: 1
                             }
+                            ]
                         }
                     ]
                 },
@@ -2768,55 +3057,119 @@ let Anima = {
                     respostas: [
                         {
                             desc: "O que faz tudo sozinho",
-                            pontos: {
-                                Rock: 0,
-                                Lofi: 1,
-                                Sertanejo: 0,
-                                Eletrônica: 3,
-                                Pop: 2,
-                                Funk: 0,
-                                Pagode: 0,
-                                Rap: 0
+                            pontos: [{
+                                tipo: "Rock",
+                                pontos: 0
+                            }, {
+                                tipo: "Lofi",
+                                pontos: 1
+                            }, {
+                                tipo: "Sertanejo",
+                                pontos: 0
+                            }, {
+                                tipo: "Eletronica",
+                                pontos: 3
+                            }, {
+                                tipo: "Pop",
+                                pontos: 2
+                            }, {
+                                tipo: "Funk",
+                                pontos: 0
+                            }, {
+                                tipo: "Pagode",
+                                pontos: 0
+                            }, {
+                                tipo: "Rap",
+                                pontos: 0
                             }
+                            ]
                         },
                         {
                             desc: "Pego carona com o que faz tudo sozinho",
-                            pontos: {
-                                Rock: 0,
-                                Lofi: 0,
-                                Sertanejo: 5,
-                                Eletrônica: 1,
-                                Pop: 0,
-                                Funk: 3,
-                                Pagode: 3,
-                                Rap: 2
+                            pontos: [{
+                                tipo: "Rock",
+                                pontos: 0
+                            }, {
+                                tipo: "Lofi",
+                                pontos: 0
+                            }, {
+                                tipo: "Sertanejo",
+                                pontos: 5
+                            }, {
+                                tipo: "Eletronica",
+                                pontos: 1
+                            }, {
+                                tipo: "Pop",
+                                pontos: 0
+                            }, {
+                                tipo: "Funk",
+                                pontos: 3
+                            }, {
+                                tipo: "Pagode",
+                                pontos: 3
+                            }, {
+                                tipo: "Rap",
+                                pontos: 2
                             }
+                            ]
                         },
                         {
                             desc: "Fico stressado",
-                            pontos: {
-                                Rock: 3,
-                                Lofi: 2,
-                                Sertanejo: 0,
-                                Eletrônica: 2,
-                                Pop: 0,
-                                Funk: 4,
-                                Pagode: 0,
-                                Rap: 1
+                            pontos: [{
+                                tipo: "Rock",
+                                pontos: 3
+                            }, {
+                                tipo: "Lofi",
+                                pontos: 2
+                            }, {
+                                tipo: "Sertanejo",
+                                pontos: 0
+                            }, {
+                                tipo: "Eletronica",
+                                pontos: 2
+                            }, {
+                                tipo: "Pop",
+                                pontos: 0
+                            }, {
+                                tipo: "Funk",
+                                pontos: 4
+                            }, {
+                                tipo: "Pagode",
+                                pontos: 0
+                            }, {
+                                tipo: "Rap",
+                                pontos: 1
                             }
+                            ]
                         },
                         {
                             desc: "Tento ser o líder",
-                            pontos: {
-                                Rock: 0,
-                                Lofi: 2,
-                                Sertanejo: 1,
-                                Eletrônica: 3,
-                                Pop: 3,
-                                Funk: 2,
-                                Pagode: 2,
-                                Rap: 0
+                            pontos: [{
+                                tipo: "Rock",
+                                pontos: 0
+                            }, {
+                                tipo: "Lofi",
+                                pontos: 2
+                            }, {
+                                tipo: "Sertanejo",
+                                pontos: 1
+                            }, {
+                                tipo: "Eletronica",
+                                pontos: 3
+                            }, {
+                                tipo: "Pop",
+                                pontos: 3
+                            }, {
+                                tipo: "Funk",
+                                pontos: 2
+                            }, {
+                                tipo: "Pagode",
+                                pontos: 2
+                            }, {
+                                tipo: "Rap",
+                                pontos: 0
                             }
+                            ]
                         }
                     ]
                 }
@@ -2950,28 +3303,6 @@ let Anima = {
                         },
                         {
                             desc: "Austrália",
-                            respostacerta: 0
-                        }
-                    ]
-                },
-                {
-                    area: "Conhecimentos gerais",
-                    pergunta: "Quais os planetas do sistema solar?",
-                    respostas: [
-                        {
-                            desc: "Terra, Vênus, Saturno, Urano, Júpiter, Marte, Netuno e Mercúrio",
-                            respostacerta: 1
-                        },
-                        {
-                            desc: "Júpiter, Marte, Mercúrio, Netuno, Plutão, Saturno, Terra, Urano e Vênus",
-                            respostacerta: 0
-                        },
-                        {
-                            desc: "Vênus, Saturno, Urano, Júpiter, Marte, Netuno e Mercúrio",
-                            respostacerta: 0
-                        },
-                        {
-                            desc: "Júpiter, Marte, Mercúrio, Netuno, Plutão, Saturno, Sol, Terra, Urano e Vênus",
                             respostacerta: 0
                         }
                     ]
@@ -3223,7 +3554,847 @@ let Anima = {
                     ]
                 }
             ]
-        }],
+        }
+    ],
 
+
+    preparaResultado: function () {
+        let header = `
+        <svg class="logo-topo" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+        viewBox="0 0 1211.4 374.8" style="enable-background:new 0 0 1211.4 374.8;" xml:space="preserve">
+<style type="text/css">
+    .white{fill:#FFFFFF;}
+</style>
+<g>
+    <path class="white" d="M781.8,133.2c-1.4,0-2.5,0-3.9,0c-46.2,1.8-67.5,40.1-67.5,74.9c0,42.3,24.5,69.2,67.5,72.1
+        c2.5,0,5.3,0.4,7.8,0.4c19.2,0,36.2-3.2,51.8-9.9l-7.5-28.8c-11.7,3.9-23.1,6-38,6c-5,0-9.6-0.7-14.2-1.8
+        c-13.8-3.2-24.5-11.4-25.6-25.6h25.6h65.3c0.4-3.2,1.4-9.6,1.4-17C844.7,168.4,827.3,133.2,781.8,133.2z M777.9,190.7H752
+        c1.1-11.4,8.5-27.7,25.9-28.4c0.7,0,1.1,0,1.4,0c19.9,0,24.5,18.1,24.5,28.4H777.9z"/>
+    <path class="white" d="M540,212.4c0,20.2-6.4,32.3-21.7,32.7c-14.9-0.4-21.3-12.4-21.3-32.7v-76h-44v82.7c0,81.7,130.7,81.7,130.7,0
+        v-82.7H540V212.4z"/>
+    <path class="white" d="M657.9,163.7c11.7,0,24.5,4.6,30.9,7.8l13.8-28.4c-8.9-4.3-28.4-9.9-46.2-9.9c-35.2,0.7-57.5,19.9-57.5,46.5
+        c-0.4,16.3,11,32.7,40.5,42.3c16,5.3,20.2,8.9,20.2,16.3c0,7.1-5.3,11.4-18.5,11.4s-30.2-5.3-38-10.3l-13.8,29.5
+        c11.4,7.5,33.4,11.7,51.8,11.7c40.1,0,60.7-19.2,60.7-45.8c-0.4-20.2-11.4-34.1-38-43.3c-17.4-6-22.7-9.2-22.7-16.3
+        C641.2,168.4,647.3,163.7,657.9,163.7z"/>
+    <path class="white" d="M977.5,194.3c0-33.4-14.9-61.1-61.8-61.1c-0.4,0-0.7,0-1.1,0c-25.2,0.4-45.1,6.7-57.5,13.8l11.7,27
+        c9.2-5.7,24.5-10.3,39.1-10.3c2.5,0,4.6,0,6.7,0.4c15.6,1.8,18.8,11,18.8,17.8v1.8c-6.4,0-12.8,0.4-18.8,0.7
+        c-39.1,4.3-63.9,21.3-63.9,52.9c0,22.7,17,43.3,45.8,43.3c6.4,0,12.4-0.7,18.1-2.5c8.9-2.8,16.3-7.8,22-14.9h1.1l2.5,14.2h39.4
+        c-1.8-7.8-2.1-20.6-2.1-34.1V194.3z M934.9,226.2c0,2.5-0.4,5-0.7,7.5c-2.5,7.8-10.3,14.6-19.5,16c-1.1,0-2.1,0-3.2,0
+        c-9.9,0-17.4-5.3-17.4-16.7c0-11.4,8.2-17.4,20.6-20.2c6-1.4,12.8-1.8,20.2-1.8V226.2z"/>
+    <path class="white" d="M1038.6,220.2c0-72.4,0-20.2,0-83.8h-43c0,46.2,0,28.1,0,90.5c0,19.9,4.3,33.4,12.1,41.5
+        c7.5,7.5,19.2,12.1,33.4,12.1c12.1,0,27-2.1,32.7-4.3l-5.7-32.7C1048.5,247.9,1038.6,242.9,1038.6,220.2z"/>
+    <path class="white" d="M1124.1,220.2c0-72.4,0-20.2,0-83.8h-43c0,46.2,0,28.1,0,90.5c0,19.9,3.9,33.4,12.1,41.5
+        c7.1,7.5,18.8,12.1,33,12.1c12.1,0,27.3-2.1,32.7-4.3l-5.7-32.7C1133.7,247.9,1124.1,242.9,1124.1,220.2z"/>
+    <path class="white" d="M140.2,111.9c27.3,0,49.4-22.4,49.4-49.7s-22-49.7-49.4-49.7c-27.7,0-49.7,22.4-49.7,49.7
+        S112.5,111.9,140.2,111.9z"/>
+    <path class="white" d="M229.7,222.7c-21.3,0-45.5-41.2-61.1-57.9c-17-17.8-39.4-27.7-64.3-27.7c-78.1,0-91.6,83.1-91.6,143.8h57.2
+        c0.7-26.3-3.6-85.9,35.5-85.9c19.5,0,36.6,29.1,48.3,43c22.4,25.6,42.3,42.6,77.1,42.6c77.4,0,91.6-83.4,91.6-143.8h-57.2
+        C264.5,163.4,267.7,222.7,229.7,222.7z"/>
+    <path class="white" d="M1191.2,143.9c-4.3-4.6-10.3-7.5-17.4-7.5c-6.7,0-12.8,2.8-17.4,7.5c-4.3,4.3-7.1,10.3-7.1,17.4
+        c0,6.7,2.8,12.8,7.1,17.4c4.6,4.3,10.7,7.1,17.4,7.1c7.1,0,13.1-2.8,17.4-7.1c4.6-4.6,7.5-10.7,7.5-17.4
+        C1198.7,154.2,1195.9,148.1,1191.2,143.9z M1188.4,175.5c-3.9,3.6-8.9,5.7-14.6,5.7c-5.3,0-10.3-2.1-14.2-5.7
+        c-3.6-3.9-5.7-8.9-5.7-14.2c0-5.7,2.1-10.7,5.7-14.6c3.9-3.6,8.9-5.7,14.2-5.7c5.7,0,10.7,2.1,14.6,5.7c3.6,3.9,5.7,8.9,5.7,14.6
+        C1194.1,166.6,1192,171.6,1188.4,175.5z"/>
+    <path class="white" d="M1181.7,164.1c-0.7-0.7-1.8-1.4-2.8-2.1c2.1-0.4,3.9-1.1,5.3-2.5c1.1-1.4,1.4-2.8,1.4-5c0-1.4-0.4-2.8-1.1-4.3
+        c-0.7-1.1-1.8-1.8-2.8-2.5c-1.4-0.4-3.6-0.7-6.4-0.7h-0.4h-10.7v26.3h5.3v-11h1.1c1.1,0,2.1,0.4,2.5,0.4c0.7,0.4,1.4,0.7,1.8,1.1
+        c0.4,0.7,1.4,2.1,2.8,3.9l3.9,5.7h6l-3.2-5C1183.4,166.2,1182.4,164.8,1181.7,164.1z M1174.9,158.4c-0.4,0-1.1,0-1.4,0h-3.9v-6.7
+        h3.9c0.7,0,1.1,0,1.4,0c1.4,0,2.1,0,2.5,0c1.1,0.4,1.8,0.7,2.1,1.1c0.4,0.7,0.7,1.4,0.7,2.1c0,0.7,0,1.4-0.4,2.1
+        c-0.4,0.4-1.1,0.7-1.8,1.1C1177.8,158.1,1176.7,158.4,1174.9,158.4z"/>
+</g>
+</svg>`;
+
+        let html = `
+            <div class="frase-efeito minutinho">
+                <div class="txt3">
+                    Um
+                    <br>
+                    minutinho...
+                </div>
+                <div class="txtapoio">
+                    <div>
+                    Estamos computando as suas respostas e já já te mostraremos o resultado!
+                    </div>
+                </div>
+            </div>
+
+
+            <svg version="1.1" id="computador" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                    viewBox="0 0 150 150" style="enable-background:new 0 0 150 150;" xml:space="preserve">
+                <style type="text/css">
+                    .alguma1{fill:#2A2929;}
+                    .alguma2{fill:#16D1A7;}
+                    .alguma3{fill:#2B2B2A;}
+                    .alguma4{fill:#2F2D2B;}
+                    .alguma5{fill:#FFF6D6;}
+                </style>
+                <g id="compuiter" transform="translate(-4583 -2657)">
+                    <path id="Caminho_2604" class="alguma1" d="M4724.9,2753.9c-0.9-0.2-1.9-0.3-2.8-0.2c-12.8,0-25.7,0-38.5,0c-1.2,0-1.7-0.2-1.6-1.5
+                        c0.1-1.5,0.1-3,0-4.5c-0.1-1,0.3-1.3,1.3-1.3c6.7,0,13.4,0,20.2,0c4.6,0.2,8.7-3,9.7-7.5c0.2-1.1,0.3-2.1,0.2-3.2
+                        c0-21.4-0.1-42.9,0.1-64.3c0-5.5-1.7-9.9-8-11.7H4610c-0.2,0.5-0.8,0.4-1.2,0.6c-3.6,1.3-6,4.7-6.2,8.5c0,0.3,0,0.6,0,0.8
+                        c0,22.3,0,44.5,0,66.8c-0.2,4.2,2.5,8.1,6.5,9.4c1.3,0.4,2.6,0.6,3.9,0.5c6.5,0,13.1,0,19.6,0c1,0,1.4,0.2,1.4,1.3
+                        c-0.1,1.6-0.1,3.2,0,4.8c0,0.9-0.2,1.2-1.2,1.2c-5.3,0-10.7,0-16,0h-0.2c-4.2,0-20.5,0-23.3,0c-3.9-0.2-7.3,2.8-7.5,6.8
+                        c0,0.3,0,0.5,0,0.8c0,8.6,0,17.2,0,25.8c-0.2,3.7,2.4,6.9,6.1,7.5c1,0.2,1.2,0.5,1.1,1.4c-0.2,3.3,1,6,4.1,7.6c1,0.5,2,0.8,3.1,0.7
+                        c38.5,0,77.1,0,115.7,0c4,0,7-2.9,7.2-7.1c0-0.6,0-1.2,0-1.8c0-0.4,0.1-0.6,0.5-0.7c3.6-0.4,5.7-2.6,6.7-5.9v-29.3
+                        C4729.3,2756.8,4727.8,2754.7,4724.9,2753.9z M4613,2741.6c-3.7,0-5.5-1.8-5.5-5.5c0-22,0-44,0-66c0-3.6,1.9-5.5,5.4-5.5
+                        c30,0,60.1,0,90.1,0c3.6,0,5.5,1.9,5.5,5.5c0,22.1,0,44.1,0,66.2c0,3.5-1.9,5.4-5.4,5.4c-15,0-30.1,0-45.1,0L4613,2741.6z
+                        M4638.8,2747.4c0-0.8,0.3-1,1.1-1c12.1,0,24.2,0,36.4,0c0.8,0,1.1,0.2,1.1,1c-0.1,1.6-0.1,3.3,0,4.9c0.1,1.1-0.3,1.3-1.3,1.3
+                        c-6,0-12,0-18,0c-5.9,0-11.8,0-17.8,0c-1,0-1.4-0.3-1.3-1.3C4638.8,2750.7,4638.8,2749.1,4638.8,2747.4L4638.8,2747.4z
+                        M4716.8,2799.2c-0.5,0.2-1.1,0.3-1.7,0.3c-38.1,0-76.2,0-114.3,0c-2.5,0-3.8-2-3-4.4c0.1-0.3,0.3-0.5,0.6-0.4c0.4,0,0.8,0,1.3,0
+                        h58.4c19.3,0,38.6,0,58,0c0.7,0,1.7-0.6,2,0.6C4718.6,2797,4718,2798.6,4716.8,2799.2z M4725.4,2776.7v9.5c0,2.9-0.7,3.6-3.7,3.6
+                        h-127.5c-3,0-3.6-0.7-3.6-3.7V2762c0-2.8,0.7-3.5,3.5-3.5c2.4,0,16.6,0,21.6,0H4721c0.5,0,1,0,1.6,0c2,0,2.8,0.9,2.8,2.9
+                        C4725.4,2766.5,4725.4,2771.6,4725.4,2776.7z"/>
+                    <path id="Caminho_2605" class="alguma2" d="M4615.7,2758.5H4721c0.5,0,1,0,1.6,0c1.9,0,2.8,0.9,2.8,2.9c0,5.1,0,10.3,0,15.4
+                        c0,3.2,0,6.3,0,9.5c0,2.9-0.7,3.6-3.7,3.6h-127.5c-3,0-3.6-0.7-3.6-3.7c0-8,0-16.1,0-24.1c0-2.8,0.7-3.5,3.5-3.5c2.7,0,5.4,0,8,0
+                        C4604,2758.5,4613.3,2758.5,4615.7,2758.5z M4708.7,2763.3c-3.1,0-6.2,0-9.3,0c-1.8,0-2.8,0.9-2.8,2.4c0,1.4,1.1,2.3,2.8,2.3
+                        c6.2,0,12.3,0,18.5,0c1.7,0,2.9-1,2.8-2.5c0-1.4-1.1-2.3-2.8-2.3C4714.8,2763.3,4711.7,2763.3,4708.7,2763.3L4708.7,2763.3z
+                        M4619.4,2780.2c0-0.9,0-1.9,0-2.8c-0.1-1.2-1.1-2.1-2.3-2c0,0,0,0,0,0c-1.2-0.1-2.2,0.7-2.4,1.8c0,0,0,0,0,0.1
+                        c-0.3,1.9-0.3,3.8,0,5.7c0.1,1.2,1.2,2,2.4,1.9c0,0,0,0,0,0c1.2,0,2.2-0.9,2.3-2.1C4619.5,2782,4619.5,2781.1,4619.4,2780.2z
+                        M4629.1,2780.2c0-0.8,0.1-1.7,0-2.5c0-1.3-1.1-2.3-2.4-2.3c0,0-0.1,0-0.1,0c-1.3,0-2.3,1-2.3,2.3c0,0,0,0.1,0,0.1
+                        c-0.1,1.6-0.1,3.3,0,4.9c0,1.3,1,2.3,2.3,2.4c1.3,0,2.4-1.1,2.5-2.4C4629.2,2781.8,4629.1,2781,4629.1,2780.2L4629.1,2780.2z
+                        M4609.8,2780.2c0-0.8,0-1.7,0-2.5c0-1.2-1-2.2-2.2-2.3c-1.2-0.2-2.3,0.7-2.5,1.9c0,0,0,0,0,0.1c-0.1,1.9-0.1,3.7,0,5.6
+                        c0.2,1.2,1.2,2.1,2.5,2c1.2-0.1,2.2-1.1,2.2-2.3C4609.9,2781.9,4609.8,2781,4609.8,2780.2L4609.8,2780.2z M4638.8,2780.2
+                        L4638.8,2780.2c0-0.8,0-1.7,0-2.5c0-1.3-1.1-2.4-2.4-2.3c0,0-0.1,0-0.1,0c-1.3,0-2.3,1-2.3,2.3c0,0.1,0,0.1,0,0.2
+                        c0,1.5,0,3.1,0,4.6c-0.1,1.3,0.9,2.5,2.3,2.5c0,0,0,0,0,0c1.4,0,2.5-1.1,2.5-2.5c0,0,0,0,0,0
+                        C4638.8,2781.7,4638.8,2781,4638.8,2780.2L4638.8,2780.2z M4600.2,2780.3c0-0.9,0-1.8,0-2.7c0-1.2-1-2.2-2.3-2.2
+                        c-1.2-0.1-2.3,0.8-2.5,2c0,0,0,0,0,0c-0.1,1.8-0.1,3.6,0,5.5c0.1,1.2,1.2,2.2,2.4,2.1c1.3,0,2.3-1.1,2.3-2.3
+                        C4600.2,2781.9,4600.2,2781.1,4600.2,2780.3L4600.2,2780.3z M4600.3,2763.3c-0.8,0-1.7,0-2.5,0c-1.3,0-2.4,1.1-2.4,2.4
+                        c0,1.3,1,2.3,2.3,2.4c1.7,0.1,3.4,0.1,5.1,0c1.3-0.1,2.3-1.2,2.2-2.5c-0.1-1.2-1.1-2.2-2.3-2.2
+                        C4601.9,2763.3,4601.1,2763.3,4600.3,2763.3L4600.3,2763.3z M4643.6,2780L4643.6,2780c0,0.8,0,1.7,0,2.5c0,1.3,1,2.4,2.3,2.4
+                        c1.3,0,2.3-0.9,2.4-2.2c0.1-1.8,0.1-3.6,0-5.3c-0.2-1.3-1.4-2.2-2.7-2.1c-1.2,0.1-2,1.1-2.1,2.3
+                        C4643.6,2778.4,4643.6,2779.2,4643.6,2780L4643.6,2780z M4653.2,2780.1c0,0.8,0,1.7,0,2.5c0,1.3,1.1,2.4,2.4,2.4
+                        c1.2,0,2.3-1,2.3-2.2c0.1-1.7,0.1-3.5,0-5.2c-0.1-1.3-1.3-2.3-2.6-2.2c-1.2,0.1-2.1,1.1-2.2,2.3
+                        C4653.2,2778.5,4653.2,2779.3,4653.2,2780.1L4653.2,2780.1z"/>
+                    <path id="Caminho_2606" class="alguma2" d="M4658,2741.6c-15,0-30,0-45,0c-3.7,0-5.5-1.8-5.5-5.5c0-22,0-44,0-66c0-3.6,1.9-5.5,5.4-5.5
+                        c30,0,60.1,0,90.1,0c3.6,0,5.5,1.9,5.5,5.5c0,22.1,0,44.1,0,66.2c0,3.5-1.9,5.4-5.4,5.4C4688.1,2741.6,4673.1,2741.6,4658,2741.6z
+                        M4657.9,2736.8c11.3,0.1,22.6-0.4,33.8-1.4c5.2-0.5,9.5-4.2,10.6-9.3c0.6-3.7,1-7.5,1.1-11.2c0.6-11,0.4-22-0.8-32.9
+                        c-0.5-5.9-5-10.5-10.9-11.1c-8.5-0.8-17.1-1.3-25.6-1.4c-13.9-0.3-27.7,0.2-41.6,1.4c-5.3,0.4-9.8,4.3-10.9,9.5
+                        c-0.4,2.1-0.6,4.3-0.8,6.4c-1,12.7-0.9,25.5,0.5,38.2c0.7,5.6,5.1,9.9,10.7,10.5C4635.4,2736.4,4646.7,2736.9,4657.9,2736.8z"/>
+                    <path id="Caminho_2607" class="alguma2" d="M4658.2,2794.6c19.3,0,38.6,0,58,0c0.7,0,1.7-0.6,2,0.6c0.5,1.8-0.1,3.4-1.3,4
+                        c-0.5,0.2-1.1,0.3-1.7,0.3c-38.1,0-76.2,0-114.2,0c-2.5,0-3.8-2-3-4.4c0.1-0.3,0.3-0.5,0.6-0.4c0.4,0,0.8,0,1.3,0L4658.2,2794.6z"
+                        />
+                    <path id="Caminho_2608" class="alguma2" d="M4657.9,2753.7c-5.9,0-11.8,0-17.8,0c-1,0-1.4-0.3-1.3-1.3c0.1-1.6,0.1-3.3,0-4.9
+                        c0-0.8,0.3-1,1.1-1c12.1,0,24.2,0,36.4,0c0.8,0,1.1,0.2,1.1,1c0,1.6-0.1,3.3,0,4.9c0.1,1.1-0.3,1.3-1.3,1.3
+                        C4669.9,2753.7,4663.9,2753.7,4657.9,2753.7z"/>
+                    <path id="Caminho_2609" class="alguma3" d="M4708.6,2763.3c3.1,0,6.1,0,9.2,0c1.7,0,2.8,0.9,2.8,2.3c0,1.4-1.1,2.5-2.8,2.5
+                        c-6.2,0-12.3,0-18.5,0c-1.7,0-2.7-0.9-2.8-2.3c0-1.5,1-2.4,2.8-2.4C4702.4,2763.3,4705.5,2763.3,4708.6,2763.3z"/>
+                    <path id="Caminho_2610" class="alguma4" d="M4619.4,2780.2c0,0.9,0,1.8,0,2.7c-0.1,1.2-1.1,2.1-2.3,2.1c-1.2,0.1-2.3-0.7-2.4-1.9
+                        c0,0,0,0,0,0c-0.3-1.9-0.3-3.8,0-5.7c0.1-1.2,1.1-2,2.3-1.9c0,0,0,0,0.1,0c1.2-0.1,2.2,0.8,2.3,2c0,0,0,0,0,0
+                        C4619.5,2778.4,4619.5,2779.3,4619.4,2780.2z"/>
+                    <path id="Caminho_2611" class="alguma4" d="M4629.1,2780.2c0,0.8,0.1,1.6,0,2.4c0,1.3-1.1,2.4-2.5,2.4c-1.3,0-2.3-1.1-2.3-2.4
+                        c-0.1-1.6-0.1-3.3,0-4.9c0-1.3,1-2.3,2.2-2.3c0,0,0.1,0,0.1,0c1.3-0.1,2.4,0.9,2.5,2.2c0,0,0,0.1,0,0.1
+                        C4629.2,2778.5,4629.1,2779.4,4629.1,2780.2z"/>
+                    <path id="Caminho_2612" class="alguma4" d="M4609.8,2780.2c0,0.8,0,1.7,0,2.5c0,1.2-1,2.2-2.2,2.3c-1.2,0.1-2.3-0.8-2.5-2
+                        c-0.1-1.9-0.1-3.7,0-5.6c0.1-1.2,1.2-2.1,2.4-2c0,0,0,0,0.1,0c1.2,0,2.2,1,2.2,2.3C4609.9,2778.5,4609.8,2779.3,4609.8,2780.2z"/>
+                    <path id="Caminho_2613" class="alguma4" d="M4638.8,2780.2c0,0.7,0,1.5,0,2.2c0,1.4-1.1,2.5-2.5,2.5c0,0,0,0,0,0
+                        c-1.3-0.1-2.4-1.2-2.3-2.5c0,0,0,0,0,0c0-1.5,0-3.1,0-4.6c-0.1-1.3,0.9-2.4,2.1-2.4c0.1,0,0.1,0,0.2,0c1.3-0.1,2.4,1,2.5,2.3
+                        c0,0,0,0.1,0,0.1C4638.8,2778.6,4638.8,2779.4,4638.8,2780.2L4638.8,2780.2z"/>
+                    <path id="Caminho_2614" class="alguma4" d="M4600.2,2780.3c0,0.8,0,1.6,0,2.4c0,1.3-1.1,2.3-2.3,2.3c-1.2,0-2.3-0.9-2.4-2.1
+                        c-0.1-1.8-0.1-3.6,0-5.5c0.1-1.2,1.2-2.1,2.4-2c0,0,0,0,0,0c1.2,0,2.2,1,2.3,2.2C4600.2,2778.5,4600.2,2779.4,4600.2,2780.3z"/>
+                    <path id="Caminho_2615" class="alguma3" d="M4600.3,2763.3c0.8,0,1.6,0,2.4,0c1.3,0.1,2.3,1.2,2.3,2.5c-0.1,1.2-1,2.2-2.2,2.3
+                        c-1.7,0.1-3.4,0.1-5.1,0c-1.3,0-2.3-1.1-2.3-2.4c0-1.3,1.1-2.4,2.4-2.4C4598.6,2763.3,4599.5,2763.3,4600.3,2763.3z"/>
+                    <path id="Caminho_2616" class="alguma4" d="M4643.6,2780c0-0.8,0-1.6,0-2.4c0.1-1.3,1.2-2.3,2.5-2.3c1.2,0.1,2.1,0.9,2.3,2.1
+                        c0.1,1.8,0.1,3.6,0,5.3c-0.1,1.3-1.2,2.3-2.6,2.2c-1.3-0.1-2.2-1.2-2.2-2.4C4643.6,2781.7,4643.6,2780.9,4643.6,2780L4643.6,2780z"
+                        />
+                    <path id="Caminho_2617" class="alguma3" d="M4653.2,2780.1c0-0.8,0-1.6,0-2.4c0-1.3,1.1-2.4,2.4-2.3c1.2,0,2.2,1,2.3,2.2
+                        c0.1,1.7,0.1,3.5,0,5.2c-0.1,1.3-1.2,2.3-2.5,2.2c-1.2-0.1-2.2-1.1-2.2-2.3C4653.2,2781.8,4653.2,2780.9,4653.2,2780.1z"/>
+                    <path id="Caminho_2618" class="alguma1" d="M4657.9,2736.8c-11.3,0.1-22.6-0.4-33.8-1.4c-5.6-0.6-10-5-10.7-10.5
+                        c-1.4-12.7-1.6-25.4-0.5-38.2c0.1-2.2,0.4-4.3,0.8-6.4c1.1-5.2,5.5-9.1,10.9-9.5c13.8-1.2,27.7-1.6,41.6-1.4
+                        c8.6,0.1,17.1,0.6,25.6,1.4c5.8,0.6,10.4,5.3,10.9,11.1c1.2,10.9,1.4,22,0.8,32.9c-0.1,3.8-0.5,7.5-1.1,11.2
+                        c-1.1,5.1-5.4,8.8-10.6,9.3C4680.5,2736.4,4669.2,2736.9,4657.9,2736.8z M4657.9,2732c4.4-0.1,8.7,0,13.1-0.2
+                        c6.7-0.2,13.4-0.7,20.1-1.2c3.4-0.2,6.2-2.8,6.7-6.2c0.7-5.8,1.1-11.7,1.2-17.5c0.1-8.1-0.2-16.2-1.1-24.3c-0.2-3.6-3-6.5-6.6-6.9
+                        c-2.2-0.2-4.5-0.4-6.7-0.6c-5.9-0.3-11.7-0.7-17.6-0.8c-6.5-0.1-13.1-0.1-19.6,0.1c-7.4,0.2-14.8,0.7-22.2,1.2
+                        c-3.5,0.2-6.4,2.9-6.9,6.3c-0.6,4.8-0.9,9.6-1.1,14.4c-0.3,9.3,0,18.7,1.1,28c0.4,3.3,2.9,5.8,6.2,6.2c5.1,0.5,10.2,0.9,15.3,1.1
+                        C4645.8,2731.9,4651.8,2732.2,4657.9,2732L4657.9,2732z"/>
+                    <path id="Caminho_2619" class="alguma5" d="M4657.9,2732c-6.1,0.2-12.1-0.1-18.2-0.3c-5.1-0.2-10.2-0.7-15.3-1.1
+                        c-3.3-0.4-5.8-3-6.2-6.2c-1-9.3-1.4-18.6-1.1-28c0.2-4.8,0.5-9.6,1.1-14.4c0.5-3.5,3.4-6.1,6.9-6.3c7.4-0.5,14.8-1,22.2-1.2
+                        c6.5-0.2,13.1-0.2,19.6-0.1c5.9,0.1,11.7,0.5,17.6,0.8c2.2,0.1,4.5,0.3,6.7,0.6c3.6,0.4,6.4,3.3,6.6,6.9c0.9,8.1,1.2,16.2,1.1,24.3
+                        c-0.1,5.9-0.5,11.7-1.2,17.5c-0.5,3.4-3.2,6-6.7,6.2c-6.7,0.5-13.4,1-20.1,1.2C4666.6,2732,4662.3,2731.9,4657.9,2732z
+                        M4626.8,2715.1c0.8,0.2,1.4-0.5,2-1.1c8.9-8.9,17.7-17.7,26.6-26.6c0.7-0.7,1.4-1.3,2-2c0.9-0.9,0.8-2.4-0.1-3.2c0,0,0,0-0.1-0.1
+                        c-1.1-0.9-2.7-0.8-3.6,0.4c0,0,0,0,0,0c-9.4,9.4-18.9,18.9-28.3,28.3c-0.4,0.4-0.7,0.8-0.8,1.3c-0.4,1.2,0.2,2.6,1.5,3
+                        C4626.2,2715.1,4626.5,2715.1,4626.8,2715.1L4626.8,2715.1z M4624.4,2698.1c-0.1,1,0.4,1.9,1.3,2.3c1,0.4,2.1,0.2,2.8-0.6
+                        c4.7-4.7,9.4-9.4,14.1-14.1c1-0.8,1.1-2.2,0.4-3.2c-0.1-0.1-0.2-0.2-0.3-0.3c-0.9-0.9-2.4-1-3.3-0.1c-0.1,0.1-0.1,0.1-0.2,0.2
+                        c-4.7,4.7-9.4,9.3-14,14C4624.7,2696.8,4624.4,2697.5,4624.4,2698.1L4624.4,2698.1z M4626.8,2688.6c2.1-0.4,3.2-2,4.3-3.5
+                        c0.7-0.9,0.6-2.2-0.3-2.9c0,0-0.1-0.1-0.1-0.1c-0.9-0.8-2.2-0.9-3.1,0c-0.9,0.8-1.8,1.7-2.6,2.6c-0.6,0.7-0.8,1.8-0.4,2.7
+                        C4624.9,2688.2,4625.8,2688.7,4626.8,2688.6L4626.8,2688.6z"/>
+                    <path id="Caminho_2620" class="alguma1" d="M4626.8,2715.1c-1.3,0.1-2.4-0.9-2.5-2.2c0-0.3,0-0.6,0.1-0.9c0.2-0.5,0.5-0.9,0.8-1.3
+                        c9.4-9.4,18.9-18.9,28.3-28.3c0.9-1.1,2.5-1.3,3.6-0.4c0,0,0,0,0,0c1,0.8,1.1,2.3,0.2,3.2c0,0,0,0-0.1,0.1c-0.6,0.7-1.3,1.3-2,2
+                        c-8.9,8.9-17.7,17.7-26.6,26.6C4628.2,2714.6,4627.7,2715.3,4626.8,2715.1z"/>
+                    <path id="Caminho_2621" class="alguma1" d="M4624.4,2698.2c0-0.7,0.3-1.4,0.8-1.8c4.7-4.7,9.4-9.4,14-14c0.8-1,2.3-1.1,3.3-0.3
+                        c0.1,0.1,0.1,0.1,0.2,0.2c0.9,0.8,1,2.3,0.2,3.2c-0.1,0.1-0.2,0.2-0.3,0.3c-4.7,4.7-9.4,9.4-14.1,14.1c-0.7,0.8-1.8,1.1-2.8,0.6
+                        C4624.8,2700.1,4624.3,2699.1,4624.4,2698.2z"/>
+                    <path id="Caminho_2622" class="alguma1" d="M4626.8,2688.6c-0.9,0.1-1.8-0.5-2.2-1.3c-0.4-0.9-0.3-1.9,0.4-2.7c0.8-0.9,1.7-1.8,2.6-2.6
+                        c0.9-0.8,2.2-0.8,3.1,0c1,0.6,1.2,1.9,0.5,2.9c0,0-0.1,0.1-0.1,0.1C4630,2686.6,4628.8,2688.2,4626.8,2688.6z"/>
+                </g>
+                </svg>
+
+                <svg id="curva-vermelho-curta" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                viewBox="0 0 412.7 85.5" style="enable-background:new 0 0 412.7 85.5;" xml:space="preserve">
+                <style type="text/css">
+                    .vermelhongo{fill:#D90F0F;}
+                </style>
+                <path class="vermelhongo" d="M412.7,46.7c-3,4-6.7,7.1-11,4.7c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12c-14.6-8.3-26,5.8-32.4,17.2
+                    l0,0c-3,4.9-8.6,16.4-15.8,12.3c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12c-14.6-8.3-26,5.8-32.4,17.2
+                    c-3,4.9-8.6,16.4-15.8,12.3c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12c-14.6-8.3-26,5.8-32.4,17.2
+                    c-3,4.9-8.6,16.4-15.8,12.3c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12c-14.6-8.3-26,5.8-32.4,17.2
+                    c-3,4.9-8.6,16.4-15.8,12.3c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12c-14.6-8.3-26,5.8-32.4,17.2l0,0
+                    c-3,4.9-8.6,16.4-15.8,12.3c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12c-14.6-8.3-26,5.8-32.4,17.2
+                    c-3,4.9-8.6,16.4-15.8,12.3c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12C7.8,21.1,3.7,20.7,0,21.5v13c1.9-1,3.9-1.2,6.2,0
+                    c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c14.5,8.2,26-5.9,32.4-17.2c2.9-4.8,8.4-16.5,15.8-12.3
+                    c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c14.5,8.2,26-5.9,32.4-17.2l0,0c2.9-4.8,8.4-16.5,15.8-12.3
+                    c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c14.5,8.2,26-5.9,32.4-17.2c2.9-4.8,8.4-16.5,15.8-12.3
+                    c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c14.5,8.2,26-5.9,32.4-17.2c2.9-4.8,8.4-16.5,15.8-12.3
+                    c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c14.5,8.2,26-5.9,32.4-17.2c2.9-4.8,8.4-16.5,15.8-12.3
+                    c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c14.5,8.2,26-5.9,32.4-17.2l0,0c2.9-4.8,8.4-16.5,15.8-12.3
+                    c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c6.2,3.5,11.9,2.9,16.9,0.2V46.7z"/>
+            </svg>
+
+        `;
+
+        $('.backdoor').html('');
+        $('.overlay').html('');
+        $('.content').html('');
+        $('#header').html('');
+        $('#curva-vermelho-curta').css('top', '150vh');
+        $('body').css('background-color', '#fac710');
+        $('.content').css('top', '0');
+        $('.content').css('display', 'flex');
+        $('.content').css('padding-bottom', '0');
+        $('.content').css('padding-bottom', '0');
+        $('.content').css('height', '100vh');
+        $('.content').css('overflow', 'hidden');
+
+        let pontos = [];
+
+        pontos.push(Anima.player.pontos.Rock);
+        pontos.push(Anima.player.pontos.Lofi);
+        pontos.push(Anima.player.pontos.Eletronica);
+        pontos.push(Anima.player.pontos.Sertanejo);
+        pontos.push(Anima.player.pontos.Pagode);
+        pontos.push(Anima.player.pontos.Rap);
+        pontos.push(Anima.player.pontos.Pop);
+        pontos.push(Anima.player.pontos.Funk);
+        
+        // let maxPoints = values.reduce(function(prev, current) { 
+        //     return prev > current ? prev : current; 
+        // });
+
+
+
+        setTimeout(() => {
+            $('.content').html(html);    
+            $('.header').html(header);    
+
+            setTimeout(() => {
+                $('.minutinho').css('margin-left', '0');
+                $('#computador').css('margin-left', '0');
+                $('#curva-vermelho-curta').css('top', '60vh');
+
+                setTimeout(() => {
+                    $('.minutinho').css('margin-left', '200vw');
+                    $('#computador').css('margin-left', '200vw');
+                    $('#curva-vermelho-curta').css('top', '150vh');
+
+                    setTimeout(() => {
+                        Anima.showResult();
+                    }, 2000);
+                    
+                }, 5500);
+
+            }, 1500);
+        }, 1500);
+    },
+
+    getIframePl: function () {
+        switch (Anima.maiorTipo) {
+            case 'Rock':
+                return `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/0M8dVM1B7qWhyDYmSYWfVh?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+
+            case 'Sertanejo':
+                return `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/6h9PthI2O5qSNGDFoHvtqR?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+
+            case 'Eletronica':
+                return `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/4hFJ7Tiq5AJAmwwD2feVJl?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+
+            case 'Lofi':
+                return `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/6UMZMO2nde60yGUTBE73LW?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+
+            case 'Pagode':
+                return `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/7vJd97sHkBJGC19vfRJlun?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+
+            case 'Funk':
+                return `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2HUlos4Mh8Q6zpa7neugJb?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+
+            case 'Pop':
+                return `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/5gWOskzXQd6fDFcY4V2RKd?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+
+            case 'Rap':
+                return `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2YUypTBNfgtycumJyldBU0?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+
+            default:
+                break;
+        }
+
+        // return `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2HUlos4Mh8Q6zpa7neugJb?utm_source=generator&theme=0" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+    },
+
+    getImgPl: function () {
+        return Anima.maiorTipo.toLocaleLowerCase();
+    },
+
+    showResult: function () {
+        let cores = {
+            header: ''
+        };
+        let titulo = '';
+        let apoio = '';
+        let tamanho = 32;
+
+        if (Anima.player.acertos >= 4){
+
+            cores.header = '#652CB3';
+            titulo = 'Mestre dos desafios';
+            apoio = 'Você deu tudo de si nesse desafio e simplesmente arrebentou! Conseguiu acertar TODAS as perguntas técnicas que separamos para você, PARABÉNS!'
+
+        } else if (Anima.player.acertos >= 2 && Anima.player.acertos < 4) {
+
+            cores.header = '#FAC710';
+            titulo = 'Uma máquina de vencer';
+            apoio = 'Parabéns! Você conseguiu acertar mais da metade das perguntas técnicas que separamos para você, é sinal de que está no caminho certo! Mas se quiser tentar de novo, fique à vontade :)';
+
+        } else {
+
+            cores.header = '#EF0B0B';
+            titulo = 'Eis aqui... A vara da repescagem';
+            // tentarNovamente
+            apoio = 'Pode ser que você só seja novo na área ou então tenha chutado todas as respostas "A" possíveis. Mas o negócio é que você acertou menos da metade das perguntas técnicas. Que tal tentar de novo?';
+            tamanho = 28;
+
+        }
+
+        let header = `
+            <div class="header-pergunta" style="background-color:${cores.header}">
+                <svg class="logo-topo" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                        viewBox="0 0 1211.4 374.8" style="enable-background:new 0 0 1211.4 374.8;" xml:space="preserve">
+                <style type="text/css">
+                    .white{fill:#FFFFFF;}
+                </style>
+                <g>
+                    <path class="white" d="M781.8,133.2c-1.4,0-2.5,0-3.9,0c-46.2,1.8-67.5,40.1-67.5,74.9c0,42.3,24.5,69.2,67.5,72.1
+                        c2.5,0,5.3,0.4,7.8,0.4c19.2,0,36.2-3.2,51.8-9.9l-7.5-28.8c-11.7,3.9-23.1,6-38,6c-5,0-9.6-0.7-14.2-1.8
+                        c-13.8-3.2-24.5-11.4-25.6-25.6h25.6h65.3c0.4-3.2,1.4-9.6,1.4-17C844.7,168.4,827.3,133.2,781.8,133.2z M777.9,190.7H752
+                        c1.1-11.4,8.5-27.7,25.9-28.4c0.7,0,1.1,0,1.4,0c19.9,0,24.5,18.1,24.5,28.4H777.9z"/>
+                    <path class="white" d="M540,212.4c0,20.2-6.4,32.3-21.7,32.7c-14.9-0.4-21.3-12.4-21.3-32.7v-76h-44v82.7c0,81.7,130.7,81.7,130.7,0
+                        v-82.7H540V212.4z"/>
+                    <path class="white" d="M657.9,163.7c11.7,0,24.5,4.6,30.9,7.8l13.8-28.4c-8.9-4.3-28.4-9.9-46.2-9.9c-35.2,0.7-57.5,19.9-57.5,46.5
+                        c-0.4,16.3,11,32.7,40.5,42.3c16,5.3,20.2,8.9,20.2,16.3c0,7.1-5.3,11.4-18.5,11.4s-30.2-5.3-38-10.3l-13.8,29.5
+                        c11.4,7.5,33.4,11.7,51.8,11.7c40.1,0,60.7-19.2,60.7-45.8c-0.4-20.2-11.4-34.1-38-43.3c-17.4-6-22.7-9.2-22.7-16.3
+                        C641.2,168.4,647.3,163.7,657.9,163.7z"/>
+                    <path class="white" d="M977.5,194.3c0-33.4-14.9-61.1-61.8-61.1c-0.4,0-0.7,0-1.1,0c-25.2,0.4-45.1,6.7-57.5,13.8l11.7,27
+                        c9.2-5.7,24.5-10.3,39.1-10.3c2.5,0,4.6,0,6.7,0.4c15.6,1.8,18.8,11,18.8,17.8v1.8c-6.4,0-12.8,0.4-18.8,0.7
+                        c-39.1,4.3-63.9,21.3-63.9,52.9c0,22.7,17,43.3,45.8,43.3c6.4,0,12.4-0.7,18.1-2.5c8.9-2.8,16.3-7.8,22-14.9h1.1l2.5,14.2h39.4
+                        c-1.8-7.8-2.1-20.6-2.1-34.1V194.3z M934.9,226.2c0,2.5-0.4,5-0.7,7.5c-2.5,7.8-10.3,14.6-19.5,16c-1.1,0-2.1,0-3.2,0
+                        c-9.9,0-17.4-5.3-17.4-16.7c0-11.4,8.2-17.4,20.6-20.2c6-1.4,12.8-1.8,20.2-1.8V226.2z"/>
+                    <path class="white" d="M1038.6,220.2c0-72.4,0-20.2,0-83.8h-43c0,46.2,0,28.1,0,90.5c0,19.9,4.3,33.4,12.1,41.5
+                        c7.5,7.5,19.2,12.1,33.4,12.1c12.1,0,27-2.1,32.7-4.3l-5.7-32.7C1048.5,247.9,1038.6,242.9,1038.6,220.2z"/>
+                    <path class="white" d="M1124.1,220.2c0-72.4,0-20.2,0-83.8h-43c0,46.2,0,28.1,0,90.5c0,19.9,3.9,33.4,12.1,41.5
+                        c7.1,7.5,18.8,12.1,33,12.1c12.1,0,27.3-2.1,32.7-4.3l-5.7-32.7C1133.7,247.9,1124.1,242.9,1124.1,220.2z"/>
+                    <path class="white" d="M140.2,111.9c27.3,0,49.4-22.4,49.4-49.7s-22-49.7-49.4-49.7c-27.7,0-49.7,22.4-49.7,49.7
+                        S112.5,111.9,140.2,111.9z"/>
+                    <path class="white" d="M229.7,222.7c-21.3,0-45.5-41.2-61.1-57.9c-17-17.8-39.4-27.7-64.3-27.7c-78.1,0-91.6,83.1-91.6,143.8h57.2
+                        c0.7-26.3-3.6-85.9,35.5-85.9c19.5,0,36.6,29.1,48.3,43c22.4,25.6,42.3,42.6,77.1,42.6c77.4,0,91.6-83.4,91.6-143.8h-57.2
+                        C264.5,163.4,267.7,222.7,229.7,222.7z"/>
+                    <path class="white" d="M1191.2,143.9c-4.3-4.6-10.3-7.5-17.4-7.5c-6.7,0-12.8,2.8-17.4,7.5c-4.3,4.3-7.1,10.3-7.1,17.4
+                        c0,6.7,2.8,12.8,7.1,17.4c4.6,4.3,10.7,7.1,17.4,7.1c7.1,0,13.1-2.8,17.4-7.1c4.6-4.6,7.5-10.7,7.5-17.4
+                        C1198.7,154.2,1195.9,148.1,1191.2,143.9z M1188.4,175.5c-3.9,3.6-8.9,5.7-14.6,5.7c-5.3,0-10.3-2.1-14.2-5.7
+                        c-3.6-3.9-5.7-8.9-5.7-14.2c0-5.7,2.1-10.7,5.7-14.6c3.9-3.6,8.9-5.7,14.2-5.7c5.7,0,10.7,2.1,14.6,5.7c3.6,3.9,5.7,8.9,5.7,14.6
+                        C1194.1,166.6,1192,171.6,1188.4,175.5z"/>
+                    <path class="white" d="M1181.7,164.1c-0.7-0.7-1.8-1.4-2.8-2.1c2.1-0.4,3.9-1.1,5.3-2.5c1.1-1.4,1.4-2.8,1.4-5c0-1.4-0.4-2.8-1.1-4.3
+                        c-0.7-1.1-1.8-1.8-2.8-2.5c-1.4-0.4-3.6-0.7-6.4-0.7h-0.4h-10.7v26.3h5.3v-11h1.1c1.1,0,2.1,0.4,2.5,0.4c0.7,0.4,1.4,0.7,1.8,1.1
+                        c0.4,0.7,1.4,2.1,2.8,3.9l3.9,5.7h6l-3.2-5C1183.4,166.2,1182.4,164.8,1181.7,164.1z M1174.9,158.4c-0.4,0-1.1,0-1.4,0h-3.9v-6.7
+                        h3.9c0.7,0,1.1,0,1.4,0c1.4,0,2.1,0,2.5,0c1.1,0.4,1.8,0.7,2.1,1.1c0.4,0.7,0.7,1.4,0.7,2.1c0,0.7,0,1.4-0.4,2.1
+                        c-0.4,0.4-1.1,0.7-1.8,1.1C1177.8,158.1,1176.7,158.4,1174.9,158.4z"/>
+                </g>
+                </svg>
+
+                <div id="trofeu">
+                ${Anima.criarTrofeu()}
+           
+                </div>
+            </div>
+        `;
+
+        let content = `
+            <div class="resultadoAcertos">
+                <div class="frase-efeito" style="font-size: ${tamanho}px">
+                    ${titulo}
+                </div>
+
+                <div class="apoiopreto" style="font-size:16px;">
+                    ${apoio}
+                </div>
+
+                <div class="frase-efeito" style="font-size: 20px;padding-bottom: 30px">
+                    ♫ E como prometido...
+                </div>
+            </div>
+
+            <div class="resultadoAcertos" style="padding: 0 30px 40px;margin:0">
+                <img src="./assets/${Anima.getImgPl()}.png">
+            </div>
+
+            <div class="resultadoAcertos" style="width:90%;padding: 0;margin:0">
+                ${Anima.getIframePl()}    
+            </div>
+
+            <div id="formC">
+                <div class="frase-efeito" style="font-size:40px;text-shadow:none">
+                    Por favor<br>Não se vá!!!
+                </div>
+                <div class="apoiopreto" style="font-size:18px;padding:0;margin:0px;color:#652cb3;">
+                    ainda...
+                </div>
+                <div class="apoiopreto" style="font-size:18px;padding:0;margin:0px;color:#2A2929;">
+                    Gostaríamos de manter contato com você, então que tal nos dizer onde te encontrar?
+                </div>
+
+                <div class="main_div">
+                    <div class="group">
+                        <input type="text" required="required" value="${Anima.player.nome || ''}"/>
+                        <label>Nome</label>
+                    </div>
+
+                    <div class="group">
+                        <input type="text" required="required"/>
+                        <label>Telefone</label>
+                    </div>
+
+                    <div class="group">
+                        <input type="text" required="required"/>
+                        <label>Manda o link do Github ou Behance ou Linkedin ou ...</label>
+                    </div>
+
+                    <div class="outro">
+                        <input id="aceitoLGPD" type="checkbox" required="required" style="height: 20px; width:20px;display:inline;"/>
+
+                        <span for="aceitoLGPD" style="position:inherit">Concordo e aceito os termos.</span>
+                    </div>
+
+                    
+                </div>
+
+                <div class="apoiopreto" style="padding:0;margin:0 0 30px 0;color:#2A2929;">
+                    Neste desafio coletamos dados pessoais apenas para sua identificação e contato.<br>
+                    A partir desses dados, você está ciente que nossos recrutadores poderão pesquisar e contatar você através do seu Linkedin ou Whatsapp.
+                    <br><br>
+                    Caso seja do seu interesse o envio do seu currículo através do nosso site, lá você poderá entender na nossa Política o uso do dados que constam no seu currículo.
+                    <br>
+                    <br>
+                    <br>
+                    <div onclick="Anima.onClickEnviar()" class="btn btn-yellow">
+                        Enviar
+                        
+                    </div>
+
+                    
+
+            
+            
+                </div>
+
+            </div>
+
+
+            <svg id="curva-rosa-curta" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            viewBox="0 0 412.7 85.5" style="enable-background:new 0 0 412.7 85.5;" xml:space="preserve">
+            <style type="text/css">
+                .rosaaa{fill:#C2596A;}
+            </style>
+            <path class="rosaaa" d="M412.7,46.7c-3,4-6.7,7.1-11,4.7c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12c-14.6-8.3-26,5.8-32.4,17.2
+                l0,0c-3,4.9-8.6,16.4-15.8,12.3c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12c-14.6-8.3-26,5.8-32.4,17.2
+                c-3,4.9-8.6,16.4-15.8,12.3c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12c-14.6-8.3-26,5.8-32.4,17.2
+                c-3,4.9-8.6,16.4-15.8,12.3c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12c-14.6-8.3-26,5.8-32.4,17.2
+                c-3,4.9-8.6,16.4-15.8,12.3c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12c-14.6-8.3-26,5.8-32.4,17.2l0,0
+                c-3,4.9-8.6,16.4-15.8,12.3c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12c-14.6-8.3-26,5.8-32.4,17.2
+                c-3,4.9-8.6,16.4-15.8,12.3c-4-2.3-4.1-12.5-5.3-17.3c-1.2-5.1-4.5-9.4-9.1-12C7.8,21.1,3.7,20.7,0,21.5v13c1.9-1,3.9-1.2,6.2,0
+                c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c14.5,8.2,26-5.9,32.4-17.2c2.9-4.8,8.4-16.5,15.8-12.3
+                c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c14.5,8.2,26-5.9,32.4-17.2l0,0c2.9-4.8,8.4-16.5,15.8-12.3
+                c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c14.5,8.2,26-5.9,32.4-17.2c2.9-4.8,8.4-16.5,15.8-12.3
+                c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c14.5,8.2,26-5.9,32.4-17.2c2.9-4.8,8.4-16.5,15.8-12.3
+                c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c14.5,8.2,26-5.9,32.4-17.2c2.9-4.8,8.4-16.5,15.8-12.3
+                c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c14.5,8.2,26-5.9,32.4-17.2l0,0c2.9-4.8,8.4-16.5,15.8-12.3
+                c3.7,2.1,3.8,9.3,4.5,13.2c1.5,7.2,3.4,12.5,9.9,16.1c6.2,3.5,11.9,2.9,16.9,0.2V46.7z"/>
+        </svg>
+
+
+            <div id="redes">
+<a href="https://useall.com.br" target="_blank">
+                <svg version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                viewBox="0 0 49.6 49.6" style="enable-background:new 0 0 49.6 49.6;" xml:space="preserve">
+           <style type="text/css">
+               .ffff{fill:#0447AB;}
+               .gggg{fill:#FFF6D6;}
+           </style>
+           <g id="Grupo_464" transform="translate(51 2348.7)">
+               <circle id="Elipse_21" class="ffff" cx="-26.2" cy="-2323.9" r="20"/>
+               <g id="Grupo_463" transform="translate(6.459 6.773)">
+                   <path id="Caminho_2667" class="gggg" d="M-37.7-2329.7c0.2,6.9,2.8,11.6,5,11.6s4.8-4.7,5-11.6H-37.7z"/>
+                   <path id="Caminho_2668" class="gggg" d="M-32.7-2343.3c-2.3,0-4.8,4.7-5,11.6h10.1C-27.9-2338.6-30.4-2343.3-32.7-2343.3z"/>
+                   <path id="Caminho_2669" class="gggg" d="M-25.6-2331.7h6.5c-0.4-5.9-4.7-10.9-10.5-12.2C-27.3-2341.8-25.8-2337.2-25.6-2331.7z"/>
+                   <path id="Caminho_2670" class="gggg" d="M-25.6-2329.7c-0.2,5.6-1.7,10.1-4,12.2c5.8-1.3,10-6.3,10.5-12.2H-25.6z"/>
+                   <path id="Caminho_2671" class="gggg" d="M-39.7-2329.7h-6.5c0.4,5.9,4.7,10.9,10.5,12.2C-38-2319.6-39.6-2324.1-39.7-2329.7z"/>
+                   <path id="Caminho_2672" class="gggg" d="M-39.7-2331.7c0.2-5.6,1.7-10.1,4-12.2c-5.8,1.3-10,6.3-10.5,12.2H-39.7z"/>
+               </g>
+           </g>
+           </svg>
+</a>
+<a href="https://instagram.com/useallsoftware" target="_blank">
+           <svg version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 49.6 49.6" style="enable-background:new 0 0 49.6 49.6;" xml:space="preserve">
+<style type="text/css">
+	.cccc{fill:#D835AC;}
+	.dddd{fill:#FFF6D6;}
+</style>
+<g id="Grupo_467" transform="translate(123 2348.7)">
+	<circle id="Elipse_22" class="cccc" cx="-98.2" cy="-2323.9" r="20"/>
+	<g id="Grupo_466" transform="translate(8.135 8.107)">
+		<g id="Grupo_465">
+			<path id="Caminho_2673" class="dddd" d="M-100.1-2339.7c-0.8,0-1.4,0.6-1.4,1.4s0.6,1.4,1.4,1.4c0.8,0,1.4-0.6,1.4-1.4
+				c0,0,0,0,0,0C-98.7-2339.1-99.3-2339.7-100.1-2339.7z"/>
+			<path id="Caminho_2674" class="dddd" d="M-106.3-2337.9c-3.2,0-5.8,2.6-5.8,5.8s2.6,5.8,5.8,5.8s5.8-2.6,5.8-5.8l0,0
+				C-100.4-2335.3-103-2337.9-106.3-2337.9z M-106.3-2328.3c-2.1,0-3.7-1.7-3.7-3.7c0-2.1,1.7-3.7,3.7-3.7c2.1,0,3.7,1.7,3.7,3.7
+				C-102.5-2330-104.2-2328.3-106.3-2328.3L-106.3-2328.3z"/>
+			<path id="Caminho_2675" class="dddd" d="M-101.6-2320.2h-9.5c-3.9,0-7.1-3.2-7.1-7.1v-9.5c0-3.9,3.2-7.1,7.1-7.1h9.5
+				c3.9,0,7.1,3.2,7.1,7.1v9.5C-94.5-2323.4-97.7-2320.2-101.6-2320.2z M-111.1-2341.7c-2.7,0-4.9,2.2-4.9,4.9l0,0v9.5
+				c0,2.7,2.2,4.9,4.9,4.9h0h9.5c2.7,0,4.9-2.2,4.9-4.9l0,0v-9.5c0-2.7-2.2-4.9-4.9-4.9h0H-111.1z"/>
+		</g>
+	</g>
+</g>
+</svg>
+</a>
+<a href="https://www.youtube.com/channel/UC6rqwowSBCO1KE84Pyom8Jw/featured" target="_blank">
+<svg version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 49.6 49.6" style="enable-background:new 0 0 49.6 49.6;" xml:space="preserve">
+<style type="text/css">
+	.aaaa{fill:#FF0000;}
+	.bbbb{fill:#FFF6D6;}
+</style>
+<g id="Grupo_468" transform="translate(195 2348.7)">
+	<circle id="Elipse_23" class="aaaa" cx="-170.2" cy="-2323.9" r="20"/>
+	<path id="Caminho_2676" class="bbbb" d="M-159.6-2326.8c0-2.7-2.1-4.8-4.7-4.9h-12.1c-2.7,0-4.8,2.2-4.7,4.9v5.8
+		c0,2.7,2.1,4.8,4.7,4.9h12.1c2.7,0,4.8-2.2,4.7-4.9V-2326.8z M-166.8-2323.5l-5.4,2.8c-0.2,0.1-0.9,0-0.9-0.3v-5.7
+		c0-0.3,0.7-0.4,0.9-0.3l5.2,2.9C-166.8-2323.9-166.6-2323.6-166.8-2323.5L-166.8-2323.5z"/>
+</g>
+</svg>
+</a>
+<a href="https://www.linkedin.com/company/useall-software-ltda/" target="_blank">
+<svg version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 49.6 49.6" style="enable-background:new 0 0 49.6 49.6;" xml:space="preserve">
+<style type="text/css">
+	.hhhh{fill:#0A66C2;}
+	.iiii{fill:#FFF6D6;}
+</style>
+<g id="Grupo_470" transform="translate(267 2348.7)">
+	<circle id="Elipse_24" class="hhhh" cx="-242.2" cy="-2323.9" r="20"/>
+	<g id="Grupo_469" transform="translate(8.539 7.427)">
+		<path id="Caminho_2677" class="iiii" d="M-249.6-2334.2c0.5-0.7,1.1-1.3,1.8-1.7c1.1-0.6,2.4-0.9,3.7-0.7c0.9,0.1,1.8,0.3,2.5,0.8
+			c1,0.7,1.7,1.8,1.9,3c0.2,1.1,0.4,2.3,0.3,3.4c0,2.7,0,5.4,0,8.1c0,0.2-0.1,0.3-0.3,0.3c-1.4,0-2.8,0-4.2,0c-0.2,0-0.3,0-0.3-0.3
+			c0-2.6,0-5.1,0-7.7c0-0.5,0-1.1-0.1-1.6c-0.1-1.2-1.2-2.1-2.4-2c-0.1,0-0.2,0-0.3,0.1c-1.3,0.1-2.2,1.1-2.3,2.4
+			c-0.1,0.5-0.1,1.1-0.1,1.6c0,2.4,0,4.8,0,7.2c0,0.2-0.1,0.3-0.3,0.3c-1.4,0-2.8,0-4.2,0c-0.2,0-0.3,0-0.3-0.3c0-4.9,0-9.8,0-14.7
+			c0-0.2,0.1-0.3,0.3-0.3c1.3,0,2.7,0,4,0c0.2,0,0.3,0.1,0.2,0.2C-249.6-2335.4-249.6-2334.8-249.6-2334.2z"/>
+		<path id="Caminho_2678" class="iiii" d="M-261.8-2328.7c0-2.4,0-4.9,0-7.4c0-0.3,0.1-0.3,0.3-0.3c1.4,0,2.8,0,4.2,0
+			c0.2,0,0.3,0,0.3,0.3c0,4.9,0,9.9,0,14.8c0,0.2-0.1,0.2-0.3,0.2c-1.4,0-2.8,0-4.2,0c-0.2,0-0.3-0.1-0.3-0.3
+			C-261.8-2323.7-261.8-2326.2-261.8-2328.7z"/>
+		<path id="Caminho_2679" class="iiii" d="M-256.7-2341.2c0,1.5-1.2,2.8-2.7,2.8c-1.5,0-2.8-1.2-2.8-2.7c0-1.5,1.2-2.7,2.7-2.8
+			C-258-2343.9-256.7-2342.7-256.7-2341.2z"/>
+	</g>
+</g>
+</svg>
+</a>
+                </div>
+            
+                <div class="frase-efeito" style="font-size:26px;text-shadow:none;padding-bottom:150px">
+                Obrigado por ter<br>participado!
+            </div>
+
+        `;
+
+        $('#header').html(header);
+        $('.content').html(content);
+        $('.content').css('height', 'auto');
+        $('body').css('overflow-y', 'scroll');
+        $('.content').css('display', 'flex')
+        $('.header-pergunta').css('margin-top', '-200vh');
+        $('.logo-topo').css('opacity', '1');
+        $('.content').css('flex-direction', 'column');
+        $('.content').css('align-content', 'center');
+        $('.content').css('align-items', 'center');
+
+        $('body').css('background-color', '#fffee2');
+
+        setTimeout(() => {
+            $('.header-pergunta').css('margin-top', '0vh');
+
+            setTimeout(() => {
+                $('#formC').css('opacity', '1');
+                $('.resultadoAcertos').css('opacity', '1');
+                
+            }, 1000);
+        }, 500);
+    },
+
+    criarTrofeu: function () {
+        let trofeuUm = `<svg width="216" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+        viewBox="0 0 248.6 216.3" style="enable-background:new 0 0 248.6 216.3;" xml:space="preserve">
+   <style type="text/css">
+       .laranja{fill:#F68A09;}
+       .st1{fill:#1F1F1F;}
+       .st2{fill:#FFB100;}
+       .st3{fill:#2A2929;}
+       .st4{fill:#16D1A7;}
+   </style>
+   <g>
+       <g id="trofeu" transform="translate(-92.533 -97.378)">
+           <path id="Caminho_2578" class="laranja" d="M240.4,301.4h-74.7c-1.9,0-4.6-0.2-6.3-2.1s-1.6-4.6-1.4-6.5c0.6-5.1,3.2-9.2,5.9-12.8
+               c3.4-4.6,7.3-8.9,11.5-12.8c5.3-4.8,8.6-11.1,10.6-20c1.4-6.6,2.4-13.3,2.8-20c0.1-1.3,1.2-2.3,2.5-2.3c0.1,0,0.3,0,0.4,0l0.2,0
+               c3.6,0.7,7.2,1.2,10.8,1.3h0.3c3.4-0.1,6.7-0.5,10-1.2l1.2-0.2c1.4-0.2,2.7,0.7,2.9,2c0,0.1,0,0.2,0,0.2
+               c0.6,8.2,1.7,17.9,4.9,27.2c1.3,3.9,3.4,7.4,6.3,10.3c0.8,0.8,1.6,1.6,2.4,2.4c4.7,4.8,9.7,9.8,13.5,15.7
+               c2.4,3.4,3.7,7.4,3.9,11.5c0.3,3.5-2.3,6.6-5.8,6.9c-0.1,0-0.3,0-0.4,0c-0.3,0-0.5,0-0.9,0C241.1,301.4,240.6,301.4,240.4,301.4z"
+               />
+           <path id="Caminho_2579" class="st1" d="M214.8,227.4c0.7,9.5,1.9,18.8,5,27.8c1.4,4.2,3.7,8.1,6.8,11.2
+               c5.5,5.6,11.3,11.1,15.6,17.8c2.1,3,3.3,6.5,3.5,10.2c0.2,2.1-1.3,4.1-3.4,4.3c-0.2,0-0.3,0-0.5,0c-0.2,0-0.4,0-0.7,0
+               c-0.3,0-0.5,0-0.8,0h-74.7c-4.3,0-5.7-1.5-5.2-5.8c0.5-4.4,2.8-8.1,5.4-11.6c3.3-4.5,7.1-8.7,11.2-12.4
+               c6.4-5.8,9.6-13.1,11.4-21.3c1.5-6.7,2.4-13.5,2.9-20.3c3.8,0.8,7.6,1.3,11.5,1.4h0.3C207.1,228.7,211,228.2,214.8,227.4
+                M214.8,222.4c-0.3,0-0.6,0-0.9,0.1l-1.2,0.2c-3.2,0.7-6.4,1-9.6,1.1h-0.3c-3.5-0.1-7-0.6-10.4-1.3l-0.2,0
+               c-2.7-0.5-5.3,1.3-5.8,4.1c0,0.2-0.1,0.3-0.1,0.5c-0.4,6.6-1.3,13.1-2.7,19.6c-1.9,8.4-4.9,14.2-9.9,18.7
+               c-4.4,4-8.3,8.4-11.9,13.2c-2.8,3.7-5.7,8.3-6.3,14c-0.3,2.3-0.4,5.8,2,8.4s5.8,3,8.2,3h74.7c0.1,0,0.2,0,0.3,0c0.2,0,0.3,0,0.5,0
+               c0.4,0,0.7,0,1.1,0c4.9-0.2,8.7-4.4,8.5-9.3c0-0.1,0-0.1,0-0.2c-0.2-4.6-1.7-9-4.3-12.8c-4-6.2-9-11.2-13.8-16.2
+               c-0.8-0.8-1.6-1.6-2.4-2.4c-2.6-2.7-4.5-5.9-5.7-9.4c-3.1-9-4.2-18.5-4.8-26.6C219.6,224.4,217.4,222.4,214.8,222.4L214.8,222.4z"
+               />
+           <g id="Grupo_400" transform="translate(92.533 105.115)">
+               <path id="Caminho_2580" class="laranja" d="M67.8,102.9c-23.1,0-43-16-48-38.6c-0.8-3.7-1.2-7.6-1.1-11.4c0-4.9,0-9.8,0-14.7
+                   c0-6,0-12.1,0-18.1c0-5.3,2.5-7.8,7.7-7.8c6.2,0,12.3,0,18.5,0h15c1.4,0,2.5,1.1,2.5,2.5l0,0v7.9c0,1.4-1.1,2.5-2.5,2.5l0,0
+                   c-2.4,0-4.8,0-7.2,0c-2.4,0-4.9,0-7.3,0c-5.6,0-10,0-14,0c0,3.3,0,6.7,0,10c0,2.9,0,5.8,0,8.7c0,1.4,0,2.7,0,4.1
+                   c-0.1,3.5,0,6.9,0.3,10.4c1.9,16.3,16.1,30.2,32.4,31.5c0.9,0.1,1.6,0.6,2,1.4l4,8c0.6,1.2,0.1,2.7-1.1,3.4
+                   c-0.3,0.2-0.7,0.3-1.1,0.3L67.8,102.9z"/>
+               <path id="Caminho_2581" class="st1" d="M44.9,14.9h15c0,2.6,0,5.2,0,7.9c-4.8,0-9.7,0-14.5,0c-4.9,0-9.8,0-14.6,0h-0.1
+                   c-1.5,0-1.8,0.4-1.8,1.9c0.1,6.4,0,12.9,0.1,19.3c0,4.9-0.2,9.8,0.3,14.7c2,17.6,17,32.3,34.6,33.7l4,8h-0.1
+                   c-21.9,0-40.9-15.2-45.6-36.6c-0.8-3.6-1.1-7.2-1.1-10.8c0-10.9,0-21.9,0-32.8c0-3.9,1.3-5.3,5.2-5.3
+                   C32.6,14.9,38.8,14.9,44.9,14.9 M44.9,9.8c-6.2,0-12.4,0-18.5,0c-2.1,0-5.3,0.3-7.6,2.7c-2.3,2.4-2.6,5.5-2.6,7.6c0,6,0,12,0,18
+                   c0,4.9,0,9.9,0,14.8c0,4,0.4,8,1.2,11.9c5.2,23.7,26.2,40.5,50.5,40.5h0.1c2.8,0,5-2.3,5-5c0-0.8-0.2-1.6-0.5-2.3l-4-8
+                   c-0.8-1.6-2.3-2.6-4.1-2.7C49.2,86.1,36,73.2,34.3,58.1c-0.3-3.4-0.4-6.7-0.3-10.1c0-1.3,0-2.7,0-4.1c0-2.9,0-5.8,0-8.7
+                   c0-2.4,0-5,0-7.5c3.3,0,7,0,11.5,0c2.4,0,4.9,0,7.3,0c2.4,0,4.8,0,7.2,0c2.8,0,5-2.2,5-5v-7.9c0-2.8-2.2-5-5-5c0,0,0,0,0,0
+                   L44.9,9.8L44.9,9.8z"/>
+           </g>
+           <g id="Grupo_401" transform="translate(224.543 105.115)">
+               <path id="Caminho_2582" class="laranja" d="M21.2,102.9c-1.4,0-2.5-1.2-2.5-2.5c0-0.4,0.1-0.8,0.3-1.1l4-8c0.4-0.7,1.1-1.2,1.9-1.4
+                   c0.4-0.1,0.9-0.1,1.3-0.2c0.9-0.1,1.7-0.2,2.5-0.4c17-3.5,29.2-18.6,29.1-36c0-4.4,0-8.8,0-13.1c0-5,0-10.1,0-15.1
+                   c-4.1,0-8.4,0-14,0c-2.4,0-4.8,0-7.3,0c-2.4,0-4.8,0-7.3,0c-1.4,0-2.5-1.1-2.5-2.5v-7.9c0-1.4,1.1-2.5,2.5-2.5c0,0,0,0,0,0h9.2
+                   c8.1,0,16.1,0,24.2,0c1.9,0,4.4,0.2,6,1.9s1.9,4.1,1.9,6.1c0,3.6,0,7.3,0.1,10.9c0.1,8.2,0.2,16.6-0.2,24.9
+                   c-0.9,18.3-9.7,32.1-26.4,41.2c-6.8,3.7-14.4,5.6-22.2,5.5C21.5,102.9,21.3,102.9,21.2,102.9z"/>
+               <path id="Caminho_2583" class="st1" d="M29.2,14.9c11.1,0,22.2,0,33.3,0c4.1,0,5.4,1.3,5.4,5.4c0,11.9,0.4,23.8-0.2,35.7
+                   c-0.9,17.7-9.6,30.7-25.1,39.2c-6.4,3.5-13.7,5.3-21,5.2h-0.5c1.3-2.7,2.7-5.3,4-8c1.3-0.2,2.7-0.3,4-0.6
+                   c18.2-3.7,31.2-19.8,31-38.4c0-9.6,0-19.2,0-28.8c0-1.5-0.3-1.9-1.8-1.9h-0.1c-4.9,0-9.8,0.1-14.6,0c-4.8,0-9.7,0-14.5,0
+                   C29.2,20.1,29.2,17.5,29.2,14.9 M29.2,9.8c-2.8,0-5,2.2-5,5c0,0,0,0,0,0v7.8c0,2.8,2.2,5,5,5c2.4,0,4.8,0,7.2,0
+                   c2.4,0,4.9,0,7.3,0c4.5,0,8.1,0,11.5,0c0,4.2,0,8.5,0,12.6c0,4.3,0,8.7,0,13C55.3,69.6,44,83.6,28.1,86.9
+                   c-0.7,0.1-1.4,0.2-2.2,0.3c-0.5,0.1-0.9,0.1-1.4,0.2c-1.6,0.2-3,1.2-3.8,2.7l-0.1,0.3l-3.9,7.7c-1.3,2.5-0.3,5.5,2.2,6.7
+                   c0.7,0.3,1.4,0.5,2.2,0.5c0.2,0,0.4,0,0.6,0c8.2,0.1,16.2-1.9,23.4-5.8c8-4.2,14.8-10.3,19.8-17.8c4.8-7.7,7.6-16.5,7.9-25.5
+                   c0.4-8.4,0.3-16.9,0.3-25.1c0-3.6-0.1-7.2-0.1-10.8c0-2.2-0.3-5.5-2.6-7.8s-5.6-2.6-7.8-2.6c-7.9,0-15.8,0-23.7,0L29.2,9.8z"/>
+           </g>
+           <path id="Caminho_2584" class="st2" d="M202.8,231.4c-3.9-0.1-7.8-0.6-11.6-1.4l-0.2,0c-0.1,0-0.2,0-0.3-0.1
+               c-4.8-1.4-9.4-3.3-13.8-5.7c-6.9-4-12.8-9.5-17.4-16c-0.1-0.1-0.2-0.3-0.3-0.5c-0.4-0.2-0.8-0.6-1-1l-4-8
+               c-0.1-0.2-0.2-0.4-0.2-0.7c0-0.1,0-0.2-0.1-0.4v0c-2.7-6.7-4-13.9-3.9-22.9c0-5.8,0-11.6,0-17.3l0-3.6c0-6.1,0-12.2,0-18.3l0-7.7
+               c0,0,0-7.9,0-7.9c0-0.2,0-0.5,0-0.7c0-0.3,0-0.7,0-1c-0.4-3.1,1-6.2,3.5-8c0.4-0.3,1-0.5,1.5-0.5h95.9c0.4,0,0.8,0.1,1.2,0.3
+               c2.1,1.1,4.5,3.3,4.2,8c0,0.4,0,0.8,0,1.2c0,0.2,0,0.5,0,0.7c0,0,0,8,0,8c0,0.2,0,0.5,0,0.7c0,0.5,0,0.9,0,1.4c0,4.4,0,8.8,0,13.2
+               c0,11,0,22.5,0,33.7c0,2.6-0.3,5.2-0.5,7.5c-0.6,4.7-1.8,9.4-3.5,13.9c0,0.1-0.1,0.2-0.1,0.3l-4,8c-0.1,0.2-0.2,0.3-0.3,0.5
+               c-0.6,0.7-1.1,1.3-1.6,2c-1.2,1.5-2.4,3-3.7,4.5c-6.8,7.7-15.7,13.2-25.6,15.9c-0.2,0-0.4,0.1-0.6,0.2c-0.1,0.1-0.3,0.1-0.4,0.2
+               c-0.1,0-0.3,0.1-0.4,0.1l-1.2,0.2c-3.6,0.7-7.2,1.2-10.9,1.3L202.8,231.4z"/>
+           <path id="Caminho_2585" class="st1" d="M250.8,112.2c2.3,1.2,3,3.2,2.8,5.6c0,0.7,0,1.4,0.1,2.1c0,2.6,0,5.2,0,7.9
+               c0,0.7-0.1,1.5-0.1,2.2c0,15.6,0,31.3,0,46.9c0,2.4-0.2,4.8-0.5,7.2c-0.6,4.6-1.8,9-3.4,13.3l-4,8c-1.8,2.1-3.5,4.3-5.3,6.4
+               c-6.5,7.3-15,12.6-24.4,15.1c-0.4,0.1-0.8,0.3-1.2,0.4c-3.8,0.8-7.7,1.3-11.7,1.4h-0.3c-3.9-0.2-7.7-0.6-11.5-1.4
+               c-4.6-1.3-9-3.1-13.2-5.5c-6.6-3.9-12.2-9.1-16.6-15.3c-0.3-0.4-0.5-1-1.1-1.2l-4-8c0-0.2-0.1-0.5-0.1-0.7
+               c-2.9-7.1-3.8-14.5-3.8-22c0-7,0-13.9,0-20.9c0-8.7,0-17.3-0.1-26c0-2.6,0-5.2,0-7.9c0.1-0.7,0.1-1.3,0.1-2
+               c-0.3-2.2,0.6-4.5,2.5-5.8L250.8,112.2 M250.8,107.2H155c-1.1,0-2.1,0.3-3,1c-3.2,2.3-5,6.2-4.5,10.2c0,0.1,0,0.4,0,0.6
+               c0,0.3,0,0.5,0,0.8c0,0.1,0,0.1,0,0.2v3.9v3.9l0,7.9c0,6.1,0,12.1,0,18.2l0,3.6c0,5.7,0,11.6,0,17.3c-0.1,9,1.3,16.7,4,23.6
+               c0,0.1,0,0.1,0,0.2c0.1,0.5,0.2,0.9,0.4,1.3l0.3,0.6l3.7,7.4c0.3,0.7,0.8,1.2,1.4,1.7l0.1,0.1c4.8,6.8,11,12.5,18.1,16.8
+               c4.5,2.5,9.3,4.5,14.3,5.9c0.2,0.1,0.4,0.1,0.6,0.1l0.2,0c4,0.8,8,1.3,12.1,1.5h0.4c3.8-0.1,7.6-0.5,11.3-1.3l1.2-0.2
+               c0.3,0,0.6-0.1,0.8-0.2c0.2-0.1,0.3-0.1,0.5-0.2c0.1-0.1,0.3-0.1,0.4-0.1c10.4-2.8,19.7-8.6,26.8-16.6c1.3-1.5,2.6-3.1,3.8-4.6
+               c0.5-0.7,1.1-1.3,1.6-2c0.2-0.3,0.4-0.6,0.6-0.9l2-4l2-4c0.1-0.2,0.2-0.4,0.3-0.6c1.8-4.7,3-9.5,3.7-14.4c0.2-2.3,0.5-5,0.5-7.7
+               c0-11.2,0-22.6,0-33.7c0-4.4,0-8.9,0-13.3c0-0.4,0-0.8,0-1.3c0-0.2,0-0.5,0-0.7c0-0.1,0-0.1,0-0.2V120c0,0,0-0.1,0-0.1
+               c0-0.3,0-0.5,0-0.8c0-0.3,0-0.7,0-0.9c0.4-6.3-3.3-9.2-5.5-10.4C252.5,107.4,251.7,107.2,250.8,107.2L250.8,107.2z"/>
+       </g>
+       <g class="floatingDefault">
+       <g id="Grupo_358" transform="translate(125.6 84.776)">
+           <path id="Polígono_18" class="st3" d="M60.6,10.6L69.5,48l35.6,9.3l-35.6,9.3L60.6,104l-8.9-37.4l-35.6-9.3L51.8,48L60.6,10.6z"
+               />
+           <g id="Grupo_350" transform="translate(1.494 0)">
+               <path id="Polígono_17" class="st4" d="M60.8,10.1l8.9,37.1l35.6,9.3l-35.6,9.3l-8.9,37.1l-8.9-37.1l-35.6-9.3l35.6-9.3
+                   L60.8,10.1z"/>
+               <path id="Polígono_17_-_Contorno" class="st3" d="M60.7,14.1l-8.1,33.8l-32.6,8.5l32.6,8.5l8.1,33.8l8.1-33.8l32.6-8.5
+                   l-32.6-8.5L60.7,14.1 M60.7,9.8l8.9,37.3l35.7,9.3l-35.7,9.3L60.7,103l-8.9-37.3l-35.7-9.3l35.7-9.3L60.7,9.8z"/>
+           </g>
+       </g>
+       <g id="Grupo_359" transform="translate(27.734 84.776)">
+           <path id="Polígono_18-2" class="st3" d="M33.8,9.8l3.5,14.9l14.1,3.7l-14.1,3.7l-3.5,14.9l-3.5-14.9l-14.1-3.7l14.1-3.7L33.8,9.8
+               z"/>
+           <path id="Polígono_17-2" class="st4" d="M34.8,9.8l3.5,14.7l14.1,3.7l-14.1,3.7l-3.5,14.7l-3.5-14.7l-14.1-3.7l14.1-3.7L34.8,9.8
+               z"/>
+           <path id="Polígono_17_-_Contorno-2" class="st3" d="M34.8,11.5l-3.2,13.3l-13,3.4l13,3.4l3.2,13.3L38,31.6l13-3.4l-13-3.4
+               L34.8,11.5 M34.8,9.8l3.6,14.7l14.3,3.7l-14.3,3.7l-3.6,14.7l-3.6-14.7l-14.3-3.7l14.3-3.7L34.8,9.8z"/>
+       </g>
+       <g id="Grupo_360" transform="translate(177.582 50.521)">
+           <path id="Polígono_18-3" class="st3" d="M26.9,10.4l2.1,8.5l8.6,2.1L29,23.1l-2.1,8.4l-2.1-8.4L16.2,21l8.6-2.1L26.9,10.4z"/>
+           <path id="Polígono_17-3" class="st4" d="M28,9.8l2.1,8.3l8.6,2.1l-8.6,2.1L28,30.7l-2.1-8.3l-8.6-2.1l8.6-2.1L28,9.8z"/>
+           <path id="Polígono_17_-_Contorno-3" class="st3" d="M28,10.8l-2,7.6l-7.9,1.9l7.9,1.9l2,7.6l2-7.6l7.9-1.9L30,18.3L28,10.8
+                M28,9.8l2.2,8.3l8.7,2.1l-8.7,2.1L28,30.7l-2.2-8.3l-8.7-2.1l8.7-2.1L28,9.8z"/>
+       </g>
+       </g>
+   </g>
+   </svg>`;
+        let trofeuDois = `<svg width="532" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+        viewBox="0 0 612.7 350" style="enable-background:new 0 0 612.7 299.8;" xml:space="preserve">
+   <style type="text/css">
+       .laranja{fill:#D8403B;}
+       .st1{fill:#1F1F1F;}
+       .st2{fill:#A6A6A6;}
+       .st3{fill:#2A2929;}
+       .st4{fill:#1DC18A;}
+   </style>
+   
+   <g id="Grupo_406" transform="translate(69.335 -34.857)">
+       <g id="Grupo_403" transform="translate(143.127 127.875)">
+           <path id="Caminho_2586" class="laranja" d="M62.5,68.9c-1.3,0-2.6-0.7-3.3-1.8l-4.5-6.6c-3.9-5.7-7.7-11.4-11.6-17.1
+               C36,33.1,29,22.8,21.9,12.4L14.6,1.8c-1.3-1.8-0.8-4.4,1.1-5.6c0.7-0.5,1.5-0.7,2.3-0.7H67c1.3,0,2.6,0.7,3.3,1.8l23.5,34.4
+               l23.5-34.4c0.8-1.1,2-1.8,3.3-1.8h49.1c2.2,0,4,1.8,4,4c0,0.8-0.2,1.6-0.7,2.3l-32.5,47.7c-2.5,3.6-10.4,15.2-10.4,15.2
+               c-0.7,1.1-2,1.8-3.3,1.8c-0.4,0-0.7,0-1-0.1c-0.7-0.2-1.4-0.5-2.1-0.9c-0.2-0.1-0.4-0.2-0.6-0.3c-8.2-4-17.2-6-26.2-6
+               c-0.7,0-1.3,0-2,0c-10.7,0.3-21.1,3.4-30.2,9c-0.1,0.1-0.2,0.1-0.3,0.2C63.9,68.7,63.2,68.9,62.5,68.9z"/>
+           <path id="Caminho_2587" class="st1" d="M169.8-1.8c0.7,0,1.3,0.6,1.3,1.3c0,0.3-0.1,0.5-0.2,0.8c-10.8,15.9-21.7,31.8-32.5,47.7
+               c-3.5,5.1-6.9,10.2-10.4,15.2c-0.2,0.4-0.7,0.6-1.1,0.6c-0.1,0-0.2,0-0.3,0c-0.8-0.3-1.5-0.6-2.2-1.1c-8.5-4.1-17.9-6.3-27.4-6.2
+               c-0.7,0-1.4,0-2,0c-11.2,0.3-22.1,3.5-31.5,9.4c-0.1,0-0.1,0.1-0.2,0.1c-0.2,0.1-0.4,0.2-0.6,0.2c-0.4,0-0.9-0.2-1.1-0.6
+               C56,57.7,50.7,49.9,45.3,42c-9.5-13.9-19-27.8-28.4-41.7c-0.4-0.6-0.3-1.4,0.3-1.8c0.2-0.2,0.5-0.2,0.8-0.2H67
+               c0.4,0,0.9,0.2,1.1,0.6l24.5,35.8c0.6,0.9,0.9,1.4,1.2,1.4s0.6-0.5,1.3-1.4c8.2-11.9,16.3-23.9,24.5-35.8c0.2-0.4,0.7-0.6,1.1-0.6
+               L169.8-1.8 M169.8-7.2h-49.1c-2.2,0-4.3,1.1-5.6,2.9l-5.8,8.5L93.9,26.9L80.8,7.7L72.6-4.3c-1.3-1.8-3.3-2.9-5.6-2.9H18
+               c-3.7,0-6.7,3-6.7,6.7c0,1.4,0.4,2.7,1.2,3.8l7.4,10.9c7,10.3,14,20.5,21,30.8c3.8,5.6,7.7,11.3,11.5,16.9l4.5,6.7
+               c2,2.9,5.8,3.8,8.9,2.1c0.1-0.1,0.2-0.1,0.4-0.2c8.7-5.4,18.7-8.3,28.9-8.6c0.6,0,1.3,0,1.9,0c8.7,0,17.3,1.9,25.1,5.7
+               c0.2,0.1,0.3,0.2,0.4,0.2c0.8,0.5,1.7,0.9,2.7,1.2c0.6,0.2,1.2,0.2,1.8,0.2c2.2,0,4.3-1.1,5.6-2.9l3-4.4c2.5-3.6,4.9-7.2,7.4-10.9
+               l24.5-35.9l8-11.8c2.1-3.1,1.3-7.3-1.8-9.4C172.5-6.8,171.2-7.2,169.8-7.2L169.8-7.2z"/>
+       </g>
+       <g id="Grupo_404" transform="translate(159.442 186.144)">
+           <path id="Caminho_2588" class="st2" d="M74.1,128.6c-0.4,0-0.8,0-1.3-0.1c-0.9-0.2-1.8-0.3-2.7-0.4c-1.8-0.3-3.6-0.6-5.5-1
+               c-14.5-3.7-26.4-11.2-35.4-22.2c-10-12.2-15.4-27.5-15.3-43.2c0.1-11.2,3-22.3,8.4-32.1c5.3-9.4,12.8-17.4,21.7-23.4
+               c0.2-0.1,0.3-0.2,0.5-0.3L45,5.7c0.2-0.1,0.4-0.2,0.6-0.3c9.9-6.1,21.2-9.5,32.9-9.8c0.7,0,1.4,0,2.1,0c9.9,0,19.7,2.2,28.6,6.5
+               c0.3,0.1,0.6,0.3,0.8,0.4c0.3,0.2,0.7,0.4,1,0.5l2.2-0.1l0.4,1.5c0.1,0.1,0.3,0.1,0.4,0.2c6.1,3.5,11.5,8,16.2,13.3
+               c19.6,22.2,22.3,54.5,6.8,79.7c-10.9,17.2-26.7,27.5-47,30.7C88.6,128.4,75.9,128.6,74.1,128.6z"/>
+           <path id="Caminho_2589" class="st1" d="M80.6-1.8c9.5,0,18.9,2.1,27.4,6.2c1,0.5,4.1,2.1,4.7,2.4c17.5,10.3,29.2,28.3,31.3,48.5
+               c1.7,14.2-1.6,28.6-9.3,40.7c-10.5,16.7-25.7,26.4-45.1,29.5c-1,0.1-12.3,0.3-15.4,0.3c-0.5,0-0.7,0-0.8,0c-2.7-0.5-5.4-0.8-8-1.4
+               c-13.9-3.6-25.3-10.6-34-21.3c-9.6-11.7-14.8-26.4-14.7-41.5c0-10.8,2.8-21.4,8.1-30.8c5.1-9,12.2-16.7,20.9-22.4
+               c0.1,0,0.1-0.1,0.2-0.1c0.4-0.2,0.8-0.4,1.2-0.6c9.5-5.9,20.4-9.1,31.5-9.4C79.2-1.8,79.9-1.8,80.6-1.8 M80.6-7.2
+               c-0.7,0-1.5,0-2.2,0C66.3-6.9,54.5-3.3,44.2,3.1c-0.1,0-0.2,0.1-0.4,0.2s-0.3,0.1-0.4,0.2c-0.3,0.1-0.5,0.3-0.8,0.5
+               C33.3,10.1,25.5,18.4,20,28.2c-5.7,10.2-8.7,21.7-8.8,33.4c-0.1,16.4,5.5,32.3,15.9,45c9.4,11.5,21.8,19.2,36.8,23.1
+               c2,0.5,3.9,0.8,5.8,1.1c0.9,0.1,1.8,0.3,2.6,0.4c0.6,0.1,1.2,0.1,1.8,0.1c0.1,0,14.4-0.1,16.3-0.4c21.1-3.3,37.5-14,48.9-31.9
+               c16.2-26.2,13.4-59.9-7-82.9C127.5,10.7,122,6.1,116,2.5l-1.1-0.6l-3.4-1.7l-0.2-0.1c-0.3-0.2-0.6-0.3-1-0.5
+               C101.1-4.9,90.9-7.2,80.6-7.2L80.6-7.2z"/>
+       </g>
+   </g>
+   
+   <g class="floatingDefault">
+   <g id="Grupo_378" transform="translate(-6497.854 -3092)">
+       <path id="Caminho_2568" class="st3" d="M6696.3,3293.4l-193.6-68.5l125.3-125.7L6696.3,3293.4z"/>
+       <g id="Grupo_348" transform="translate(6500.765 3092)">
+           <path id="Caminho_2569" class="st4" d="M198.5,197.4L4.9,128.9L130.2,3.2L198.5,197.4z"/>
+           <path id="Polígono_9_-_Contorno" class="st3" d="M196.9,195.8L129.8,5L6.7,128.5L196.9,195.8 M198.5,197.4L4.9,128.9L130.2,3.2
+               L198.5,197.4z"/>
+       </g>
+   </g>
+   <g id="Grupo_412" transform="translate(7434.409 2313.912) rotate(171)">
+       <path id="Caminho_2568-2" class="st3" d="M6614.1,3211.2l-120.2-42.5l77.8-78.1L6614.1,3211.2z"/>
+       <g id="Grupo_348-2" transform="translate(6499.716 3092)">
+           <path id="Caminho_2569-2" class="st4" d="M116.3,116.8L-3.9,74.2L73.9-3.8L116.3,116.8z"/>
+           <path id="Polígono_9_-_Contorno-2" class="st3" d="M115.3,115.7L73.6-2.7L-2.8,74L115.3,115.7 M116.3,116.8L-3.9,74.2L73.9-3.8
+               L116.3,116.8z"/>
+       </g>
+   </g>
+   </g>
+   </svg>
+   `;
+        let trofeuTres = `<svg width="248" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+        viewBox="0 0 262.1 266.8" style="enable-background:new 0 0 262.1 266.8;" xml:space="preserve">
+   <style type="text/css">
+       .contorninho{fill:#2A2929;}
+       .seilaqdiaboeisso{fill:#996056;}
+       .otracoisa{fill:#FAC710;}
+   </style>
+   <g id="Grupo_485" transform="translate(-80.133 -65.383)">
+       <g id="Grupo_423" transform="translate(-6505 -4399.37)">
+           <path id="Caminho_2573" class="contorninho" d="M6777.2,4724.7c-3.8-1.9-6.2-4.8-6.5-9.2c-0.1-2.7,0-5.5-0.1-8.2c-0.1-1.3,0.7-2.6,1.9-3
+               c1.2-0.5,2.6-0.2,3.5,0.8c1,0.9,1.9,1.9,2.8,2.9c1.7,1.9,1.2,4.3-1.2,5.2c-0.7,0.3-0.8,0.5-0.9,1.1c-0.2,2.5,1.6,4.8,4.2,5.1
+               c2.4,0.2,4.5-1.5,4.8-3.9c0-0.1,0-0.2,0-0.3c0.2-4.6,0.1-9.2,0.2-13.8c0-0.8-0.5-1-1.1-1.4c-3.4-1.6-5.5-5.3-5-9.1
+               c0.3-3.2,2.3-6,5.2-7.5c1.1-0.6,0.9-1.4,0.9-2.3c0-19.7,0-39.4,0-59.1v-52.8c-0.4-0.3-0.6-0.1-0.7,0.1c-5.8,6.5-13.1,9.4-21.8,9.4
+               c-1.6,0-3.9-0.7-4.7,0.3c-0.8,1-0.3,3.2-0.3,4.8c0,13.7-8.3,24.5-21.3,27.8c-3.6,0.7-7.4,1-11.1,0.8c-1.2,0-1.5,0.3-1.5,1.5
+               c0.1,4.4,0.1,8.8-1.3,13.1c-3.7,11.5-14.5,19.2-26.5,19.1c-0.9,0-1.7,0-2.6,0c0,0.8,0.6,1.1,0.9,1.5c6.1,7.1,6.7,17.4,1.7,25.3
+               c-0.6,0.6-0.6,1.6,0,2.3c0.1,0.1,0.2,0.2,0.3,0.2c3.1,3,3.1,3.1,6.1,0.1c0.6-0.7,1.3-1.3,2.1-1.6c1.6-0.5,3.4,0.4,3.9,2
+               c0.4,1.1,0.1,2.4-0.8,3.2c-2.1,2.2-4.3,4.4-6.5,6.5c-1.8,1.8-3.6,3.6-5.4,5.4c-1.5,1.5-3.3,1.6-4.6,0.3c-1.4-1.3-1.3-3.1,0.2-4.7
+               c0.1-0.1,0.3-0.3,0.4-0.4c3.6-3.7,3.6-3.6-0.4-7c-0.3-0.4-0.8-0.4-1.2-0.1c0,0,0,0-0.1,0c-8.4,5.3-16.7,5.2-24.9-0.3
+               c-0.6-0.4-1-0.4-1.4,0.1c-0.6,0.7-1.3,1.3-1.9,1.9c-11.3,11.3-22.5,22.5-33.8,33.8c-6.2,6.2-14.6,6.9-21.1,1.9
+               c-6.7-5.3-7.8-15-2.5-21.6c0.4-0.5,0.8-0.9,1.2-1.4c15.3-15.4,30.6-30.7,46-46c2.3-2.6,6-3.6,9.3-2.5c0.9,0.4,2,0.1,2.6-0.7
+               c18.8-18.8,37.6-37.7,56.4-56.5c18.6-18.6,37.2-37.2,55.8-55.8c5.3-5.3,13.7-3.4,15.8,3.5c0.4,1.3,0.5,2.8,0.2,4.2
+               c-0.3,1.8-0.4,3.7-0.4,5.5c0,45.2,0,90.5,0,135.7c0,1.4,0.2,2.3,1.6,2.9c2.7,1.3,5.8,4,4.5,9.7c-0.7,3-2.9,5.5-5.7,6.7
+               c-0.7,0.3-0.4,1-0.4,1.5c0,4.3,0,8.6,0,12.9c0,2.8-1.1,5.4-3,7.5c-1.5,1.7-3.6,2.9-5.8,3.3
+               C6781.6,4726,6777.8,4724.9,6777.2,4724.7z M6617.2,4713.5c2.7-0.1,5.3-1.3,7.2-3.4c11.7-11.7,23.4-23.4,35.1-35.1
+               c1-0.7,1.2-2,0.6-2.9c0,0-0.1-0.1-0.1-0.1c-3.4-5.9-3.8-13.1-1-19.3c0.2-0.6,1.1-1.3,0.3-1.8c-0.6-0.4-1.5,0.1-2.1,0.6
+               c-0.4,0.3-0.7,0.7-1.1,1.1c-14.9,14.9-29.9,29.9-44.8,44.8c-0.3,0.3-0.6,0.6-0.9,1c-2.3,2.7-2.9,6.4-1.5,9.7
+               C6610.5,4711.7,6613.6,4713.1,6617.2,4713.5z M6677.9,4639.8c1.8,0.1,3.5,0.3,5.2,0.7c1.3,0.4,2.7,0,3.5-1
+               c32.7-32.7,65.4-65.4,98.1-98.1c1.5-1.5,2-4.3,0.9-5.5c-1.3-1.4-3.1-1.1-5.1,1c-33.7,33.7-67.5,67.5-101.2,101.2
+               C6678.7,4638.5,6678.2,4639.1,6677.9,4639.8z M6691.5,4669.6c4.7-7.1,2.7-16.7-4.5-21.3s-16.7-2.7-21.3,4.5
+               c-4.7,7.1-2.7,16.7,4.5,21.3c5.3,3.4,12.1,3.3,17.2-0.2c-1.3-1.2-2.6-2.2-3.7-3.4c-0.6-0.7-1.6-1-2.4-0.6
+               c-4.8,1.4-9.9-1.3-11.4-6.2c-0.2-0.7-0.3-1.5-0.4-2.2c-0.3-3.7,1.8-7.1,5.2-8.7c3.2-1.8,7.1-1.3,9.8,1.1c3,2.3,4.2,6.2,3,9.8
+               c-0.2,0.7-0.7,1.3,0.1,2.1C6689,4667,6690.2,4668.3,6691.5,4669.6z M6729.2,4606c13.2,1.2,24.2-10.4,22.9-22.9L6729.2,4606z
+                M6695.2,4639.8c14.1,1.2,24.7-11.3,23.1-23.1L6695.2,4639.8z M6763.1,4572.3c11.7,0.9,21.9-7.9,22.8-19.6c0.1-1.1,0.1-2.1,0-3.2
+               L6763.1,4572.3z M6789.2,4688.6c-1.7,0-3.1,1.4-3.1,3.1c0,0,0,0.1,0,0.1c0,1.7,1.4,3,3.1,3c1.7,0,3-1.4,3-3.1c0-1-0.6-2-1.4-2.6
+               C6790.3,4688.8,6789.7,4688.6,6789.2,4688.6L6789.2,4688.6z M6678.6,4664c1.6,0,3-1.2,3.1-2.8c0.1-1.6-1.2-3-2.8-3.1
+               s-3,1.2-3.1,2.8c0,0,0,0.1,0,0.1C6675.7,4662.5,6677,4663.9,6678.6,4664z"/>
+           <path id="Caminho_2574" class="seilaqdiaboeisso" d="M6617.2,4713.5c-3.6-0.4-6.7-1.9-8.3-5.5c-1.5-3.3-0.8-7.2,1.6-9.8
+               c0.7-0.8,1.4-1.5,2.1-2.2c14.5-14.5,29-28.9,43.4-43.4c0.4-0.4,0.7-0.7,1.1-1.1c0.6-0.5,1.5-1,2.1-0.6c0.8,0.5-0.1,1.2-0.3,1.8
+               c-2.8,6.2-2.4,13.4,1,19.3c0.7,0.9,0.6,2.2-0.3,3c0,0-0.1,0.1-0.1,0.1c-11.7,11.7-23.5,23.4-35.1,35.1
+               C6622.5,4712.2,6620,4713.4,6617.2,4713.5z"/>
+           <path id="Caminho_2575" class="seilaqdiaboeisso" d="M6677.9,4639.8c0.3-0.7,0.8-1.3,1.4-1.7c33.7-33.7,67.5-67.5,101.2-101.2
+               c2-2,3.8-2.3,5.1-1c1.1,1.1,0.6,4-0.9,5.5c-32.7,32.7-65.4,65.4-98.1,98.1c-0.8,1.1-2.2,1.5-3.5,1
+               C6681.4,4640.1,6679.7,4639.9,6677.9,4639.8z"/>
+           <path id="Caminho_2576" class="seilaqdiaboeisso" d="M6789.1,4688.6c1.7,0.1,3.1,1.5,3.1,3.2c-0.1,1.7-1.5,2.9-3.2,3c-1.7,0-3-1.4-3-3
+               C6786,4690.1,6787.3,4688.6,6789.1,4688.6C6789.1,4688.6,6789.1,4688.6,6789.1,4688.6z"/>
+           <path id="Caminho_2577" class="seilaqdiaboeisso" d="M6678.6,4664c-1.6-0.1-2.8-1.4-2.9-3c0-1.6,1.4-2.9,3-2.9c1.6,0,2.9,1.4,2.9,3
+               c0,0,0,0.1,0,0.1C6681.5,4662.8,6680.2,4664,6678.6,4664z"/>
+       </g>
+       <g class="floatingDefault">
+       <g id="Grupo_358" transform="translate(80.133 119.275)">
+           <path id="Polígono_18" class="contorninho" d="M52.5,7.3l8.9,37.4L96.9,54l-35.6,9.3l-8.9,37.4l-8.9-37.4L8,54l35.6-9.3L52.5,7.3z"/>
+           <g id="Grupo_350" transform="translate(1.494 0)">
+               <path id="Polígono_17" class="otracoisa" d="M52.6,6.8l8.9,37.1l35.6,9.3l-35.6,9.3l-8.9,37.1l-8.9-37.1L8.1,53.2l35.6-9.3L52.6,6.8z"
+                   />
+               <path id="Polígono_17_-_Contorno" class="contorninho" d="M52.5,10.8l-8.1,33.8l-32.6,8.5l32.6,8.5l8.1,33.8l8.1-33.8l32.6-8.5
+                   l-32.6-8.5L52.5,10.8 M52.5,6.6l8.9,37.3l35.7,9.3l-35.7,9.3l-8.9,37.3l-8.9-37.3L8,53.1l35.7-9.3L52.5,6.6z"/>
+           </g>
+       </g>
+       <g id="Grupo_424" transform="translate(283.334 65.383)">
+           <path id="Polígono_18-2" class="contorninho" d="M30,6.9l4.4,18.5L52,30.1l-17.6,4.6L30,53.2l-4.4-18.5L8,30.1l17.6-4.6L30,6.9z"/>
+           <g id="Grupo_350-2" transform="translate(0.74 0)">
+               <path id="Polígono_17-2" class="otracoisa" d="M30.1,6.7l4.4,18.4l17.6,4.6l-17.6,4.6l-4.4,18.4l-4.4-18.4L8,29.6l17.6-4.6L30.1,6.7z"
+                   />
+               <path id="Polígono_17_-_Contorno-2" class="contorninho" d="M30,8.7l-4,16.7L9.9,29.6L26,33.8l4,16.7l4-16.7l16.1-4.2L34,25.4L30,8.7
+                    M30,6.6L34.4,25l17.7,4.6l-17.7,4.6L30,52.7l-4.4-18.4L8,29.6L25.6,25L30,6.6z"/>
+           </g>
+       </g>
+       </g>
+   </g>
+   </svg>
+   `;
+
+
+        if (Anima.player.acertos >= 4){
+            return trofeuUm;
+        } else if (Anima.player.acertos >= 2 && Anima.player.acertos < 4) {
+            return trofeuDois;
+        } else {
+            return trofeuTres;
+        }
+    }
 };
-

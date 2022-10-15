@@ -5,6 +5,10 @@ svg#explosao {
   opacity: 0;
 }
 
+/* * {
+  overflow-x: hidden!important;
+} */
+
 /* SVG#estrelinha-g {
   position: absolute;
   top: 378px;
@@ -156,7 +160,7 @@ SVG#estrelinha-p {
 }
 
 #btns-carreiras {
-  margin-top: 77px;
+  margin-top: 20px;
 }
 
 /*-----------------------------------*/
@@ -251,12 +255,16 @@ svg#explosao,
 #estrela-loading,
 .antesdetudo,
 .perfeitonome,
+.minutinho,
 .seguircarreira,
 .agorashow,
 #btns-carreiras,
 #olho-easter,
 #curva-verde,
-#curva-vermelha
+#curva-vermelha,
+#computador,
+#formC,
+.resultadoAcertos
 {
   transition: all 1s ease;
 }

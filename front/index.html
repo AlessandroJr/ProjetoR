@@ -36,7 +36,14 @@
     <script src="./scripts/bootstrap.js"></script>
 
     <script>
-        window.onresize = Anima.onWindowResize;
+        window.onresize = Anima.onWindowResize;;
+
+        function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+        }
     </script>
 
     <title>Desafio - Useall</title>

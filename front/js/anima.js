@@ -10,11 +10,11 @@ let Anima = {
     sound: {
         btnS: new Audio('./assets/audio/btn-simples.wav'),
         btnG: new Audio('./assets/audio/btn-g.wav'),
-        open: new Audio('./assets/audio/open.mp3'),
+        open: '',
         errado: new Audio('./assets/audio/errado.wav'),
         certo: new Audio('./assets/audio/certo.wav'),
-        perguntas: new Audio('./assets/audio/perguntas.ogg'),
-        resultado: new Audio('./assets/audio/resultado.wav')
+        perguntas: '',
+        resultado: ''
     },
 
     carreira: '',
@@ -939,12 +939,19 @@ let Anima = {
                         Eai, bora?
                     </strong>
                 </div>
+
+                <div id="bora" onclick="Anima.onClickAction(${frame.sceneid})" class="btn btn-cian ">
+                                    Bora 
+                                    <span style="margin-top:5px" class="material-symbols-outlined">
+                                        arrow_forward
+                                    </span>
+                                </div>
                     `;
 
                     $('#janelinha.janelinha').css('height', '25px');
                     $('#ola').css('margin-top', '23px');
                     $('#ola').html(html);
-
+                    $('#ola').css('overflow-y', 'scroll');
                     setTimeout(() => {
 
                         $('#janelinha.janelinha').css('height', '422px');
@@ -962,12 +969,7 @@ let Anima = {
                             distancia = distancia.toString() + 'px';
 
                             let btn = `
-                                <div onclick="Anima.onClickAction(${frame.sceneid})" class="btn btn-cian btn-bottom">
-                                    Bora 
-                                    <span style="margin-top:5px" class="material-symbols-outlined">
-                                        arrow_forward
-                                    </span>
-                                </div>
+                                
                             `;
 
                             $('.content').append(btn);
@@ -1432,7 +1434,8 @@ let Anima = {
         }
     }],
 
-    waiting: function() {
+    preload: function () {
+        this.carregarAudio();
         let loading = `
         <div class="waiting">
             <span class="toque" style="font-size:16px">
@@ -1441,6 +1444,69 @@ let Anima = {
         </div>`;
 
         $('body').append(loading);
+        
+        this.loadApp();
+    },
+
+    backLoad: function () {
+        this.loadApp();
+    },
+
+    loadApp: function () {
+        if (!Anima.sound.perguntas 
+            || !Anima.sound.resultado 
+            || !Anima.sound.open) {
+            
+          setTimeout(() => {
+            Anima.backLoad();
+          }, 1000);
+        } else {
+            this.waiting();
+        }
+      
+    },
+
+    carregarAudio:function () {
+        var request = new XMLHttpRequest();
+        request.open("GET", "./assets/audio/perguntas.mp3", true);
+        request.responseType = "blob";    
+        request.onload = function() {
+            if (this.status == 200) {
+                Anima.sound.perguntas = new Audio(URL.createObjectURL(this.response));
+            }
+            Anima.carregarAudioDois();
+        }
+        request.send();
+    },
+
+    carregarAudioDois: function () {
+        var requestdois = new XMLHttpRequest();
+        requestdois.open("GET", "./assets/audio/resultado.wav", true);
+        requestdois.responseType = "blob";    
+        requestdois.onload = function() {
+            if (this.status == 200) {
+                Anima.sound.resultado = new Audio(URL.createObjectURL(this.response));
+            }
+            Anima.carregarAudioTres();
+        }
+        requestdois.send();
+    },
+
+    carregarAudioTres: function () {
+        var requesttres = new XMLHttpRequest();
+        requesttres.open("GET", "./assets/audio/open.mp3", true);
+        requesttres.responseType = "blob";    
+        requesttres.onload = function() {
+            if (this.status == 200) {
+                Anima.sound.open = new Audio(URL.createObjectURL(this.response));
+            }
+        }
+        requesttres.send();
+    },
+    
+
+    waiting: function() {
+        
 
         setTimeout(() => {
             let html = `
@@ -1468,7 +1534,7 @@ let Anima = {
             `;
 
             $('.waiting').html(html);
-        }, 5000);
+        }, 1000);
     },
 
     iniciar: function () {

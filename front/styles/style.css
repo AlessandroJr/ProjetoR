@@ -4,7 +4,7 @@
 }
 
 body {
-  overflow-y: hidden;
+  overflow-y: scroll;
   overflow-x: hidden;
 }
 
@@ -16,7 +16,12 @@ body {
   font-weight: 400;
   src: url("../assets/fonts/IconsGF.woff2") format("woff2");
 }
-
+#bora {
+  margin: 30px auto 60px auto;
+    margin-bottom: 50px;
+    width: 282px;
+  text-shadow: none;
+}
 .material-symbols-outlined {
   font-family: "Material Symbols Outlined";
   font-weight: normal;
@@ -35,7 +40,7 @@ body {
 
 @font-face {
   font-family: Roboto;
-  src: url("../assets/fonts/Roboto-Regular.woff");
+  src: url("../assets/fonts/Roboto-Medium.woff");
 }
 
 @font-face {
@@ -47,7 +52,7 @@ body {
   background-color: #fac710;
   font-family: Roboto regular;
   font-size: 12px;
-  overflow: hidden;
+  overflow-x: hidden;
   transition: all 1s ease;
 }
 

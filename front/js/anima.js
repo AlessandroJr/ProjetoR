@@ -2,6 +2,25 @@
 
 let Anima = {
 
+    configs: {
+        
+
+        //produção
+        // api: 'https://desafio.useall.com.br/api/v1/',
+        // front: 'https://desafio.useall.com.br'
+        
+    },
+
+    sound: {
+        btnS: new Audio('./assets/audio/btn-simples.wav'),
+        btnG: new Audio('./assets/audio/btn-g.wav'),
+        open: new Audio('./assets/audio/open.mp3'),
+        errado: new Audio('./assets/audio/errado.wav'),
+        certo: new Audio('./assets/audio/certo.wav'),
+        perguntas: new Audio('./assets/audio/perguntas.ogg'),
+        resultado: new Audio('./assets/audio/resultado.mp3')
+    },
+
     carreira: '',
 
     cores: [{
@@ -45,6 +64,9 @@ let Anima = {
     onClickAction: function (sceneid, oquesalvar) {
         let nextframe = Anima.frames.find(e => e.sceneid === sceneid);
 
+        Anima.sound.open.volume = 0.6;
+        Anima.sound.btnG.play();
+
         if (nextframe.nextFrame) {
             nextframe.nextFrame();
         }
@@ -62,7 +84,19 @@ let Anima = {
     onClickCarreira: function (carreira) {
         Anima.carreira = carreira;
 
+        Anima.sound.btnS.play();
+
         this.loadingPerguntas();
+
+        Anima.sound.open.volume = 0.4;
+
+        setTimeout(() => {
+            Anima.sound.open.volume = 0.2;
+            setTimeout(() => {
+                Anima.sound.open.volume = 0;
+                Anima.sound.open.pause();
+            }, 1000);
+        }, 1000);
 
         return;
     },
@@ -151,6 +185,9 @@ let Anima = {
             $('#curva-verde').css('margin-top', '12vh');
             $('#curva-vermelha').css('margin-top', '20vh');
 
+            Anima.sound.perguntas.volume = 0.8;
+            Anima.sound.perguntas.loop = true;
+
             setTimeout(() => {
                 $('#planeta-loading').css('transform', 'rotate(360deg) translate(0px, 0px)');
 
@@ -159,6 +196,7 @@ let Anima = {
 
                     setTimeout(() => {
                         $('.agorashow').css('margin-left', '0');
+                        Anima.sound.perguntas.play();
 
                         setTimeout(() => {
 
@@ -201,6 +239,7 @@ let Anima = {
         }
 
         Anima.cor = cores;
+        Anima.sound.perguntas.volume = 0.6;
 
         let header = `
             <div class="header-pergunta" style="background-color:${cores.header}">
@@ -1397,19 +1436,67 @@ let Anima = {
         }
     }],
 
+    waiting: function() {
+        let loading = `
+        <div class="waiting">
+            <span class="toque" style="font-size:16px">
+                carregando...
+            </span>
+        </div>`;
+
+        $('body').append(loading);
+
+        setTimeout(() => {
+            let html = `
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="112" height="108" viewBox="0 0 112 108">
+            <g id="headphone" clip-path="url(#clip-headphone)">
+              
+              <g id="Grupo_367" data-name="Grupo 367" transform="translate(-131 -279)">
+                <g id="Grupo_366" data-name="Grupo 366" transform="translate(-949.124 -3562)">
+                  <path id="Caminho_2570" data-name="Caminho 2570" d="M175.461,144.719c.022-8.044.088-16.088-.009-24.132-.162-13.555-5.645-24.541-16.16-33.029-.787-.636-2.091-1.009-2.287-1.882-.191-.858.506-1.918.816-2.887.588-1.843.1-2.828-1.73-3.439-2.173-.726-4.365-1.392-6.52-2.168-6.588-2.375-24.383-2.944-31.313-2.694a2.5,2.5,0,0,0-.28.027.247.247,0,0,1-.075,0,1.863,1.863,0,0,0-.276-.02c-3.387-.033-12.573-.077-15.953.31-5.95.679-11.468,2.911-17.1,4.73a2.1,2.1,0,0,0-1.41,2.795c.241.877.533,1.744.857,2.593a1.006,1.006,0,0,1-.447,1.407c-11.639,8.455-17.7,19.883-17.891,34.32-.105,7.787-.026,15.576-.009,23.362a9.945,9.945,0,0,1-.471,3.437,12.151,12.151,0,0,0-.629,4.095c0,3.767-.024,7.532,0,11.3A15.415,15.415,0,0,0,75.494,177.39c2.714.825,5.483.611,8.245.627a1.161,1.161,0,0,1,1.23.732,6.352,6.352,0,0,0,5.886,3.664c1.458.031,2.916.024,4.374,0a6.513,6.513,0,0,0,6.511-6.467q.049-18.755,0-37.513a6.5,6.5,0,0,0-6.395-6.465c-1.567-.035-3.135-.04-4.7,0-2.006.051-3.948.741-4.845,2.487-1,1.944-2.4,2.021-4.13,1.9a9.767,9.767,0,0,0-1.964.013c-.818.108-.934-.222-.93-.957.033-4.935.02-9.871.015-14.806a28.09,28.09,0,0,1,.9-7.156,28.381,28.381,0,0,1,8.627-14.164.292.292,0,0,1,.419.031c1.029,1.235,1.648,1.367,3.242.849,1.243-.4,2.49-.8,3.729-1.227,3.961-1.363,7.921-2.595,12.207-2.549,8.565.1,17.133.033,25.7.024a24.233,24.233,0,0,1,4.352.356c3.773.688,7.3,2.188,10.94,3.334,1.843.58,2.35.515,3.523-.8a.293.293,0,0,1,.415-.02,27.721,27.721,0,0,1,9.31,18.432c.513,6.014.1,12.057.206,18.087.009.537-.23.57-.656.563-1.456-.024-2.916-.042-4.374,0a1.053,1.053,0,0,1-1.14-.7,6.377,6.377,0,0,0-5.976-3.7q-2.131-.03-4.264,0a6.524,6.524,0,0,0-6.557,6.533q-.036,18.7,0,37.4a6.525,6.525,0,0,0,6.465,6.516c1.383.026,2.769.007,4.154,0a6.422,6.422,0,0,0,6.226-3.82.918.918,0,0,1,1-.576c1.386.024,2.771.02,4.157.007a15.343,15.343,0,0,0,14.77-11.881c.076-.326.009-.736.308-.992a.279.279,0,0,0,.094-.213v-15.39a.3.3,0,0,0-.012-.084A16.827,16.827,0,0,1,175.461,144.719ZM88.632,157.19q0-9.045,0-18.087c0-2.014.752-2.753,2.784-2.758,1.166,0,2.333-.011,3.5,0a2.209,2.209,0,0,1,2.46,2.421q.016,18.416,0,36.829a2.208,2.208,0,0,1-2.453,2.428q-1.914.023-3.826,0a2.224,2.224,0,0,1-2.46-2.531Q88.624,166.341,88.632,157.19Zm-9.072-16.444c1.274-.033,2.552.035,3.826-.029.726-.037.892.194.888.9-.031,5.19-.018,10.377-.018,15.567s-.011,10.377.015,15.567c0,.69-.136.948-.879.908-2.1-.119-4.214.165-6.3-.4a10.912,10.912,0,0,1-8.129-10.313c-.057-3.835-.064-7.675,0-11.51A10.932,10.932,0,0,1,79.561,140.745Zm6.993-45.691A32.488,32.488,0,0,0,76.515,109a32.889,32.889,0,0,0-2.1,11.782c0,5.227-.011,10.454.013,15.681a1.117,1.117,0,0,1-.829,1.273,12.763,12.763,0,0,0-3.1,1.84.291.291,0,0,1-.465-.233v-.608c0-6.322-.14-12.651.037-18.969.338-12.2,5.626-21.867,15.293-29.412a.293.293,0,0,1,.457.143c.388,1.212.711,2.317,1.128,3.383C87.188,94.474,86.953,94.731,86.554,95.054Zm66.407-11.4q-1.894,5.591-3.692,11.211c-.2.62-.471.589-.938.429-1.169-.4-2.352-.761-3.512-1.187a35.006,35.006,0,0,0-12.63-2.1c-8.2.086-16.405.031-24.607.022a32.339,32.339,0,0,0-4.79.354c-3.4.508-6.575,1.827-9.828,2.861-.59.189-.916.253-1.16-.523-1.155-3.686-2.383-7.347-3.611-11.006-.173-.519-.147-.767.447-.926.98-.259,1.94-.609,2.9-.948a47.565,47.565,0,0,1,12.733-2.87c2.477-.163,10.751-.048,13.228-.11a2.771,2.771,0,0,0,.386-.038.259.259,0,0,1,.091,0,2.566,2.566,0,0,0,.305.035,15.473,15.473,0,0,0,1.749.007c7.458-.433,25.488,1.344,32.4,3.9C152.911,82.94,153.17,83.035,152.961,83.653Zm-.465,91.936a2.2,2.2,0,0,1-2.444,2.436q-1.914.023-3.826,0a2.225,2.225,0,0,1-2.469-2.522q-.013-9.15,0-18.3,0-9.044,0-18.087c0-2.014.756-2.76,2.778-2.766,1.164,0,2.33-.011,3.5,0a2.214,2.214,0,0,1,2.469,2.412Q152.51,157.172,152.5,175.589Zm2.059-80.558a.884.884,0,0,1-.364-1.183c.432-1.08.748-2.208,1.116-3.314v0a.289.289,0,0,1,.443-.128,37.383,37.383,0,0,1,15.347,30.49c-.013,6.091,0,12.18,0,18.445a.291.291,0,0,1-.463.236,14.08,14.08,0,0,0-3.428-1.991c-.579-.218-.485-.631-.485-1.049,0-5.042-.013-10.087,0-15.129A32.732,32.732,0,0,0,154.555,95.03ZM172.17,162.87a10.932,10.932,0,0,1-10.749,10.764c-1.2.024-2.407-.044-3.606.026-.761.044-.962-.167-.958-.946.039-5.19.02-10.379.02-15.567,0-5.152.015-10.3-.015-15.457-.007-.73.116-1.016.923-.976,2.352.117,4.724-.2,7.026.627a10.931,10.931,0,0,1,7.36,10.129C172.225,155.27,172.232,159.072,172.17,162.87Z" transform="translate(1015.56 3766.567)" fill="#2a2929"/>
+                  <path id="Caminho_2571" data-name="Caminho 2571" d="M105.984,150.654a32.955,32.955,0,0,0-12.223,25.828c0,5.247-.011,10.495.013,15.742a1.121,1.121,0,0,1-.834,1.278,14.452,14.452,0,0,0-3.585,2.2v-1.2c0-6.347-.141-12.7.038-19.042.344-12.386,5.786-22.17,15.731-29.782.45,1.375.8,2.609,1.265,3.795C106.622,150.071,106.386,150.329,105.984,150.654Z" transform="translate(996.282 3711.048)" fill="#1dc18a"/>
+                  <path id="Caminho_2572" data-name="Caminho 2572" d="M236.46,99.15q-1.885,5.613-3.673,11.254c-.2.623-.469.592-.934.43-1.163-.406-2.341-.764-3.494-1.192a34.551,34.551,0,0,0-12.566-2.11c-8.16.086-16.322.031-24.483.022a31.9,31.9,0,0,0-4.766.355c-3.388.51-6.542,1.834-9.779,2.872-.587.19-.912.254-1.154-.525-1.15-3.7-2.371-7.375-3.593-11.049-.172-.521-.146-.77.445-.929.975-.26,1.93-.611,2.884-.951a46.97,46.97,0,0,1,12.669-2.881c2.465-.163,10.7-.049,13.162-.11a2.7,2.7,0,0,0,.43-.046,2.513,2.513,0,0,0,.349.044,15.263,15.263,0,0,0,1.741.007c7.421-.435,25.36,1.349,32.241,3.918C236.409,98.434,236.667,98.529,236.46,99.15Z" transform="translate(931.899 3751.106)" fill="#1dc18a"/>
+                  <path id="Caminho_2573" data-name="Caminho 2573" d="M490.062,196.078a15.5,15.5,0,0,0-3.918-2.349c-.583-.219-.488-.634-.488-1.053,0-5.062-.013-10.126,0-15.188a32.819,32.819,0,0,0-12.252-26.477c-.413-.344-.594-.616-.366-1.188.435-1.084.753-2.216,1.124-3.327a2.325,2.325,0,0,1,.177-.327,37.5,37.5,0,0,1,15.724,30.8C490.051,183.279,490.062,189.581,490.062,196.078Z" transform="translate(696.556 3710.666)" fill="#1dc18a"/>
+                  <path id="Caminho_2574" data-name="Caminho 2574" d="M500.969,398.078a10.991,10.991,0,0,1-10.824,10.806c-1.21.024-2.424-.044-3.631.026-.766.044-.969-.168-.965-.949.04-5.21.02-10.42.02-15.627,0-5.172.015-10.345-.015-15.517-.007-.733.117-1.02.929-.98,2.369.117,4.757-.2,7.075.629a10.976,10.976,0,0,1,7.411,10.168C501.025,390.449,501.031,394.266,500.969,398.078Z" transform="translate(686.73 3531.283)" fill="#652cb3"/>
+                  <path id="Caminho_2575" data-name="Caminho 2575" d="M434.58,395.358a2.216,2.216,0,0,1-2.461,2.446q-1.927.023-3.852,0a2.237,2.237,0,0,1-2.486-2.532q-.013-9.186,0-18.376,0-9.08,0-18.157c0-2.022.762-2.77,2.8-2.777,1.172,0,2.347-.011,3.521,0a2.226,2.226,0,0,1,2.486,2.422Q434.593,376.87,434.58,395.358Z" transform="translate(733.491 3546.771)" fill="#b145bf"/>
+                  <path id="Caminho_2576" data-name="Caminho 2576" d="M99.892,408c0,.693-.137.951-.885.912-2.115-.119-4.243.166-6.342-.4a10.961,10.961,0,0,1-8.186-10.353c-.057-3.85-.064-7.7,0-11.554a10.991,10.991,0,0,1,10.669-10.731c1.283-.033,2.57.035,3.852-.029.731-.038.9.194.894.9-.031,5.21-.018,10.417-.018,15.627S99.866,402.794,99.892,408Z" transform="translate(1000.076 3531.276)" fill="#652cb3"/>
+                  <path id="Caminho_2577" data-name="Caminho 2577" d="M183.15,395.367a2.22,2.22,0,0,1-2.47,2.437q-1.927.023-3.852,0a2.236,2.236,0,0,1-2.477-2.541q-.013-9.189,0-18.376,0-9.08,0-18.157c0-2.022.757-2.764,2.8-2.768,1.174,0,2.349-.011,3.521,0a2.221,2.221,0,0,1,2.477,2.431Q183.166,376.882,183.15,395.367Z" transform="translate(929.832 3546.771)" fill="#b145bf"/>
+                </g>
+              </g>
+            </g>
+          </svg>
+          <br>
+          Para uma melhor experiência, <br>recomendamos o uso de fone de <br> ouvidos :D
+                    <div onclick="Anima.iniciar()" class="toque">Toque para <br>iniciar</div>
+              
+            `;
+
+            $('.waiting').html(html);
+        }, 5000);
+    },
+
     iniciar: function () {
         let frame = this.frames[0];
 
-        Anima.currentFrame = this.frames[0];
+        Anima.sound.btnG.play();
+        $('.waiting').css('opacity', '0');
 
-        this.renderBackdoor(frame);
-        this.renderOverlay(frame);
-
-        Anima.onWindowResize();
-
-        Anima.currentFrame.onThisFrame();
-
-        // frame.nextFrame();
+        setTimeout(() => {
+            Anima.sound.open.play();
+            Anima.sound.open.loop = true;
+    
+            Anima.currentFrame = this.frames[0];
+            Anima.player.perguntaAtual = 0;
+    
+            this.renderBackdoor(frame);
+            this.renderOverlay(frame);
+    
+            $('.waiting').remove();
+    
+            Anima.onWindowResize();
+    
+            Anima.currentFrame.onThisFrame();
+        }, 1500);
     },
 
     renderBackdoor: function (frame) {
@@ -1441,7 +1528,16 @@ let Anima = {
     onClickResposta: function (sn, op, kl) {
         if (sn == 'certo') {
             Anima.player.acertos++;
+
+            Anima.sound.certo.play();
+        } else if (sn = 'errado') {
+            Anima.sound.errado.play();
+        } else {
+            Anima.sound.certo.play();
         }
+
+        Anima.sound.btnS.play();
+
 
         // debugger
         // if (op == 'offponto') {
@@ -1725,7 +1821,7 @@ let Anima = {
                             respostacerta: 0
                         },
                         {
-                            desc: "Atendimento ao clinete",
+                            desc: "Atendimento ao cliente",
                             respostacerta: 0
                         }
                     ]
@@ -1775,6 +1871,20 @@ let Anima = {
                         {
                             desc: "2011",
                             respostacerta: 0
+                        }
+                    ]
+                },
+                {
+                    area: "Desenvolvimento",
+                    pergunta: "A linguagem de programação JavaScript(JS) é uma linguagem de frontend mas que também pode ser utilizada para backend.",
+                    respostas: [
+                        {
+                            desc: "Errado",
+                            respostacerta: 0
+                        },
+                        {
+                            desc: "Certo",
+                            respostacerta: 1
                         }
                     ]
                 },
@@ -3787,18 +3897,27 @@ let Anima = {
             $('.content').html(html);    
             $('.header').html(header);    
 
+            Anima.sound.perguntas.volume = 0.8;
+
             setTimeout(() => {
                 $('.minutinho').css('margin-left', '0');
                 $('#computador').css('margin-left', '0');
                 $('#curva-vermelho-curta').css('top', '60vh');
+    
+                Anima.sound.perguntas.volume = 0.6;
+
 
                 setTimeout(() => {
                     $('.minutinho').css('margin-left', '200vw');
                     $('#computador').css('margin-left', '200vw');
                     $('#curva-vermelho-curta').css('top', '150vh');
+            Anima.sound.perguntas.volume = 0.2;
+
 
                     setTimeout(() => {
                         Anima.showResult();
+                        Anima.sound.perguntas.volume = 0;
+
                     }, 2000);
                     
                 }, 5500);
@@ -3807,31 +3926,35 @@ let Anima = {
         }, 1500);
     },
 
+    stopMusic: function () {
+        Anima.sound.resultado.pause();
+    },
+
     getIframePl: function () {
         switch (Anima.maiorTipo) {
             case 'Rock':
-                return `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/0M8dVM1B7qWhyDYmSYWfVh?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+                return `<iframe onclick="Anima.stopMusic()" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/0M8dVM1B7qWhyDYmSYWfVh?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
 
             case 'Sertanejo':
-                return `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/6h9PthI2O5qSNGDFoHvtqR?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+                return `<iframe onclick="Anima.stopMusic()" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/6h9PthI2O5qSNGDFoHvtqR?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
 
             case 'Eletronica':
-                return `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/4hFJ7Tiq5AJAmwwD2feVJl?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+                return `<iframe onclick="Anima.stopMusic()" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/4hFJ7Tiq5AJAmwwD2feVJl?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
 
             case 'Lofi':
-                return `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/6UMZMO2nde60yGUTBE73LW?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+                return `<iframe onclick="Anima.stopMusic()" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/6UMZMO2nde60yGUTBE73LW?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
 
             case 'Pagode':
-                return `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/7vJd97sHkBJGC19vfRJlun?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+                return `<iframe onclick="Anima.stopMusic()" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/7vJd97sHkBJGC19vfRJlun?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
 
             case 'Funk':
-                return `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2HUlos4Mh8Q6zpa7neugJb?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+                return `<iframe onclick="Anima.stopMusic()" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2HUlos4Mh8Q6zpa7neugJb?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
 
             case 'Pop':
-                return `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/5gWOskzXQd6fDFcY4V2RKd?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+                return `<iframe onclick="Anima.stopMusic()" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/5gWOskzXQd6fDFcY4V2RKd?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
 
             case 'Rap':
-                return `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2YUypTBNfgtycumJyldBU0?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+                return `<iframe onclick="Anima.stopMusic()" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2YUypTBNfgtycumJyldBU0?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
 
             default:
                 break;
@@ -3851,6 +3974,8 @@ let Anima = {
         let titulo = '';
         let apoio = '';
         let tamanho = 32;
+
+        Anima.sound.perguntas.pause();
 
         if (Anima.player.acertos >= 4){
 
@@ -3967,7 +4092,7 @@ let Anima = {
                     </div>
 
                     <div class="group">
-                        <input id="fonei" type="text" required="required"/>
+                        <input maxlength="15" id="fonei" type="text" onkeyup="handlePhone(event)" required="required"/>
                         <label>Telefone</label>
                     </div>
 
@@ -4005,7 +4130,7 @@ let Anima = {
                 </div>
 
             </div>
-
+            <button class="btn btn-cian btn-carreira" onclick="document.location.reload(true);" style="margin: 20px 0; font-weight: bold">Tentar novamente</button>
 
             <svg id="curva-rosa-curta" version="1.1" id="Camada_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
             viewBox="0 0 412.7 85.5" style="enable-background:new 0 0 412.7 85.5;" xml:space="preserve">
@@ -4136,6 +4261,8 @@ let Anima = {
 
         setTimeout(() => {
             $('.header-pergunta').css('margin-top', '0vh');
+
+        Anima.sound.resultado.play();
 
             setTimeout(() => {
                 $('#formC').css('opacity', '1');
@@ -4401,28 +4528,31 @@ let Anima = {
         }
     },
 
-    configs: {
-        api: 'http://192.168.2.200:1290/api/v1/',
-        front: 'http://192.168.2.200:5000/'
-
-        //produção
-        // api: 'https://desafio.useall.com.br/api/v1/',
-        // front: 'https://desafio.useall.com.br'
-        
-    },
-
     onClickEnviar: function () {
         let url = Anima.configs.api + 'inserirInscricao';
+
+        Anima.sound.btnS.play();
 
         Anima.player.nome = document.getElementById('nomei').value || '';
         Anima.player.fone = document.getElementById('fonei').value || '';
         Anima.player.link = document.getElementById('linki').value || '';
         Anima.player.aceitolgpd = document.getElementById('aceitoLGPD').checked;
 
+        if (!Anima.player.nome) {
+            alert('O campo nome é obrigatório para a sua inscrição.');
+            return;
+        }
+
+        if (!Anima.player.fone) {
+            alert('O campo nome é obrigatório para a sua inscrição.');
+            return;
+        }
+
         if (!Anima.player.aceitolgpd) {
             alert('Você precisa aceitar os termos para enviar sua inscrição.');
             return;
         }
+
 
         Anima.postRequest(url, Anima.player, (response) => {
             if (response.error) {

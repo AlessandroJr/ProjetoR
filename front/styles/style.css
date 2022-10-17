@@ -419,6 +419,66 @@ body {
   padding-top: 30px;
 }
 
+.waiting {
+  top: 0;
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  background-color: #FAC710;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  text-align: center;
+  color: #652cb3;
+  z-index: 100;
+}
+
+.waiting .loading {
+  animation-name: loading;
+  animation-duration: 1.5s;
+  /* animation-delay: 1s; */
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+.waiting .toque {
+  font-family: Ultra;
+  font-size: 26px;
+  animation-name: piscando;
+  animation-duration: 1.5s;
+  /* animation-delay: 1s; */
+  animation-iteration-count: infinite;
+  animation-timing-function: easy;
+  margin-top: 100px;
+  cursor: pointer;
+}
+
+@keyframes piscando {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes loading {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 #redes svg{
   width: 40px;
 }

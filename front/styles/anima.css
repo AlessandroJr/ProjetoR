@@ -264,7 +264,8 @@ svg#explosao,
 #curva-vermelha,
 #computador,
 #formC,
-.resultadoAcertos
+.resultadoAcertos,
+.waiting
 {
   transition: all 1s ease;
 }

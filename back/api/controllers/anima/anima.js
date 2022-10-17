@@ -14,6 +14,9 @@ module.exports = app => {
                 // perguntasSelecionadas: req.body.pgts,
                 // respondidas: req.body.respondidas,
                 acertos: req.body.acertos,
+                perfil: req.body.perfil,
+                maiorTipo: req.body.maiorTipo,
+                maiorValor: req.body.maiorValor,
                 pontos: {
                     Rock: req.body.pontos.Rock,
                     Lofi: req.body.pontos.Lofi,

@@ -2,7 +2,7 @@ let Anima = {
 
     configs: {
         // produção
-        api: 'https://desafio.useall.com.br/api/v1/',
+        api: 'https://desafio.useall.com.br/api/api/v1/',
         front: 'https://desafio.useall.com.br'
         
     },
@@ -45,6 +45,7 @@ let Anima = {
         pgts: [],
         respondidas: [],
         acertos: 0,
+        perfil: [],
         pontos: {
             Rock: 0,
             Lofi: 0,
@@ -1678,6 +1679,7 @@ let Anima = {
             console.log(Anima.player.pontos);
         } else if (Anima.player.pgts[Anima.player.perguntaAtual].area == 'Perfil') {
             console.log(Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].tipo);
+            Anima.player.perfil.push(Anima.player.pgts[Anima.player.perguntaAtual].respostas[kl].tipo);
             Anima.player.otherResults.push(sn);
         } else {
             console.log(sn);
@@ -4621,6 +4623,9 @@ let Anima = {
             return;
         }
 
+        Anima.player.maiorTipo = Anima.maiorTipo;
+        Anima.player.maiorValor = Anima.maiorValor;
+        
 
         Anima.postRequest(url, Anima.player, (response) => {
             if (response.error) {

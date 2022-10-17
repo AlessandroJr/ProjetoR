@@ -1,11 +1,9 @@
 let Anima = {
 
     configs: {
-        
-
-        //produção
-        // api: 'https://desafio.useall.com.br/api/v1/',
-        // front: 'https://desafio.useall.com.br'
+        // produção
+        api: 'https://desafio.useall.com.br/api/v1/',
+        front: 'https://desafio.useall.com.br'
         
     },
 

@@ -1,5 +1,3 @@
-// Sabe o cú? Toma lá
-
 let Anima = {
 
     configs: {

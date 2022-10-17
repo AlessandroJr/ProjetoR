@@ -11,8 +11,8 @@ module.exports = app => {
                 phone: req.body.fone,
                 aceitoLGPD: req.body.aceitolgpd,
                 otherResults: req.body.otherResults,
-                perguntasSelecionadas: req.body.pgts,
-                respondidas: req.body.respondidas,
+                // perguntasSelecionadas: req.body.pgts,
+                // respondidas: req.body.respondidas,
                 acertos: req.body.acertos,
                 pontos: {
                     Rock: req.body.pontos.Rock,

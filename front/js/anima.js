@@ -952,7 +952,6 @@ let Anima = {
                     $('#janelinha.janelinha').css('height', '25px');
                     $('#ola').css('margin-top', '23px');
                     $('#ola').html(html);
-                    $('#ola').css('overflow-y', 'scroll');
                     setTimeout(() => {
 
                         $('#janelinha.janelinha').css('height', '422px');
@@ -2303,7 +2302,7 @@ let Anima = {
                     pergunta: "Uma estrutura de atendimento, em primeiro nível, às solicitações dos usuários, deve estar equipada e composta de:",
                     respostas: [
                         {
-                            desc: "tendentes não técnicos preparados para registrar os chamados e solucionar remotamente os problemas básicos.",
+                            desc: "Atendentes não técnicos preparados para registrar os chamados e solucionar remotamente os problemas básicos.",
                             respostacerta: 1
                         },
                         {
@@ -3450,11 +3449,11 @@ let Anima = {
                         },
                         {
                             desc: "Galileu Galilei",
-                            respostacerta: 1
+                            respostacerta: 0
                         },
                         {
                             desc: "Descartes",
-                            respostacerta: 0
+                            respostacerta: 1
                         },
                         {
                             desc: "Sócrates",

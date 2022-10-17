@@ -18,7 +18,7 @@ let Anima = {
         errado: new Audio('./assets/audio/errado.wav'),
         certo: new Audio('./assets/audio/certo.wav'),
         perguntas: new Audio('./assets/audio/perguntas.ogg'),
-        resultado: new Audio('./assets/audio/resultado.mp3')
+        resultado: new Audio('./assets/audio/resultado.wav')
     },
 
     carreira: '',
@@ -3933,28 +3933,28 @@ let Anima = {
     getIframePl: function () {
         switch (Anima.maiorTipo) {
             case 'Rock':
-                return `<iframe onclick="Anima.stopMusic()" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/0M8dVM1B7qWhyDYmSYWfVh?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+                return `<iframe id="iframePl" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/0M8dVM1B7qWhyDYmSYWfVh?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
 
             case 'Sertanejo':
-                return `<iframe onclick="Anima.stopMusic()" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/6h9PthI2O5qSNGDFoHvtqR?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+                return `<iframe id="iframePl" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/6h9PthI2O5qSNGDFoHvtqR?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
 
             case 'Eletronica':
-                return `<iframe onclick="Anima.stopMusic()" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/4hFJ7Tiq5AJAmwwD2feVJl?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+                return `<iframe id="iframePl" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/4hFJ7Tiq5AJAmwwD2feVJl?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
 
             case 'Lofi':
-                return `<iframe onclick="Anima.stopMusic()" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/6UMZMO2nde60yGUTBE73LW?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+                return `<iframe id="iframePl" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/6UMZMO2nde60yGUTBE73LW?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
 
             case 'Pagode':
-                return `<iframe onclick="Anima.stopMusic()" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/7vJd97sHkBJGC19vfRJlun?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+                return `<iframe id="iframePl" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/7vJd97sHkBJGC19vfRJlun?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
 
             case 'Funk':
-                return `<iframe onclick="Anima.stopMusic()" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2HUlos4Mh8Q6zpa7neugJb?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+                return `<iframe id="iframePl" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2HUlos4Mh8Q6zpa7neugJb?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
 
             case 'Pop':
-                return `<iframe onclick="Anima.stopMusic()" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/5gWOskzXQd6fDFcY4V2RKd?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+                return `<iframe id="iframePl" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/5gWOskzXQd6fDFcY4V2RKd?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
 
             case 'Rap':
-                return `<iframe onclick="Anima.stopMusic()" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2YUypTBNfgtycumJyldBU0?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+                return `<iframe id="iframePl" style="border-radius:12px" src="https://open.spotify.com/embed/playlist/2YUypTBNfgtycumJyldBU0?utm_source=generator" width="100%" height="380" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
 
             default:
                 break;
@@ -4070,7 +4070,7 @@ let Anima = {
                 <img src="./assets/${Anima.getImgPl()}.png" loading="lazy">
             </div>
 
-            <div class="resultadoAcertos" style="width:90%;padding: 0;margin:0">
+            <div onclick="Anima.stopMusic()" class="resultadoAcertos" style="width:90%;padding: 0;margin:0">
                 ${Anima.getIframePl()}    
             </div>
 
@@ -4267,6 +4267,12 @@ let Anima = {
             setTimeout(() => {
                 $('#formC').css('opacity', '1');
                 $('.resultadoAcertos').css('opacity', '1');
+
+                let iframe = document.getElementById('iframePl');
+
+                iframe.addEventListener('click', function () {
+                    Anima.stopMusic();
+                });
                 
             }, 1000);
         }, 500);

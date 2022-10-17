@@ -3,4 +3,7 @@ module.exports = app => {
 
 	app.route('/api/v1/inserirInscricao')
 		.post(controller.inserirInscricao);
+
+	app.route('/api/v1/listarInscricao')
+		.get(controller.listarInscricao);
 }

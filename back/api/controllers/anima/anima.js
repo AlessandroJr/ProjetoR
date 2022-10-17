@@ -15,14 +15,14 @@ module.exports = app => {
                 respondidas: req.body.respondidas,
                 acertos: req.body.acertos,
                 pontos: {
-                    Rock:req.body.pontos.Rock,
-                    Lofi:req.body.pontos.Lofi,
-                    Sertanejo:req.body.pontos.Sertanejo,
-                    Eletronica:req.body.pontos.Eletronica,
-                    Pop:req.body.pontos.Pop,
-                    Funk:req.body.pontos.Funk,
-                    Pagode:req.body.pontos.Pagode,
-                    Rap:req.body.pontos.Rap
+                    Rock: req.body.pontos.Rock,
+                    Lofi: req.body.pontos.Lofi,
+                    Sertanejo: req.body.pontos.Sertanejo,
+                    Eletronica: req.body.pontos.Eletronica,
+                    Pop: req.body.pontos.Pop,
+                    Funk: req.body.pontos.Funk,
+                    Pagode: req.body.pontos.Pagode,
+                    Rap: req.body.pontos.Rap
                 }
             };
 
@@ -32,6 +32,36 @@ module.exports = app => {
                 if (error) response.error = error;
 
                 res.status(200).json(response);
+            });
+
+        })
+    };
+
+    controller.listarInscricao = function (req, res) {
+        db.MongoClient.connect(db.url, function (err, db) {
+            if (err) throw err;
+            var dbo = db.db('desafio');
+
+            let projection = {
+                idinscricao: 1,
+                name: 1,
+                phone: 1,
+                aceitoLGPD: 1,
+                otherResults: 1,
+                perguntasSelecionadas: 1,
+                respondidas: 1,
+                acertos: 1,
+                pontos: 1
+            };
+
+            let query = {};
+
+            dbo.collection('inscricao').find(query, { projection: projection }).toArray(function (err, response) {
+                if (err) throw err;
+
+                res.status(200).json(response);
+
+                db.close();
             });
 
         });

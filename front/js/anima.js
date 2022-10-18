@@ -1453,9 +1453,7 @@ let Anima = {
     },
 
     loadApp: function () {
-        if (!Anima.sound.perguntas 
-            || !Anima.sound.resultado 
-            || !Anima.sound.open) {
+        if (!Anima.sound.open) {
             
           setTimeout(() => {
             Anima.backLoad();
@@ -1468,11 +1466,11 @@ let Anima = {
 
     carregarAudio:function () {
         var request = new XMLHttpRequest();
-        request.open("GET", "./assets/audio/perguntas.mp3", true);
+        request.open("GET", "./assets/audio/open.mp3", true);
         request.responseType = "blob";    
         request.onload = function() {
             if (this.status == 200) {
-                Anima.sound.perguntas = new Audio(URL.createObjectURL(this.response));
+                Anima.sound.open = new Audio(URL.createObjectURL(this.response));
             }
             Anima.carregarAudioDois();
         }
@@ -1494,11 +1492,11 @@ let Anima = {
 
     carregarAudioTres: function () {
         var requesttres = new XMLHttpRequest();
-        requesttres.open("GET", "./assets/audio/open.mp3", true);
+        requesttres.open("GET", "./assets/audio/perguntas.mp3", true);
         requesttres.responseType = "blob";    
         requesttres.onload = function() {
             if (this.status == 200) {
-                Anima.sound.open = new Audio(URL.createObjectURL(this.response));
+                Anima.sound.perguntas = new Audio(URL.createObjectURL(this.response));
             }
         }
         requesttres.send();
